@@ -1,0 +1,8 @@
+minishell
+obj/
+in*
+out*
+test*
+libft/*.o
+.vscode
+.NotRelink
