@@ -1,8 +1,9 @@
 minishell
 obj/
-in*
+inf*
 out*
 test*
 libft/*.o
 .vscode
 .NotRelink
+ooomfie
