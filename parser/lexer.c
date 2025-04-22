@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/17 10:56:12 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:14:33 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,33 @@ void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 }
 
 void	turn_quoted_tokens_to_word(t_tokenized_line *line)
+{
+	size_t		i;
+	t_type		quote_type;
+
+	i = 0;
+	while (i < line->nb_token)
+	{
+		if (line->tokens[i].type == TYPE_SINGLE_QUOTE || line->tokens[i].type == TYPE_DOUBLE_QUOTE)
+		{
+			quote_type = line->tokens[i].type;
+			i++;
+			while (line->tokens[i].type != quote_type && i < line->nb_token)
+			{
+				if (line->tokens[i].type != TYPE_WHITESPACE)
+					line->tokens[i].type = TYPE_WORD;
+				i++;
+			}
+			if (i >= line->nb_token)
+				printf("ERROR_QUOTE");
+			i++;
+		}
+		i++;
+	}
+	print_tokens(line);
+}
+
+void	turn_whitespaces_to_word(t_tokenized_line *line)
 {
 	size_t		i;
 	t_type		quote_type;
@@ -210,25 +237,25 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 t_tokenized_line	*lexer(char *line)
 {
 	t_tokenized_line	*tokens;
-	t_tokenized_line	*tokens_quotes_removed;
+	t_tokenized_line	*tokens_output;
 	const size_t		len_line = ft_strlen(line);
 	const int			size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
 
 	tokens = malloc(size * 4);
 	if (tokens == 0)
 		return (0);
-	tokens_quotes_removed = malloc(size);
-	if (tokens_quotes_removed == 0)
+	tokens_output = malloc(size);
+	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
-	ft_bzero(tokens, size * 4);
 	printf("%p, %p\n", tokens, tokens + size * 4);
 	tokenize_string(line, tokens);
 	turn_quoted_tokens_to_word(tokens);
-	fuse_words(tokens, tokens + size);
-	remove_whitespaces(tokens + size, tokens + size * 2);
-	fuse_chevrons(tokens + size * 2, tokens + size * 3);
-	mark_single_quote_words(tokens + size * 3);
-	remove_quotes(tokens + size * 3, tokens_quotes_removed);
+	turn_whitespaces_to_word(tokens);
+	remove_quotes(tokens, tokens + size);
+	fuse_words(tokens + size, tokens + size * 2);
+	remove_whitespaces(tokens + size * 2, tokens + size * 3);
+	fuse_chevrons(tokens + size * 3, tokens_output);
+	mark_single_quote_words(tokens_output);
 	free(tokens);
-	return (tokens_quotes_removed);
+	return (tokens_output);
 }
