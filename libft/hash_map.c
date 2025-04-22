@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   hash_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 15:24:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:22:54 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stddef.h>
 #include <stdlib.h>
 
 t_hash_table	*table_alloc(int capacity)
@@ -39,7 +40,7 @@ void	table_delete_item(t_hash_table *table, int index)
 
 void	table_delete_table(t_hash_table *table)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < table->capacity)
@@ -56,7 +57,7 @@ int	table_resize(t_hash_table *table)
 {
 	t_hash_table	*new_table;
 	t_ht_item		*tmp_items;
-	int				i;
+	size_t			i;
 
 	new_table = table_alloc(table->capacity * 2);
 	if (new_table == 0)
