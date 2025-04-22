@@ -27,6 +27,11 @@ ed
 $USER
 ed
 
+<< e cat
+> $zz
+> '$zz'
+> e
+
 << ee cat
 > $USER
 > ed
@@ -38,10 +43,6 @@ echo $zz
 echo s$zz
 echo "$zz"
 echo '$zz'
-<< e cat
-> $zz
-> '$zz'
-> e
 
 export zz="o test"
 ech$zz

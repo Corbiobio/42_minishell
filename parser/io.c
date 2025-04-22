@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 15:35:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:50:28 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 {
 	int	fd;
 
+	if (cmd->io[1] >= 0)
+		close(cmd->io[1]);
 	if (redirect.type == TYPE_GREATER)
 		fd = open(filename, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (redirect.type == TYPE_GREATER_GREATER)
@@ -57,6 +59,8 @@ void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 {
 	int	fd;
 
+	if (cmd->io[0] >= 0)
+		close(cmd->io[0]);
 	if (redirect.type == TYPE_LESSER)
 		fd = open(filename, O_RDONLY);
 	else
