@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 15:32:51 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:35:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 	if (redirect.type == TYPE_LESSER)
 		fd = open(filename, O_RDONLY);
 	else
-		fd = open_heredoc(filename);
+		fd = create_heredoc(filename);
 	cmd->io[0] = fd;
 }
 
