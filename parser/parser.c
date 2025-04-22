@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 16:57:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:03:36 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parser.h"
+#include "../includes/execution.h"
 #include "../libft/libft.h"
+#include "minishell.h"
 #include <stddef.h>
 #include <stdio.h>
+#include <sys/wait.h>
 
 int	count_commands(t_tokenized_line *line)
 {
@@ -96,8 +99,17 @@ t_cmd_list	*parser(char *line)
 	return (cmds);
 }
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
-	parser("cat << 'hi  -e' < file1 >file2|ls -a > ooomfie");
-	return (0);
+	int			status;
+	t_cmd_list	*list;
+
+	list = parser("cat << 'hi  -e' < file1 >file2|ls -a > ooomfie");
+	create_child_and_exec_cmd(list, env);
+	while (wait(&status) > 0)
+		;
+	free(list);
+	(void)ac;
+	(void)av;
+	return (status);
 }

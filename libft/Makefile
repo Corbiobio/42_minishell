@@ -26,6 +26,9 @@ SRC_FILES = $(SRC_DIR)ft_isalpha.c\
 		$(SRC_DIR)ft_realloc.c\
 		$(SRC_DIR)ft_atoi.c\
 		$(SRC_DIR)dynamic_array.c\
+		$(SRC_DIR)hash_map_methods.c\
+		$(SRC_DIR)hash_map.c\
+		$(SRC_DIR)ft_quicksort.c\
 #		$(SRC_DIR)main.c\
 
 OBJ_FILES = $(SRC_FILES:.c=.o)

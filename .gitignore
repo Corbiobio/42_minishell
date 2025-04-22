@@ -2,8 +2,6 @@ minishell
 obj/
 inf*
 out*
-libft/*.o
-libft/libft.a
 .vscode
 .NotRelink
 ooomfie
