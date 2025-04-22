@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2024/11/13 18:13:08 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:25:59 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,19 @@ typedef struct s_dynamic_array
 	size_t	size;
 }	t_dynamic_array;
 
+typedef struct s_ht_item
+{
+	char	*key;
+	char	*value;
+}	t_ht_item;
+
+typedef struct s_hash_table
+{
+	size_t		capacity;
+	size_t		size;
+	t_ht_item	*items;
+}	t_hash_table;
+
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);
@@ -43,6 +56,7 @@ size_t			ft_strlen(const char *s);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
+int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strnstr(const char *big, const char *little, size_t len);
 int				ft_toupper(int c);
 int				ft_tolower(int c);
@@ -99,5 +113,9 @@ t_dynamic_array	init_dynamic_array(size_t size);
 int				push_array(t_dynamic_array *darray, char *elem);
 void			swap_int(int *a, int *b);
 void			ft_quicksort(int *arr, int low, int high);
+
+int				table_insert(t_hash_table *table, char *key, char *value);
+int				table_resize(t_hash_table *table);
+void			table_delete_item(t_hash_table *table, int index);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:44:07 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/17 16:26:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 09:59:19 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,10 @@ void	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 	int	fd;
 
 	if (redirect.type == TYPE_GREATER)
-	{
 		fd = open(filename, O_TRUNC | O_WRONLY | O_CREAT, 0644);
-		cmd->io[1] = fd;
-	}
 	if (redirect.type == TYPE_GREATER_GREATER)
-	{
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
-		cmd->io[1] = fd;
-	}
+	cmd->io[1] = fd;
 }
 
 void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
@@ -63,13 +58,10 @@ void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 	int	fd;
 
 	if (redirect.type == TYPE_LESSER)
-	{
 		fd = open(filename, O_RDONLY);
-		cmd->io[0] = fd;
-	}
 	else
-	{
-	}
+		fd = open_heredoc(filename);
+	cmd->io[0] = fd;
 }
 
 void	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)

@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/17 16:26:40 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:05:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static int	write_heredoc(char	*eof_signal, int write_end)
 	return (0);
 }
 
-static int	create_heredoc(char **av)
+int	create_heredoc(char *eof)
 {
 	int		end[2];
 	char	*eof_signal;
 
 	if (pipe(end) == -1)
 		return (-1);
-	eof_signal = ft_strjoin(av[2], "\n");
+	eof_signal = ft_strjoin(eof, "\n");
 	if (eof_signal == 0)
 	{
 		close(end[0]);
@@ -61,26 +61,4 @@ static int	create_heredoc(char **av)
 	free(eof_signal);
 	close(end[1]);
 	return (end[0]);
-}
-
-void	open_heredoc(int ac, char **av, char **envp)
-{
-	t_files	files;
-
-	if (ac < 6)
-		return ;
-	files.infile = create_heredoc(av);
-	if (files.infile == -1)
-	{
-		perror("here_doc");
-		return ;
-	}
-	files.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (files.outfile == -1)
-	{
-		perror(av[ac - 1]);
-		close(files.infile);
-		return ;
-	}
-	pipex(files, ac - 4, &av[3], envp);
 }

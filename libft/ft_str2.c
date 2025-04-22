@@ -6,11 +6,25 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:40:03 by sflechel          #+#    #+#             */
-/*   Updated: 2024/11/07 17:41:48 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:53:00 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t			i;
+	unsigned char	*str1;
+	unsigned char	*str2;
+
+	i = 0;
+	str1 = (unsigned char *) s1;
+	str2 = (unsigned char *) s2;
+	while (str1[i] && (str1[i] == str2[i]))
+		i++;
+	return (str1[i] - str2[i]);
+}
 
 int	ft_toupper(int c)
 {

@@ -15,6 +15,7 @@ HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h
 SRC = lexer.c\
 	  grammar.c\
 	  io.c\
+	  heredoc_bonus\
 	  parser.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
