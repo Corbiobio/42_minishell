@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:44:07 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/17 16:26:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:38:30 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 void	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)
 {
 	const t_token	redirect = line->tokens[token_index];
-	int				fd;
 	char			*filename;
 
 	filename = alloc_word(line, token_index + 1);
