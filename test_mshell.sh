@@ -55,3 +55,6 @@ echo s > o'$USER'tfile ; echo s > o"$USER"tfile
 
 echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnn
 echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnnm -nnnn
+
+echo > /dev/stdin test | cat -e
+echo > /dev/stdout test | cat -e
