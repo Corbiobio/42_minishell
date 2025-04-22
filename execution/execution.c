@@ -6,16 +6,13 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/22 13:32:31 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/22 13:59:12 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "execution.h"
-#include <stdlib.h>
 #include <unistd.h> 
-#include <fcntl.h>
-#include <sys/wait.h>
 
 static t_position	get_pos(t_cmd_list *list, size_t index)
 {
@@ -80,31 +77,3 @@ void	create_child_and_exec_cmd(t_cmd_list *list, char **env)
 		i++;
 	}
 }
-
-//int	main(int ac, char **av, char **env)
-//{
-//	int	status;
-//	t_cmd_list	*cmd_list = malloc(sizeof(t_cmd_list) + 5 * sizeof(t_cmd));
-
-//	int in = open("in", O_RDWR);
-//	int out = open("out", O_RDWR);
-//	cmd_list->cmds[0] = (t_cmd){ {-2, out},(char*[]){"/usr/bin/echo", "test",NULL}};
-//	cmd_list->cmds[1] = (t_cmd){ {out, -2},(char*[]){"/usr/bin/cat", "-e",NULL}};
-//	cmd_list->cmds[2] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/wc", "-m",NULL}};
-//	//cmd_list->cmds[0] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/echo", "ceci est un test",NULL}};
-//	//cmd_list->cmds[1] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	//cmd_list->cmds[2] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	//cmd_list->cmds[3] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	//cmd_list->cmds[4] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	cmd_list->nb_cmd = 3;
-
-//	create_child_and_exec_cmd(cmd_list, env);
-//	while (wait(&status) > 0)
-//		;
-//	free(cmd_list);
-//	close(in);
-//	close(out);
-//	(void)ac;
-//	(void)av;
-//	return (status);
-//}
