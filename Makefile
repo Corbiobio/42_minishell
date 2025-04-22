@@ -18,6 +18,7 @@ PARS =\
 	grammar.c\
 	io.c\
 	parser.c\
+	heredoc_bonus.c\
 
 PARS_FILES = $(addprefix $(PARS_DIR), $(PARS))
 
