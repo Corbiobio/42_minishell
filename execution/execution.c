@@ -6,12 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/22 13:59:12 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:31:27 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "execution.h"
+#include "../includes/minishell.h"
+#include "../includes/execution.h"
 #include <unistd.h> 
 
 static t_position	get_pos(t_cmd_list *list, size_t index)

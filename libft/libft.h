@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 15:25:59 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:22:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,14 @@ t_dynamic_array	init_dynamic_array(size_t size);
 int				push_array(t_dynamic_array *darray, char *elem);
 void			swap_int(int *a, int *b);
 void			ft_quicksort(int *arr, int low, int high);
+char			*ft_strndup(const char *s, size_t n);
 
 int				table_insert(t_hash_table *table, char *key, char *value);
 int				table_resize(t_hash_table *table);
 void			table_delete_item(t_hash_table *table, int index);
+char			*table_search(t_hash_table *table, const char *key);
+
+char			*ft_str_triple_join(char const *s1,
+					char const *s2, char const *s3);
 
 #endif

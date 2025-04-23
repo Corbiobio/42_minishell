@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 17:14:33 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 09:51:50 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	tokenize_string(char *line, t_tokenized_line *tokens)
 			tokens->tokens[i].type = TYPE_SINGLE_QUOTE;
 		else if (line[i] == '"')
 			tokens->tokens[i].type = TYPE_DOUBLE_QUOTE;
+		else if (line[i] == '$')
+			tokens->tokens[i].type = TYPE_DOLLAR;
 		else
 			tokens->tokens[i].type = TYPE_WORD;
 		i++;
@@ -153,7 +155,6 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 	size_t	i;
 
 	output->line = input->line;
-	//*output = (t_tokenized_line){.line = input->line};
 	i = 0;
 	while (i < input->nb_token)
 	{
@@ -234,27 +235,28 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	print_tokens(output);
 }
 
-t_tokenized_line	*lexer(char *line)
+t_tokenized_line	*lexer(char *line, t_hash_table *env)
 {
 	t_tokenized_line	*tokens;
 	t_tokenized_line	*tokens_output;
 	const size_t		len_line = ft_strlen(line);
 	const int			size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
 
-	tokens = malloc(size * 4);
+	tokens = malloc(size * 5);
 	if (tokens == 0)
 		return (0);
 	tokens_output = malloc(size);
 	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
-	printf("%p, %p\n", tokens, tokens + size * 4);
+	printf("%p, %p\n", tokens, tokens + size * 5);
 	tokenize_string(line, tokens);
 	turn_quoted_tokens_to_word(tokens);
-	turn_whitespaces_to_word(tokens);
-	remove_quotes(tokens, tokens + size);
-	fuse_words(tokens + size, tokens + size * 2);
-	remove_whitespaces(tokens + size * 2, tokens + size * 3);
-	fuse_chevrons(tokens + size * 3, tokens_output);
+	expand_variables(tokens, tokens + size, env);
+	turn_whitespaces_to_word(tokens + size);
+	remove_quotes(tokens + size, tokens + size * 2);
+	fuse_words(tokens + size * 2, tokens + size * 3);
+	remove_whitespaces(tokens + size * 3, tokens + size * 4);
+	fuse_chevrons(tokens + size * 4, tokens_output);
 	mark_single_quote_words(tokens_output);
 	free(tokens);
 	return (tokens_output);
