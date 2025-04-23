@@ -6,11 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 12:49:32 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:18:24 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "libft.h"
 #include "../includes/execution.h"
 #include <stddef.h>
 #include <stdio.h>
@@ -44,7 +45,7 @@ static t_position	get_pos(t_cmd_list *list, size_t curr_cmd_index)
 		return (MID);
 }
 
-void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, char **env, t_cmd_list *list, size_t i)
+int 	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_list *list, size_t i)
 {
 	char	*path;
 
@@ -73,20 +74,20 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, char **env, t_cmd_list *lis
 		close(fds[0]);
 	}
 	close_all_unused_fds(list, i);
-	(void)list;
-	(void)i;
 	path = get_cmd_path(cmd, env);
+	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
 	{
-		if (execve(path, cmd.cmd, env) == -1)
-			write(STDERR_FILENO, "cannot execve\n", 15);
+		if (execve(path, cmd.cmd, NULL) == -1)
+			dprintf(2, "cannot exec %s\n", cmd.cmd[0]);
 	}
 	else
-		write(STDERR_FILENO, "cannot access to path\n", 23);
+		dprintf(2, "cannot find correct path for %s\n", cmd.cmd[0]);
 	free(path);
+	exit (EXIT_FAILURE);
 }
 
-void	create_child_and_exec_cmd(t_cmd_list *list, char **env)
+void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 {
 	t_position	pos;
 	size_t		i;
@@ -98,10 +99,10 @@ void	create_child_and_exec_cmd(t_cmd_list *list, char **env)
 	{
 		pos = get_pos(list, i);
 		if (pos != LAST && pipe(fds) == -1)
-			write(STDERR_FILENO, "errooooor on pipe\n", 19);
+			dprintf(2, "cannot pipe on %s\n", list->cmds[i].cmd[0]);
 		pid = fork();
 		if (pid < 0)
-			write(STDERR_FILENO, "errooooor on fork\n", 19);
+			dprintf(2, "cannot fork on %s\n", list->cmds[i].cmd[0]);
 		else if (pid == 0)
 			exec_cmd(fds, list->cmds[i], pos, env, list, i);
 		if (pos != FIRST)
@@ -114,30 +115,3 @@ void	create_child_and_exec_cmd(t_cmd_list *list, char **env)
 		i++;
 	}
 }
-
-//int	main(int ac, char **av, char **env)
-//{
-//	t_cmd_list	*cmd_list = malloc(sizeof(t_cmd_list) + 3 * sizeof(t_cmd));
-//	int			status;
-
-//	int in = open("in", O_RDWR);
-//	int out = open("out", O_RDWR);
-//	cmd_list->cmds[0] = (t_cmd){ {-2, out},(char*[]){"echo", "test",NULL}};
-//	cmd_list->cmds[1] = (t_cmd){ {in, -2},(char*[]){"cat", "-e",NULL}};
-//	//cmd_list->cmds[2] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/wc", "-m",NULL}};
-//	//cmd_list->cmds[0] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/echo", "ceci est un test",NULL}};
-//	//cmd_list->cmds[1] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	//cmd_list->cmds[2] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	//cmd_list->cmds[3] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	//cmd_list->cmds[4] = (t_cmd){ {-2, -2},(char*[]){"/usr/bin/cat", "-e", NULL}};
-//	cmd_list->nb_cmd = 2;
-//	create_child_and_exec_cmd(cmd_list, env);
-//	while (wait(&status) > 0)
-//		;
-//	free(cmd_list);
-//	close(in);
-//	close(out);
-//	(void)ac;
-//	(void)av;
-//	return (status);
-//}

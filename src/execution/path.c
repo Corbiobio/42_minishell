@@ -6,34 +6,14 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:26:59 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 12:46:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:11:25 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+#include <stdio.h>
 #include <unistd.h>
-
-static char	*find_path_variable_in_env(char **env)
-{
-	int		i;
-	char	*paths;
-
-	if (env == NULL)
-		return (NULL);
-	i = 0;
-	paths = NULL;
-	while (env[i] != NULL)
-	{
-		if (ft_strnstr(env[i], "PATH=", 5) != NULL)
-		{
-			paths = env[i] + 5;
-			break ;
-		}
-		i++;
-	}
-	return (paths);
-}
 
 static char	*join_path_to_cmd(char *path, char *cmd_name)
 {
@@ -46,13 +26,13 @@ static char	*join_path_to_cmd(char *path, char *cmd_name)
 	return (new_path);
 }
 
-char	*get_cmd_path(t_cmd cmd, char **env)
+char	*get_cmd_path(t_cmd cmd, t_hash_table *env)
 {
-	const char	*paths_var = find_path_variable_in_env(env);
-	const char	**paths = (const char**)ft_split(paths_var, ':');
+	const char	*paths_from_env = table_search(env, "PATH");
+	const char	**paths = (const char**)ft_split(paths_from_env, ':');
 	char		*curr_path;
 	size_t		i;
-
+	
 	if (paths == NULL)
 		return (NULL);
 	if (ft_strchr(cmd.cmd[0], '/') != NULL)
@@ -65,6 +45,8 @@ char	*get_cmd_path(t_cmd cmd, char **env)
 			break ;
 		free(curr_path);
 		i++;
+		if (paths[i] == NULL)
+			curr_path = NULL;
 	}
 	ft_free_split((char **)paths);
 	return (curr_path);

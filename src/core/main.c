@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 15:19:19 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:21:26 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,39 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	print_hash_table(env_table);
 	list = parser("cat << 'hi  -e' < file1 >file2|ls -a > ooomfie", env_table);
-	create_child_and_exec_cmd(list, env);
+	create_child_and_exec_cmd(list, env_table);
 	while (wait(&status) > 0)
 		;
+	table_delete_table(env_table);
 	free(list);
+	return (status);
 	(void)ac;
 	(void)av;
-	return (status);
 }
+
+//main without parsing and parsing print
+//int	main(int ac, char **av, char **env)
+//{
+//	t_cmd_list		*cmd_list = malloc(sizeof(t_cmd_list) + 3 * sizeof(t_cmd));
+//	t_hash_table	*env_table;
+//	int				status = 0;
+
+//	env_table = convert_env_to_table(env);
+//	if (env_table == 0)
+//		return (1);
+//	//int in = open("in", O_RDWR);
+//	//int out = open("out", O_RDWR);
+//	cmd_list->cmds[0] = (t_cmd){ {-2, -2},(char*[]){"ecsho","test", NULL}};
+//	cmd_list->cmds[1] = (t_cmd){ {-2, -2},(char*[]){"cat", "-e",NULL}};
+//	cmd_list->nb_cmd = 2;
+//	create_child_and_exec_cmd(cmd_list, env_table);
+//	while (wait(&status) > 0)
+//		;
+//	table_delete_table(env_table);
+//	//close(in);
+//	//close(out);
+//	free(cmd_list);
+//	return (status);
+//	(void)ac;
+//	(void)av;
+//}
