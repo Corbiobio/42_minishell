@@ -6,11 +6,27 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:40:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 13:53:00 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 09:25:11 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+char	*ft_strndup(const char *s, size_t n)
+{
+	int		len;
+	char	*dup;
+
+	len = ft_strlen(s);
+	dup = ft_calloc(len + 1, sizeof(char));
+	if (dup <= 0)
+		return (0);
+	if (n < len)
+		ft_strlcpy(dup, s, n + 1);
+	else
+		ft_strlcpy(dup, s, len + 1);
+	return (dup);
+}
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

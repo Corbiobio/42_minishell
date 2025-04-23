@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 15:24:22 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 09:08:11 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	power(int nb, int exponent)
 	return (power(nb * nb, exponent - 1));
 }
 
-static int	table_hash_function(char *key, int len_table)
+static int	table_hash_function(const char *key, const int len_table)
 {
 	long long int	hash;
 	int				prime_signature;
@@ -66,7 +66,7 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 	return (0);
 }
 
-char	*table_search(t_hash_table *table, char *key)
+char	*table_search(t_hash_table *table, const char *key)
 {
 	int	i;
 

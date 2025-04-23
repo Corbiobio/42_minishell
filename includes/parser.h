@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 10:05:27 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:37:54 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include "minishell.h"
 # include <stddef.h>
+#include "../libft/libft.h"
 
 typedef enum e_type
 {
@@ -30,6 +31,7 @@ typedef enum e_type
 	TYPE_GREATER_GREATER,
 	TYPE_LESSER_LESSER,
 	TYPE_PIPE,
+	TYPE_DOLLAR
 }	t_type;
 
 typedef struct s_token
@@ -46,17 +48,25 @@ typedef struct s_tokenized_line
 	t_token	tokens[];
 }	t_tokenized_line;
 
-t_tokenized_line	*lexer(char *line);
+//lexer.c
+t_tokenized_line	*lexer(char *line, t_hash_table *env);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
+void				tokenize_string(char *line, t_tokenized_line *tokens);
 
+//expander.c
+void				expand_variables(t_tokenized_line *input, t_tokenized_line *output, t_hash_table *env);
+
+//io.c
 void				open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
 
+//grammar.c
 void				grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 char				*alloc_word(t_tokenized_line *line, int token_index);
 
 int					is_type_redirect(t_token token);
 
+//heredoc.c
 int					create_heredoc(char *eof);
 
 void	print_tokens(t_tokenized_line *line);

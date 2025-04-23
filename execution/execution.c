@@ -6,12 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 12:45:44 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:49:32 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "execution.h"
+#include "../includes/minishell.h"
+#include "../includes/execution.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
