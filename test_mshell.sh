@@ -54,8 +54,19 @@ cat > $USEr
 
 echo s > o'$USER'tfile ; echo s > o"$USER"tfile
 
-echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnn
-echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnnm -nnnn
-
 echo > /dev/stdin test | cat -e
 echo > /dev/stdout test | cat -e
+
+export tests=tests | echo $tests
+export tests=tests
+echo $tests
+
+#builtin -> echo 
+echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnn
+echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnnm -nnnn
+echo -
+echo "" -
+echo "" -n
+echo "" -n - a ""
+echo -n ""
+echo -nnnnnn ""
