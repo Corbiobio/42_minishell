@@ -1,6 +1,6 @@
 NAME = libft.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Ofast
+CFLAGS = -Wall -Wextra -Werror -g3
 
 SRC_DIR = ./
 INC_DIR = ./

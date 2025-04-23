@@ -19,7 +19,9 @@ SRC =\
 	parser/io.c\
 	parser/parser.c\
 	parser/heredoc_bonus.c\
+	parser/expander.c\
 	execution/execution.c\
+	execution/path.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 

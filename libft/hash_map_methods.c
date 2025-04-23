@@ -6,11 +6,12 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 09:08:11 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:33:53 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stddef.h>
 
 static int	power(int nb, int exponent)
 {
@@ -43,8 +44,8 @@ static int	table_hash_function(const char *key, const int len_table)
 
 int	table_insert(t_hash_table *table, char *key, char *value)
 {
-	int			i;
-	const int	load = table->capacity * 100 / table->size;
+	size_t		i;
+	const int	load = table->size * 100 / table->capacity;
 
 	if (load > 50)
 	{
@@ -52,7 +53,7 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 			return (1);
 	}
 	i = table_hash_function(key, table->capacity);
-	while (table->items[i].key)
+	while (i < table->capacity && table->items[i].key)
 	{
 		if (table->items[i].value && ft_strcmp(table->items[i].key, key) == 0)
 		{
@@ -61,17 +62,20 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 		}
 		i++;
 	}
-	table->items[i] = (t_ht_item){.key = key, .value = value};
-	table->size++;
+	if (i < table->capacity)
+	{
+		table->items[i] = (t_ht_item){.key = key, .value = value};
+		table->size++;
+	}
 	return (0);
 }
 
 char	*table_search(t_hash_table *table, const char *key)
 {
-	int	i;
+	size_t	i;
 
 	i = table_hash_function(key, table->capacity);
-	while (table->items[i].key)
+	while (i < table->capacity && table->items[i].key)
 	{
 		if (table->items[i].value && ft_strcmp(table->items[i].key, key) == 0)
 			return (table->items[i].value);
@@ -83,10 +87,10 @@ char	*table_search(t_hash_table *table, const char *key)
 void	table_remove_item(t_hash_table *table, char *key)
 {
 	static char	deleted_item;
-	int			i;
+	size_t		i;
 
 	i = table_hash_function(key, table->capacity);
-	while (table->items[i].key)
+	while (table->capacity && table->items[i].key)
 	{
 		if (table->items[i].value && ft_strcmp(table->items[i].key, key) == 0)
 		{
@@ -95,5 +99,6 @@ void	table_remove_item(t_hash_table *table, char *key)
 		}
 		i++;
 	}
-	table->size--;
+	if (i < table->capacity)
+		table->size--;
 }

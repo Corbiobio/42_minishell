@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:40:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 13:15:05 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:38:58 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strndup(const char *s, size_t n)
 	char	*dup;
 
 	len = ft_strlen(s);
-	dup = ft_calloc(len + 1, sizeof(char));
+	dup = ft_calloc(n + 1, sizeof(char));
 	if (dup <= 0)
 		return (0);
 	if (n < len)

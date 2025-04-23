@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 17:22:54 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:36:22 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,16 @@ int	table_resize(t_hash_table *table)
 {
 	t_hash_table	*new_table;
 	t_ht_item		*tmp_items;
+	size_t			tmp_capacity;
 	size_t			i;
 
 	new_table = table_alloc(table->capacity * 2);
 	if (new_table == 0)
 		return (1);
 	i = 0;
-	while (i < table->size)
+	while (i < table->capacity)
 	{
-		if (table->items[i].key && table->items[i].value)
+		if (table->items[i].key)
 			table_insert(new_table, table->items[i].key, table->items[i].value);
 		i++;
 	}
@@ -73,7 +74,9 @@ int	table_resize(t_hash_table *table)
 	table->items = new_table->items;
 	new_table->items = tmp_items;
 	table->size = new_table->size;
+	tmp_capacity = table->capacity;
 	table->capacity = new_table->capacity;
+	new_table->capacity = tmp_capacity;
 	table_delete_table(new_table);
 	return (0);
 }
