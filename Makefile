@@ -4,8 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -g3
 LIB = libft.a
 LIB_DIR = libft/
 
-PARS_DIR = parser/
-EXEC_DIR = execution/
+SRC_DIR = src/
 INC_DIR = includes/
 OBJ_DIR = obj/
 
@@ -13,21 +12,15 @@ I = -I $(INC_DIR) -I $(LIB_DIR)
 
 HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h
 
-PARS =\
-	lexer.c\
-	grammar.c\
-	io.c\
-	parser.c\
-	heredoc_bonus.c\
+SRC =\
+	parser/lexer.c\
+	parser/grammar.c\
+	parser/io.c\
+	parser/parser.c\
+	parser/heredoc_bonus.c\
+	execution/execution.c\
 
-PARS_FILES = $(addprefix $(PARS_DIR), $(PARS))
-
-EXEC =\
-	execution.c\
-
-EXEC_FILES = $(addprefix $(EXEC_DIR), $(EXEC))
-
-SRC_FILES = $(PARS_FILES) $(EXEC_FILES)
+SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 
 OBJ_FILES = $(SRC_FILES:.c=.o)
 OBJ_FILES := $(addprefix $(OBJ_DIR), $(OBJ_FILES))
