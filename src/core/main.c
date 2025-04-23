@@ -6,11 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/23 17:21:26 by edarnand         ###   ########.fr       */
-=======
-/*   Updated: 2025/04/23 17:30:05 by sflechel         ###   ########.fr       */
->>>>>>> sflechel
+/*   Updated: 2025/04/23 18:44:17 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +92,7 @@ int	main(int ac, char **av, char **env)
 	if (env_table == 0)
 		return (1);
 	print_hash_table(env_table);
-	line = ft_strdup("ls < ' cat |'file1 >file2|cat $USER >> ooomfie");
+	line = ft_strdup("ls < ' cat |'file1 >file2|echo $USER$PWD$donotexist>> ooomfie");
 	list = parser(line, env_table);
 	create_child_and_exec_cmd(list, env_table);
 	while (wait(&status) > 0)

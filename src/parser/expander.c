@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 17:25:41 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:34:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
 	if (new_line <= 0)
 		return (0);
 	ft_strlcat(new_line, line, dollar.pos + 1);
-	ft_strlcat(new_line, s2, len);
+	if (s2)
+		ft_strlcat(new_line, s2, len);
 	ft_strlcat(new_line, &line[dollar.pos + dollar.len], len);
 	return (new_line);
 }
@@ -68,6 +69,19 @@ char	*search_in_env(t_tokenized_line *input, size_t word_pos, t_hash_table *env)
 	return (value);
 }
 
+void	correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index)
+{
+	size_t	i;
+
+	i = index;
+	while (i < line->nb_token)
+	{
+		line->tokens[i].pos -= old_len;
+		line->tokens[i].pos += new_len;
+		i++;
+	}
+}
+
 void	search_and_replace(t_tokenized_line *line, t_hash_table *env)
 {
 	size_t	i;
@@ -81,6 +95,7 @@ void	search_and_replace(t_tokenized_line *line, t_hash_table *env)
 		{
 			replacement = search_in_env(line, i, env);
 			new_line = token_line_triple_join(line->line, line->tokens[i], replacement);
+			correct_positions(line, ft_strlen(replacement), line->tokens[i].len, i);
 			free(replacement);
 			free(line->line);
 			line->line = new_line;
