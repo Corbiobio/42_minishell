@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 17:18:24 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:39:43 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,34 +45,39 @@ static t_position	get_pos(t_cmd_list *list, size_t curr_cmd_index)
 		return (MID);
 }
 
-int 	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_list *list, size_t i)
+void	infile_redirection(t_cmd cmd, t_position pos, int fds[3])
 {
-	char	*path;
-
 	if (cmd.io[0] >= 0)
 	{
 		dup2(cmd.io[0], STDIN_FILENO);
 		close(cmd.io[0]);
-		close(fds[2]);
 	}
 	else if (pos != FIRST)
-	{
 		dup2(fds[2], STDIN_FILENO);
-		close(fds[2]);
-	}
+	close(fds[2]);
+}
+
+void	outfile_redirection(t_cmd cmd, t_position pos, int fds[3])
+{
 	if (cmd.io[1] >= 0)
 	{
 		dup2(cmd.io[1], STDOUT_FILENO);
 		close(cmd.io[1]);
-		close(fds[1]);
-		close(fds[0]);
 	}
 	else if (pos != LAST)
-	{
 		dup2(fds[1], STDOUT_FILENO);
-		close(fds[1]);
-		close(fds[0]);
-	}
+	close(fds[1]);
+	close(fds[0]);
+}
+
+int 	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_list *list, size_t i)
+{
+	char	*path;
+
+	if (cmd.io[0] >= 0 || pos != FIRST)
+		infile_redirection(cmd, pos, fds);
+	if (cmd.io[1] >= 0 || pos != LAST)
+		outfile_redirection(cmd, pos, fds);
 	close_all_unused_fds(list, i);
 	path = get_cmd_path(cmd, env);
 	table_delete_table(env);
