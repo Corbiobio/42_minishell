@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 11:37:54 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:17:40 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,15 @@ void				open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
 //grammar.c
 void				grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
 
+//heredoc.c
+int					create_heredoc(char *eof);
+
+//parser.c
+t_cmd_list			*parser(char *line, t_hash_table *env);
+
 char				*alloc_word(t_tokenized_line *line, int token_index);
 
 int					is_type_redirect(t_token token);
-
-//heredoc.c
-int					create_heredoc(char *eof);
 
 void	print_tokens(t_tokenized_line *line);
 void	print_cmds(t_cmd_list *list);

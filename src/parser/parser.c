@@ -6,14 +6,14 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 17:37:25 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:17:18 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parser.h"
-#include "../includes/execution.h"
-#include "../libft/libft.h"
-#include "../includes/minishell.h"
+#include "../../includes/parser.h"
+#include "../../includes/execution.h"
+#include "../../libft/libft.h"
+#include "../../includes/minishell.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <sys/wait.h>
@@ -81,12 +81,12 @@ void	word_single_quotes_to_word(t_tokenized_line *tokens)
 	}
 }
 
-t_cmd_list	*parser(char *line)
+t_cmd_list	*parser(char *line, t_hash_table *env)
 {
 	t_tokenized_line	*tokens;
 	t_cmd_list			*cmds;
 
-	tokens = lexer(line);
+	tokens = lexer(line, env);
 	word_single_quotes_to_word(tokens);
 	cmds = malloc(sizeof(t_cmd_list) + sizeof(t_cmd) * count_commands(tokens));
 	if (cmds == 0)
@@ -97,19 +97,4 @@ t_cmd_list	*parser(char *line)
 	print_cmds(cmds);
 	free(tokens);
 	return (cmds);
-}
-
-int	main(int ac, char **av, char **env)
-{
-	int			status;
-	t_cmd_list	*list;
-
-	list = parser("cat << 'hi  -e' < file1 >file2|ls -a > ooomfie");
-	create_child_and_exec_cmd(list, env);
-	while (wait(&status) > 0)
-		;
-	free(list);
-	(void)ac;
-	(void)av;
-	return (status);
 }

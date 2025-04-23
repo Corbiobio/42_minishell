@@ -6,15 +6,16 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:40:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 09:25:11 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:15:05 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stddef.h>
 
 char	*ft_strndup(const char *s, size_t n)
 {
-	int		len;
+	size_t	len;
 	char	*dup;
 
 	len = ft_strlen(s);

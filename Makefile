@@ -13,6 +13,7 @@ I = -I $(INC_DIR) -I $(LIB_DIR)
 HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h
 
 SRC =\
+	core/main.c\
 	parser/lexer.c\
 	parser/grammar.c\
 	parser/io.c\
@@ -22,7 +23,7 @@ SRC =\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 
-OBJ_FILES = $(SRC_FILES:.c=.o)
+OBJ_FILES = $(SRC:.c=.o)
 OBJ_FILES := $(addprefix $(OBJ_DIR), $(OBJ_FILES))
 
 all: makelibft $(NAME)
