@@ -6,12 +6,12 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 09:51:50 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:46:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parser.h"
-#include "../libft/libft.h"
+#include "../../includes/parser.h"
+#include "../../libft/libft.h"
 #include <stdio.h>
 
 int	ft_iswhitespace(char c)
@@ -154,7 +154,7 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
 
-	output->line = input->line;
+	*output = (t_tokenized_line){.line = input->line};
 	i = 0;
 	while (i < input->nb_token)
 	{
@@ -167,7 +167,8 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 				output->tokens[output->nb_token - 1].len++;
 				i++;
 			}
-			add_token(output, input->tokens[i]);
+			if (i < input->nb_token)
+				add_token(output, input->tokens[i]);
 		}
 		i++;
 	}
@@ -180,20 +181,23 @@ void	fuse_chevrons(t_tokenized_line *input, t_tokenized_line *output)
 
 	i = 0;
 	*output = (t_tokenized_line){.line = input->line};
-	while (i + 1 < input->nb_token)
+	while (i < input->nb_token)
 	{
 		add_token(output, input->tokens[i]);
-		if (input->tokens[i].type == TYPE_GREATER && input->tokens[i + 1].type == TYPE_GREATER)
+		if (i + 1 < input->nb_token)
 		{
-			output->tokens[output->nb_token - 1].type = TYPE_GREATER_GREATER;
-			output->tokens[output->nb_token - 1].len = 2;
-			i++;
-		}
-		if (input->tokens[i].type == TYPE_LESSER && input->tokens[i + 1].type == TYPE_LESSER)
-		{
-			output->tokens[output->nb_token - 1].type = TYPE_LESSER_LESSER;
-			output->tokens[output->nb_token - 1].len = 2;
-			i++;
+			if (input->tokens[i].type == TYPE_GREATER && input->tokens[i + 1].type == TYPE_GREATER)
+			{
+				output->tokens[output->nb_token - 1].type = TYPE_GREATER_GREATER;
+				output->tokens[output->nb_token - 1].len = 2;
+				i++;
+			}
+			else if (input->tokens[i].type == TYPE_LESSER && input->tokens[i + 1].type == TYPE_LESSER)
+			{
+				output->tokens[output->nb_token - 1].type = TYPE_LESSER_LESSER;
+				output->tokens[output->nb_token - 1].len = 2;
+				i++;
+			}
 		}
 		i++;
 	}

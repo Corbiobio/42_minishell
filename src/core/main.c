@@ -6,7 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/04/23 17:21:26 by edarnand         ###   ########.fr       */
+=======
+/*   Updated: 2025/04/23 17:30:05 by sflechel         ###   ########.fr       */
+>>>>>>> sflechel
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +90,14 @@ int	main(int ac, char **av, char **env)
 	int				status;
 	t_cmd_list		*list;
 	t_hash_table	*env_table;
+	char			*line;
 
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
 		return (1);
 	print_hash_table(env_table);
-	list = parser("cat << 'hi  -e' < file1 >file2|ls -a > ooomfie", env_table);
+	line = ft_strdup("ls < ' cat |'file1 >file2|cat $USER >> ooomfie");
+	list = parser(line, env_table);
 	create_child_and_exec_cmd(list, env_table);
 	while (wait(&status) > 0)
 		;

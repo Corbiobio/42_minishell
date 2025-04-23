@@ -6,14 +6,14 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 11:35:03 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:25:41 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parser.h"
+#include "../../includes/parser.h"
 #include <stddef.h>
 #include <stdlib.h>
-#include "../libft/libft.h"
+#include "../../libft/libft.h"
 
 static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
 {
@@ -24,7 +24,7 @@ static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
 	new_line = ft_calloc(len, sizeof(char));
 	if (new_line <= 0)
 		return (0);
-	ft_strlcat(new_line, line, dollar.pos);
+	ft_strlcat(new_line, line, dollar.pos + 1);
 	ft_strlcat(new_line, s2, len);
 	ft_strlcat(new_line, &line[dollar.pos + dollar.len], len);
 	return (new_line);
@@ -35,6 +35,7 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 	size_t	i;
 
 	i = 0;
+	*output = (t_tokenized_line){.line = input->line};
 	while (i < input->nb_token)
 	{
 		add_token(output, input->tokens[i]);
