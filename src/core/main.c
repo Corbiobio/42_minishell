@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 15:19:19 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:51:22 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	main(int ac, char **av, char **env)
 	if (env_table == 0)
 		return (1);
 	print_hash_table(env_table);
-	list = parser("cat << 'hi  -e' < file1 >file2|ls -a > ooomfie", env_table);
+	list = parser("ls < ' cat |'file1 >file2|cat $USER > ooomfie", env_table);
 	create_child_and_exec_cmd(list, env);
 	while (wait(&status) > 0)
 		;

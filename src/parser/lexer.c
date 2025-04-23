@@ -6,12 +6,12 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 09:51:50 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:44:04 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parser.h"
-#include "../libft/libft.h"
+#include "../../includes/parser.h"
+#include "../../libft/libft.h"
 #include <stdio.h>
 
 int	ft_iswhitespace(char c)
@@ -154,7 +154,7 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
 
-	output->line = input->line;
+	*output = (t_tokenized_line){.line = input->line};
 	i = 0;
 	while (i < input->nb_token)
 	{
