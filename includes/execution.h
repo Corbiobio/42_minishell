@@ -6,12 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/22 13:58:07 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:46:18 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINE_NAME
-# define DEFINE_NAME
+#ifndef EXECUTION_H
+# define EXECUTION_H
 
 # include "minishell.h"
 
@@ -22,6 +22,10 @@ typedef enum e_position
 	LAST
 }	t_position;
 
+//path
+char	*get_cmd_path(t_cmd cmd, char **env);
+
+//execution
 void	create_child_and_exec_cmd(t_cmd_list *list, char **env);
 
 #endif
