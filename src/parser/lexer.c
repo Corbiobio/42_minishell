@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 17:46:57 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:17:54 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,35 @@ void	add_token(t_tokenized_line *line, t_token token_to_add)
 	line->nb_token++;
 }
 
+char	*type_to_str(t_type type)
+{
+	if (type == TYPE_ERROR)
+		return ("error");
+	if (type == TYPE_WORD)
+		return ("word");
+	if (type == TYPE_WORD_SINGLE_QUOTE)
+		return ("word_single_quote");
+	if (type == TYPE_WHITESPACE)
+		return ("whitespace");
+	if (type == TYPE_SINGLE_QUOTE)
+		return ("single_quote");
+	if (type == TYPE_DOUBLE_QUOTE)
+		return ("double_quote");
+	if (type == TYPE_GREATER)
+		return ("greater");
+	if (type == TYPE_LESSER)
+		return ("lesser");
+	if (type == TYPE_GREATER_GREATER)
+		return ("greater_greater");
+	if (type == TYPE_LESSER_LESSER)
+		return ("lesser_lesser");
+	if (type == TYPE_PIPE)
+		return ("pipe");
+	if (type == TYPE_DOLLAR)
+		return ("dollar");
+	return ("error");
+}
+
 void	print_tokens(t_tokenized_line *line)
 {
 	size_t	i;
@@ -47,7 +76,8 @@ void	print_tokens(t_tokenized_line *line)
 	i = 0;
 	while (i < line->nb_token)
 	{
-		printf("type: %d, pos: %zu, len: %zu\n", (int)line->tokens[i].type, line->tokens[i].pos, line->tokens[i].len);
+		//printf("%s\n", line->line + line->tokens[i].pos);
+		printf("[ %.*s ] type: %s\n", (int)line->tokens[i].len, line->line + line->tokens[i].pos, type_to_str(line->tokens[i].type));
 		i++;
 	}
 }
