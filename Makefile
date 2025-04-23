@@ -22,6 +22,7 @@ SRC =\
 	parser/expander.c\
 	execution/execution.c\
 	execution/path.c\
+	builtin/echo.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 
