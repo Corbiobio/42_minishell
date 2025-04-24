@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 13:15:24 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:31:43 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef struct s_tokenized_line
 }	t_tokenized_line;
 
 //lexer.c
-t_tokenized_line	*lexer(char *line, t_hash_table *env);
+char				*expander(char *line, t_hash_table *env);
+t_tokenized_line	*lexer(char *line);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
 void				tokenize_string(char *line, t_tokenized_line *tokens);
 

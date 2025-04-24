@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 13:22:09 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:30:39 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,28 +290,35 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	print_tokens(output);
 }
 
-t_tokenized_line	*lexer(char *line, t_hash_table *env)
+char	*expander(char *line, t_hash_table *env)
+{
+	void			*tokens;
+	const size_t	len_line = ft_strlen(line);
+	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
+
+	tokens = malloc(size * 2);
+	if (tokens == 0)
+		return (0);
+	tokenize_string(line, tokens);
+	turn_quoted_tokens_to_word(tokens);
+	line = expand_variables(tokens, tokens + size, env);
+	free(tokens);
+	return (line);
+}
+
+t_tokenized_line	*lexer(char *line)
 {
 	void			*tokens;
 	void			*tokens_output;
-	size_t	len_line = ft_strlen(line);
-	size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
+	const size_t	len_line = ft_strlen(line);
+	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
 
-	tokens = malloc(size * 2);
+	tokens = malloc(size * 4);
 	if (tokens == 0)
 		return (0);
 	tokens_output = malloc(size);
 	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
-	tokenize_string(line, tokens);
-	turn_quoted_tokens_to_word(tokens);
-	line = expand_variables(tokens, tokens + size, env);
-	free(tokens);
-	len_line = ft_strlen(line);
-	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
-	tokens = malloc(size * 4);
-	if (tokens == 0)
-		return (0);
 	tokenize_string(line, tokens);
 	turn_whitespaces_to_word(tokens);
 	remove_quotes(tokens, tokens + size);
