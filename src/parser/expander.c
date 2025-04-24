@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 13:16:31 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:37:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, s
 {
 	size_t	i;
 
-	i = index;
+	i = index + 1;
 	while (i < line->nb_token)
 	{
 		line->tokens[i].pos -= old_len;
@@ -96,6 +96,7 @@ char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 			replacement = search_in_env(line, i, env);
 			new_line = token_line_triple_join(line->line, line->tokens[i], replacement);
 			correct_positions(line, ft_strlen(replacement), line->tokens[i].len, i);
+			line->tokens[i].len = ft_strlen(replacement);
 			free(line->line);
 			line->line = new_line;
 		}
@@ -104,11 +105,41 @@ char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 	return (line->line);
 }
 
-char	*expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)
+void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	*output = (t_tokenized_line){.line = input->line};
+	while (i < input->nb_token)
+	{
+		if (input->tokens[i].type == TYPE_DOLLAR)
+		{
+			j = 0;
+			while (j < input->tokens[i].len)
+			{
+				output->tokens[i + j] = (t_token){.pos = i + j, .len = 1};
+				if (ft_iswhitespace(input->line[input->tokens[i].pos + j]))
+					output->tokens[i + j].type = TYPE_WHITESPACE;
+				else
+					output->tokens[i + j].type = TYPE_WORD;
+				output->nb_token++;
+				j++;
+			}
+			i++;
+			continue ;
+		}
+		add_token(output, input->tokens[i]);
+		i++;
+	}
+	print_tokens(output);
+}
+
+void	expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)
 {
 	char	*new_line;
 
 	fuse_dollars(input, intermediary);
 	new_line = search_and_replace(intermediary, env);
-	return (new_line);
 }

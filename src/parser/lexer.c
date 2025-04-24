@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 13:30:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:38:02 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,6 @@
 #include <stddef.h>
 #include <stdio.h>
 
-int	ft_iswhitespace(char c)
-{
-	if (c == ' ')
-		return (1);
-	if (c >= 9 && c <= 13)
-		return (1);
-	return (0);
-}
 int	is_token_character(char c)
 {
 	if (c == '|')
@@ -290,27 +282,31 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	print_tokens(output);
 }
 
-char	*expander(char *line, t_hash_table *env)
-{
-	void			*tokens;
-	const size_t	len_line = ft_strlen(line);
-	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
-
-	tokens = malloc(size * 2);
-	if (tokens == 0)
-		return (0);
-	tokenize_string(line, tokens);
-	turn_quoted_tokens_to_word(tokens);
-	line = expand_variables(tokens, tokens + size, env);
-	free(tokens);
-	return (line);
-}
-
-t_tokenized_line	*lexer(char *line)
+t_tokenized_line *expander(char *line, t_hash_table *env)
 {
 	void			*tokens;
 	void			*tokens_output;
 	const size_t	len_line = ft_strlen(line);
+	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
+
+	tokens = malloc(size);
+	if (tokens == 0)
+		return (0);
+	tokens_output = malloc(size);
+	if (tokens_output == 0)
+		return (free(tokens), (void *)0);
+	tokenize_string(line, tokens);
+	turn_quoted_tokens_to_word(tokens);
+	expand_variables(tokens, tokens_output, env);
+	free(tokens);
+	return (tokens_output);
+}
+
+t_tokenized_line	*lexer(t_tokenized_line *input)
+{
+	void			*tokens;
+	void			*tokens_output;
+	const size_t	len_line = ft_strlen(input->line);
 	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
 
 	tokens = malloc(size * 4);
@@ -319,7 +315,9 @@ t_tokenized_line	*lexer(char *line)
 	tokens_output = malloc(size);
 	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
-	tokenize_string(line, tokens);
+	expand_token_list(input, tokens);
+	free(input);
+	//tokenize_string(line, tokens);
 	turn_whitespaces_to_word(tokens);
 	remove_quotes(tokens, tokens + size);
 	fuse_words(tokens + size, tokens + size * 2);

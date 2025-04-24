@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 15:55:48 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:04:16 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 void	free_cmd_list(t_cmd_list *list)
 {
@@ -109,7 +110,7 @@ int	main(int ac, char **av, char **env)
 	print_hash_table(env_table);
 	while (42)
 	{
-		line = readline("beurre_demiShell$ ");
+		line = readline("beurre_demishell$ ");
 		if (line && *line)
 			add_history(line);
 		list = parser(line, env_table);
@@ -118,9 +119,9 @@ int	main(int ac, char **av, char **env)
 			;
 		free_cmd_list(list);
 	}
+	rl_clear_history();
 	table_delete_table(env_table);
 	return (status);
-	(void)list;
 	(void)ac;
 	(void)av;
 }

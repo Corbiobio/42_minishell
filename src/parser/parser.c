@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 13:30:51 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:40:16 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 	t_tokenized_line	*tokens;
 	t_cmd_list			*cmds;
 
-	line = expander(line, env);
-	tokens = lexer(line);
+	tokens = expander(line, env);
+	tokens = lexer(tokens);
 	word_single_quotes_to_word(tokens);
 	cmds = malloc(sizeof(t_cmd_list) + sizeof(t_cmd) * count_commands(tokens));
 	if (cmds == 0)

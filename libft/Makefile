@@ -8,7 +8,8 @@ INC_DIR = ./
 HEADERS = $(INC_DIR)libft.h\
 
 SRC_FILES = $(SRC_DIR)ft_isalpha.c\
-	    $(SRC_DIR)ft_str.c\
+		$(SRC_DIR)ft_is2.c\
+		$(SRC_DIR)ft_str.c\
 		$(SRC_DIR)ft_str2.c\
 	    $(SRC_DIR)ft_mem.c\
 	    $(SRC_DIR)ft_misc.c\

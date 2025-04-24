@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 13:31:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:41:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,15 @@ typedef struct s_tokenized_line
 }	t_tokenized_line;
 
 //lexer.c
-char				*expander(char *line, t_hash_table *env);
-t_tokenized_line	*lexer(char *line);
+t_tokenized_line	*expander(char *line, t_hash_table *env);
+t_tokenized_line	*lexer(t_tokenized_line *input);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
 void				tokenize_string(char *line, t_tokenized_line *tokens);
 
 //expander.c
 void				correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index);
-char				*expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env);
+void				expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env);
+void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
 
 //io.c
 void				open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
