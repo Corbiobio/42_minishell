@@ -10,6 +10,8 @@ OBJ_DIR = obj/
 
 I = -I $(INC_DIR) -I $(LIB_DIR)
 
+LIBS = -lreadline
+
 HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h
 
 SRC =\
@@ -39,7 +41,7 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c $(HEADERS) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(I) -c $< -o $@
 
 $(NAME): $(LIB_DIR)$(LIB) $(OBJ_FILES) Makefile
-	$(CC) $(CFLAGS) $(OBJ_FILES) $(I) $(LIB_DIR)$(LIB) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIB_DIR)$(LIB) $(LIBS) -o $(NAME)
 
 makelibft:
 	@$(MAKE) --no-print-directory -C $(LIB_DIR)

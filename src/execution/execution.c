@@ -6,13 +6,13 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 17:39:43 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:36:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "libft.h"
-#include "../includes/execution.h"
+#include "../../includes/minishell.h"
+#include "../../libft/libft.h"
+#include "../../includes/execution.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,7 +54,8 @@ void	infile_redirection(t_cmd cmd, t_position pos, int fds[3])
 	}
 	else if (pos != FIRST)
 		dup2(fds[2], STDIN_FILENO);
-	close(fds[2]);
+	if (fds[2] != -1)
+		close(fds[2]);
 }
 
 void	outfile_redirection(t_cmd cmd, t_position pos, int fds[3])
@@ -100,6 +101,7 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 	int			pid;
 
 	i = 0;
+	fds[2] = -1;
 	while (i < list->nb_cmd)
 	{
 		pos = get_pos(list, i);
@@ -110,13 +112,17 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 			dprintf(2, "cannot fork on %s\n", list->cmds[i].cmd[0]);
 		else if (pid == 0)
 			exec_cmd(fds, list->cmds[i], pos, env, list, i);
-		if (pos != FIRST)
+		if (fds[2] != -1)
 			close(fds[2]);
 		if (pos != LAST)
 		{
 			close(fds[1]);
 			fds[2] = fds[0];
 		}
+		if (list->cmds[i].io[0] >= 0)
+			close(list->cmds[i].io[0]);
+		if (list->cmds[i].io[1] >= 0)
+			close(list->cmds[i].io[1]);
 		i++;
 	}
 }
