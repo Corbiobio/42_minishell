@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 10:03:27 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:18:29 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	main(int ac, char **av, char **env)
 	if (env_table == 0)
 		return (1);
 	print_hash_table(env_table);
-	line = ft_strdup("ls < ' cat |'file1 >file2|echo $USER$PWD$donotexist>> ooomfie");
+	line = ft_strdup("'ec'h$zz");
 	list = parser(line, env_table);
 	create_child_and_exec_cmd(list, env_table);
 	while (wait(&status) > 0)

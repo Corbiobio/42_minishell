@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 10:13:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:16:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, s
 	}
 }
 
-void	search_and_replace(t_tokenized_line *line, t_hash_table *env)
+char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 {
 	size_t	i;
 	char	*replacement;
@@ -101,17 +101,14 @@ void	search_and_replace(t_tokenized_line *line, t_hash_table *env)
 		}
 		i++;
 	}
+	return (line->line);
 }
 
-void	expand_variables(t_tokenized_line *input, t_tokenized_line *output, t_hash_table *env)
+char	*expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)
 {
-	t_tokenized_line	*intermediary;
+	char	*new_line;
 
-	intermediary = malloc(sizeof(t_tokenized_line) + sizeof(t_token) * input->nb_token);
-	if (intermediary == 0)
-		return ;
 	fuse_dollars(input, intermediary);
-	search_and_replace(intermediary, env);
-	tokenize_string(intermediary->line, output);
-	free(intermediary);
+	new_line = search_and_replace(intermediary, env);
+	return (new_line);
 }

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 08:23:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:15:24 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void				tokenize_string(char *line, t_tokenized_line *tokens);
 
 //expander.c
 void				correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index);
-void				expand_variables(t_tokenized_line *input, t_tokenized_line *output, t_hash_table *env);
+char				*expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env);
 
 //io.c
 void				open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
