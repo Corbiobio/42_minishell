@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 07:58:22 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 08:00:18 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 				i++;
 			}
 			continue ;
-			//add_token(output, input->tokens[i]);
 		}
 		i++;
 	}

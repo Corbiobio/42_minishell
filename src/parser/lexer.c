@@ -6,12 +6,13 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 18:17:54 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/24 08:41:05 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../libft/libft.h"
+#include <stddef.h>
 #include <stdio.h>
 
 int	ft_iswhitespace(char c)
@@ -76,7 +77,6 @@ void	print_tokens(t_tokenized_line *line)
 	i = 0;
 	while (i < line->nb_token)
 	{
-		//printf("%s\n", line->line + line->tokens[i].pos);
 		printf("[ %.*s ] type: %s\n", (int)line->tokens[i].len, line->line + line->tokens[i].pos, type_to_str(line->tokens[i].type));
 		i++;
 	}
@@ -254,6 +254,19 @@ void	mark_single_quote_words(t_tokenized_line *line)
 	print_tokens(line);
 }
 
+char	*line_surgery(char *line, t_token quote)
+{
+	const size_t	len_line = ft_strlen(line);
+	char			*new_line;
+
+	new_line = ft_calloc(len_line, sizeof(char));
+	if (new_line == 0)
+		return (0);
+	ft_strlcat(new_line, line, quote.pos + 1);
+	ft_strlcat(new_line, &line[quote.pos + 1], len_line);
+	return (new_line);
+}
+
 void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
@@ -262,8 +275,16 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	*output = (t_tokenized_line){.line = input->line};
 	while (i < input->nb_token)
 	{
-		if (input->tokens[i].type != TYPE_SINGLE_QUOTE && input->tokens[i].type != TYPE_DOUBLE_QUOTE)
-			add_token(output, input->tokens[i]);
+		if (input->tokens[i].type == TYPE_SINGLE_QUOTE || input->tokens[i].type == TYPE_DOUBLE_QUOTE)
+		{
+			output->line = line_surgery(input->line, input->tokens[i]);
+			free(input->line);
+			input->line = output->line;
+			correct_positions(input, 0, 1, i);
+			i++;
+			continue ;
+		}
+		add_token(output, input->tokens[i]);
 		i++;
 	}
 	print_tokens(output);
