@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 14:37:09 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:55:48 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,17 @@ int	main(int ac, char **av, char **env)
 	if (env_table == 0)
 		return (1);
 	print_hash_table(env_table);
-	line = readline("beurre_demiShell$ ");
-	list = parser(line, env_table);
-	create_child_and_exec_cmd(list, env_table);
-	while (wait(&status) > 0)
-		;
-	free_cmd_list(list);
+	while (42)
+	{
+		line = readline("beurre_demiShell$ ");
+		if (line && *line)
+			add_history(line);
+		list = parser(line, env_table);
+		create_child_and_exec_cmd(list, env_table);
+		while (wait(&status) > 0)
+			;
+		free_cmd_list(list);
+	}
 	table_delete_table(env_table);
 	return (status);
 	(void)list;
