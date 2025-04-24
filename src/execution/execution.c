@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/24 15:36:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:56:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ void	outfile_redirection(t_cmd cmd, t_position pos, int fds[3])
 	}
 	else if (pos != LAST)
 		dup2(fds[1], STDOUT_FILENO);
-	close(fds[1]);
-	close(fds[0]);
+	if (fds[1] != -1)
+		close(fds[1]);
+	if (fds[1] != -1)
+		close(fds[0]);
 }
 
 int 	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_list *list, size_t i)
@@ -101,6 +103,8 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 	int			pid;
 
 	i = 0;
+	fds[0] = -1;
+	fds[1] = -1;
 	fds[2] = -1;
 	while (i < list->nb_cmd)
 	{
@@ -116,7 +120,8 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 			close(fds[2]);
 		if (pos != LAST)
 		{
-			close(fds[1]);
+			if (fds[1] != -1)
+				close(fds[1]);
 			fds[2] = fds[0];
 		}
 		if (list->cmds[i].io[0] >= 0)
