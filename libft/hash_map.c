@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 15:36:22 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 10:12:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	table_delete_table(t_hash_table *table)
 	i = 0;
 	while (i < table->capacity)
 	{
-		if (table->items[i].key == 0)
+		if (table->items[i].value != 0)
 			table_delete_item(table, i);
 		i++;
 	}

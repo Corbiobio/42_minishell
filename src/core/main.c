@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 18:44:17 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 10:03:27 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+
+void	free_cmd_list(t_cmd_list *list)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < list->nb_cmd)
+	{
+		ft_free_split(list->cmds[i].cmd);
+		i++;
+	}
+	free(list);
+}
 
 void	print_hash_table(t_hash_table *table)
 {
@@ -64,7 +77,7 @@ t_hash_table	*convert_env_to_table(char **env)
 	char			*value;
 	size_t			i;
 
-	env_table = table_alloc(100);
+	env_table = table_alloc(150);
 	if (env_table == 0)
 		return (0);
 	i = 0;
@@ -98,7 +111,7 @@ int	main(int ac, char **av, char **env)
 	while (wait(&status) > 0)
 		;
 	table_delete_table(env_table);
-	free(list);
+	free_cmd_list(list);
 	return (status);
 	(void)ac;
 	(void)av;

@@ -6,12 +6,11 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/17 14:03:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 09:35:39 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parser.h"
-#include "../libft/libft.h"
+#include "../../includes/parser.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>

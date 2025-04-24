@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 08:00:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/24 10:13:28 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	search_and_replace(t_tokenized_line *line, t_hash_table *env)
 			replacement = search_in_env(line, i, env);
 			new_line = token_line_triple_join(line->line, line->tokens[i], replacement);
 			correct_positions(line, ft_strlen(replacement), line->tokens[i].len, i);
-			free(replacement);
 			free(line->line);
 			line->line = new_line;
 		}
