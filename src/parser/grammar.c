@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 09:35:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 09:28:05 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	remove_redirection(t_tokenized_line *input, t_tokenized_line *output)
 			i++;
 		}
 	}
-	print_tokens(output);
 }
 
 void	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
@@ -87,7 +86,6 @@ void	convert_to_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 		i++;
 	}
 	cmd_list->cmds[cmd_index].cmd[counter] = 0;
-	print_cmds(cmd_list);
 }
 
 void	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list)

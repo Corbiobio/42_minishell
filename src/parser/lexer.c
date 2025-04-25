@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 18:38:02 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 09:27:15 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ void	tokenize_string(char *line, t_tokenized_line *tokens)
 			tokens->tokens[i].type = TYPE_WORD;
 		i++;
 	}
-	print_tokens(tokens);
 }
 
 void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
@@ -116,7 +115,6 @@ void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 			add_token(output, input->tokens[i]);
 		i++;
 	}
-	print_tokens(output);
 }
 
 void	turn_quoted_tokens_to_word(t_tokenized_line *line)
@@ -143,7 +141,6 @@ void	turn_quoted_tokens_to_word(t_tokenized_line *line)
 		}
 		i++;
 	}
-	print_tokens(line);
 }
 
 void	turn_whitespaces_to_word(t_tokenized_line *line)
@@ -169,7 +166,6 @@ void	turn_whitespaces_to_word(t_tokenized_line *line)
 		}
 		i++;
 	}
-	print_tokens(line);
 }
 
 void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
@@ -194,7 +190,6 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 		}
 		i++;
 	}
-	print_tokens(output);
 }
 
 void	fuse_chevrons(t_tokenized_line *input, t_tokenized_line *output)
@@ -205,7 +200,6 @@ void	fuse_chevrons(t_tokenized_line *input, t_tokenized_line *output)
 	*output = (t_tokenized_line){.line = input->line};
 	while (i < input->nb_token)
 	{
-		add_token(output, input->tokens[i]);
 		if (i + 1 < input->nb_token)
 		{
 			if (input->tokens[i].type == TYPE_GREATER && input->tokens[i + 1].type == TYPE_GREATER)
@@ -223,7 +217,6 @@ void	fuse_chevrons(t_tokenized_line *input, t_tokenized_line *output)
 		}
 		i++;
 	}
-	print_tokens(output);
 }
 
 void	mark_single_quote_words(t_tokenized_line *line)
@@ -243,7 +236,6 @@ void	mark_single_quote_words(t_tokenized_line *line)
 		}
 		i++;
 	}
-	print_tokens(line);
 }
 
 char	*line_surgery(char *line, t_token quote)
@@ -279,7 +271,6 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 		add_token(output, input->tokens[i]);
 		i++;
 	}
-	print_tokens(output);
 }
 
 t_tokenized_line *expander(char *line, t_hash_table *env)

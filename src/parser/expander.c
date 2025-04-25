@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 18:37:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 08:50:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
 		add_token(output, input->tokens[i]);
 		i++;
 	}
-	print_tokens(output);
 }
 
 void	expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 17:04:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 09:21:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <termios.h>
+#include <unistd.h>
 
 void	free_cmd_list(t_cmd_list *list)
 {
@@ -97,17 +99,30 @@ t_hash_table	*convert_env_to_table(char **env)
 	return (env_table);
 }
 
+void	handle_signals_interactive(void)
+{
+}
+
 int	main(int ac, char **av, char **env)
 {
 	int				status;
 	t_cmd_list		*list;
 	t_hash_table	*env_table;
 	char			*line;
+	struct termios	old_termios;
+	struct termios	new_termios;
+	int				tmp;
 
+	tcgetattr(STDIN_FILENO, &old_termios);
+	new_termios = old_termios;
+	tmp = new_termios.c_cc[VEOF];
+	new_termios.c_cc[VEOF] = new_termios.c_cc[VINTR];
+	new_termios.c_cc[VINTR] = tmp;
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
+	handle_signals_interactive();
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
 		return (1);
-	print_hash_table(env_table);
 	while (42)
 	{
 		line = readline("beurre_demishell$ ");
@@ -121,6 +136,7 @@ int	main(int ac, char **av, char **env)
 	}
 	rl_clear_history();
 	table_delete_table(env_table);
+	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	return (status);
 	(void)ac;
 	(void)av;

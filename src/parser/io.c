@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 14:50:21 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 08:49:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ void	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
 
 	i = 0;
 	cmd_index = 0;
-	print_tokens(line);
 	while (i < line->nb_token)
 	{
 		if (line->tokens[i].type == TYPE_PIPE)
