@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 09:21:45 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:17:54 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,36 @@ t_hash_table	*convert_env_to_table(char **env)
 	return (env_table);
 }
 
-void	handle_signals_interactive(void)
+void	signal_handler_shell(int signum)
 {
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (signum == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
+
+void	set_signal_handler(void)
+{
+	struct sigaction	sigset;
+
+	sigemptyset(&sigset.sa_mask);
+	sigaddset(&sigset.sa_mask, SIGINT);
+	sigaddset(&sigset.sa_mask, SIGQUIT);
+	sigset.sa_flags = 0;
+	sigset.sa_handler = &signal_handler_shell;
+	sigaction(SIGINT, &sigset, 0);
+	sigaction(SIGQUIT, &sigset, 0);
+}
+
+
 
 int	main(int ac, char **av, char **env)
 {
@@ -109,24 +136,17 @@ int	main(int ac, char **av, char **env)
 	t_cmd_list		*list;
 	t_hash_table	*env_table;
 	char			*line;
-	struct termios	old_termios;
-	struct termios	new_termios;
-	int				tmp;
 
-	tcgetattr(STDIN_FILENO, &old_termios);
-	new_termios = old_termios;
-	tmp = new_termios.c_cc[VEOF];
-	new_termios.c_cc[VEOF] = new_termios.c_cc[VINTR];
-	new_termios.c_cc[VINTR] = tmp;
-	tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
-	handle_signals_interactive();
+	set_signal_handler();
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
 		return (1);
 	while (42)
 	{
 		line = readline("beurre_demishell$ ");
-		if (line && *line)
+		if (!line)
+			break ;
+		if (*line)
 			add_history(line);
 		list = parser(line, env_table);
 		create_child_and_exec_cmd(list, env_table);
@@ -136,7 +156,6 @@ int	main(int ac, char **av, char **env)
 	}
 	rl_clear_history();
 	table_delete_table(env_table);
-	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	return (status);
 	(void)ac;
 	(void)av;
