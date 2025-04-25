@@ -5,3 +5,4 @@ out*
 .vscode
 .NotRelink
 ooomfie
+compile_flags.txt

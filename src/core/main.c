@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 10:17:54 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 10:26:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-#include <signal.h>
-#include <termios.h>
 #include <unistd.h>
 
 void	free_cmd_list(t_cmd_list *list)
@@ -98,37 +96,6 @@ t_hash_table	*convert_env_to_table(char **env)
 	}
 	return (env_table);
 }
-
-void	signal_handler_shell(int signum)
-{
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (signum == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-void	set_signal_handler(void)
-{
-	struct sigaction	sigset;
-
-	sigemptyset(&sigset.sa_mask);
-	sigaddset(&sigset.sa_mask, SIGINT);
-	sigaddset(&sigset.sa_mask, SIGQUIT);
-	sigset.sa_flags = 0;
-	sigset.sa_handler = &signal_handler_shell;
-	sigaction(SIGINT, &sigset, 0);
-	sigaction(SIGQUIT, &sigset, 0);
-}
-
-
 
 int	main(int ac, char **av, char **env)
 {

@@ -6,12 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 09:27:23 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:26:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-#include "../../includes/execution.h"
 #include "../../libft/libft.h"
 #include "../../includes/minishell.h"
 #include <stddef.h>
@@ -53,7 +52,6 @@ void	print_cmds(t_cmd_list *list)
 	int		j;
 
 	printf("nb_cmd: %zu\n", list->nb_cmd);
-	*(volatile int *)(NULL) = 0;
 	i = 0;
 	while (i < list->nb_cmd)
 	{
@@ -96,6 +94,7 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 	init_cmds(cmds, count_commands(tokens));
 	open_infile_outfile(tokens, cmds);
 	grammarify(tokens, cmds);
+	print_cmds(cmds);
 	free(tokens->line);
 	free(tokens);
 	return (cmds);
