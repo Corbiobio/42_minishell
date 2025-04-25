@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   signal_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 14:54:19 by sflechel         ###   ########.fr       */
+/*   Created: 2025/04/25 14:55:37 by sflechel          #+#    #+#             */
+/*   Updated: 2025/04/25 15:10:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
 #include <signal.h>
-#include <stdio.h>
 #include <unistd.h>
 
-void	signal_handler_shell(int signum)
+void	letsdonothing(int signum)
 {
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (signum == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-		write(STDIN_FILENO, "  \b\b", 4);
-	}
+	(void)signum;
 }
 
-void	set_signal_handler_main(void)
+void	set_signal_handler_exec(void)
 {
 	struct sigaction	sigset;
 
@@ -40,7 +27,7 @@ void	set_signal_handler_main(void)
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigaddset(&sigset.sa_mask, SIGQUIT);
 	sigset.sa_flags = 0;
-	sigset.sa_handler = &signal_handler_shell;
+	sigset.sa_handler = &letsdonothing;
 	sigaction(SIGINT, &sigset, 0);
 	sigaction(SIGQUIT, &sigset, 0);
 }

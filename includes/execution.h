@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 17:19:35 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:57:18 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,11 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env);
 
 //echo
 void	echo(t_cmd cmd);
+
+//signal_exec
+void	set_signal_handler_exec(void);
+
+//env
+char	**get_env_from_table(t_hash_table *env_table);
+
 #endif

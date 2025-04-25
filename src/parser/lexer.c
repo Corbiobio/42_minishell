@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 11:32:24 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:36:50 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,21 +308,13 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
 	expand_token_list(input, tokens);
-	print_tokens(input);
 	free(input);
-	//tokenize_string(line, tokens);
 	turn_whitespaces_to_word(tokens);
-	print_tokens(tokens);
 	remove_quotes(tokens, tokens + size);
-	print_tokens(tokens + size);
 	fuse_words(tokens + size, tokens + size * 2);
-	print_tokens(tokens + size * 2);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
-	print_tokens(tokens + size * 3);
 	fuse_chevrons(tokens + size * 3, tokens_output);
-	print_tokens(tokens_output);
 	mark_single_quote_words(tokens_output);
-	print_tokens(tokens_output);
 	free(tokens);
 	return (tokens_output);
 }

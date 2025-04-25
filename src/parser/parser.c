@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 11:26:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:37:33 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 	init_cmds(cmds, count_commands(tokens));
 	open_infile_outfile(tokens, cmds);
 	grammarify(tokens, cmds);
-	print_cmds(cmds);
 	free(tokens->line);
 	free(tokens);
 	return (cmds);

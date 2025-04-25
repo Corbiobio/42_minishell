@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/24 18:58:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:08:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ void	outfile_redirection(t_cmd cmd, t_position pos, int fds[3])
 
 int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_list *list, size_t i)
 {
-	char	*path;
+	char		*path;
+	const char	**envp = (const char **)get_env_from_table(env);
 
 	if (cmd.io[0] >= 0 || pos != FIRST)
 		infile_redirection(cmd, pos, fds);
@@ -86,12 +87,13 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
 	{
-		if (execve(path, cmd.cmd, NULL) == -1)
+		if (execve(path, cmd.cmd, (char **)envp) == -1)
 			dprintf(2, "cannot exec %s\n", cmd.cmd[0]);
 	}
 	else
 		dprintf(2, "cannot find correct path for %s\n", cmd.cmd[0]);
 	free(path);
+	ft_free_split((char **)envp);
 	exit (EXIT_FAILURE);
 }
 
@@ -102,6 +104,7 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 	int			fds[3];
 	int			pid;
 
+	set_signal_handler_exec();
 	i = 0;
 	fds[0] = -1;
 	fds[1] = -1;
