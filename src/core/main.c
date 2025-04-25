@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 14:59:04 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:07:14 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,6 @@ void	free_cmd_list(t_cmd_list *list)
 		i++;
 	}
 	free(list);
-}
-
-void	print_hash_table(t_hash_table *table)
-{
-	size_t	i;
-
-	printf("size: %zu, capacity: %zu\n", table->size, table->capacity);
-	i = 0;
-	while (i < table->capacity)
-	{
-		if (table->items[i].key == 0)
-			printf("%zu: no value  ", i);
-		else if (table->items[i].value == 0)
-			printf("%zu: empty/removed  ", i);
-		else
-			printf("%zu: ,key: %s, value: %s\n", i, table->items[i].key, table->items[i].value);
-		i++;
-	}
 }
 
 int	split_key_value(char *input, char **key, char **value)
@@ -80,7 +62,7 @@ t_hash_table	*convert_env_to_table(char **env)
 	char			*value;
 	size_t			i;
 
-	env_table = table_alloc(150);
+	env_table = table_alloc(5);
 	if (env_table == 0)
 		return (0);
 	i = 0;
@@ -104,6 +86,7 @@ int	main(int ac, char **av, char **env)
 	t_hash_table	*env_table;
 	char			*line;
 
+	status = 0;
 	set_signal_handler_main();
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)

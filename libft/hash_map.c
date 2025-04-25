@@ -6,13 +6,32 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 10:12:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:05:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+void	print_hash_table(t_hash_table *table)
+{
+	size_t	i;
+
+	printf("size: %zu, capacity: %zu\n", table->size, table->capacity);
+	i = 0;
+	while (i < table->capacity)
+	{
+		if (table->items[i].key == 0)
+			printf("%zu: no value  ", i);
+		else if (table->items[i].value == 0)
+			printf("%zu: empty/removed  ", i);
+		else
+			printf("%zu: ,key: %s, value: %s\n", i, table->items[i].key, table->items[i].value);
+		i++;
+	}
+}
 
 t_hash_table	*table_alloc(int capacity)
 {
@@ -45,8 +64,8 @@ void	table_delete_table(t_hash_table *table)
 	i = 0;
 	while (i < table->capacity)
 	{
-		if (table->items[i].value != 0)
-			table_delete_item(table, i);
+		//if (table->items[i].key != 0)
+		table_delete_item(table, i);
 		i++;
 	}
 	free(table->items);
@@ -77,6 +96,7 @@ int	table_resize(t_hash_table *table)
 	tmp_capacity = table->capacity;
 	table->capacity = new_table->capacity;
 	new_table->capacity = tmp_capacity;
-	table_delete_table(new_table);
+	free(new_table->items);
+	free(new_table);
 	return (0);
 }
