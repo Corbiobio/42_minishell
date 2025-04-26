@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 17:07:14 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:14:37 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_hash_table	*convert_env_to_table(char **env)
 	char			*value;
 	size_t			i;
 
-	env_table = table_alloc(5);
+	env_table = table_alloc(100);
 	if (env_table == 0)
 		return (0);
 	i = 0;
@@ -71,6 +71,8 @@ t_hash_table	*convert_env_to_table(char **env)
 		if (split_key_value(env[i], &key, &value) == 1)
 		{
 			table_delete_table(env_table);
+			free(key);
+			free(value);
 			return (0);
 		}
 		table_insert(env_table, key, value);

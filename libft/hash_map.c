@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 17:05:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/26 11:07:49 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	print_hash_table(t_hash_table *table)
 	while (i < table->capacity)
 	{
 		if (table->items[i].key == 0)
-			printf("%zu: no value  ", i);
+			printf("%zu: no value  \n", i);
 		else if (table->items[i].value == 0)
-			printf("%zu: empty/removed  ", i);
+			printf("%zu: empty/removed  \n", i);
 		else
 			printf("%zu: ,key: %s, value: %s\n", i, table->items[i].key, table->items[i].value);
 		i++;
@@ -64,12 +64,28 @@ void	table_delete_table(t_hash_table *table)
 	i = 0;
 	while (i < table->capacity)
 	{
-		//if (table->items[i].key != 0)
-		table_delete_item(table, i);
+		if (table->items[i].key != 0)
+			table_delete_item(table, i);
 		i++;
 	}
+	printf("capacity: %zu\n", table->size);
 	free(table->items);
 	free(table);
+}
+
+int	table_insert_for_resize(t_hash_table *table, char *key, char *value)
+{
+	size_t		i;
+
+	i = table_hash_function(key, table->capacity);
+	while (i < table->capacity && table->items[i].key)
+		i++;
+	if (i < table->capacity)
+	{
+		table->items[i] = (t_ht_item){.key = key, .value = value};
+		table->size++;
+	}
+	return (0);
 }
 
 int	table_resize(t_hash_table *table)

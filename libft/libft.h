@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 17:28:10 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:32:10 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ void			table_delete_item(t_hash_table *table, int index);
 void			table_delete_table(t_hash_table *table);
 char			*table_search(t_hash_table *table, const char *key);
 t_hash_table	*table_alloc(int capacity);
+void			print_hash_table(t_hash_table *table);
+int				table_hash_function(const char *key, const int len_table);
+int				power(int nb, int exponent);
 
 char			*ft_str_triple_join(char const *s1,
 					char const *s2, char const *s3);

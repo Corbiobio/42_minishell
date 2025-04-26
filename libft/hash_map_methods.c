@@ -6,14 +6,14 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 17:16:36 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:11:39 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stddef.h>
 
-static int	power(int nb, int exponent)
+int	power(int nb, int exponent)
 {
 	if (exponent < 0)
 		return (0);
@@ -22,7 +22,7 @@ static int	power(int nb, int exponent)
 	return (power(nb * nb, exponent - 1));
 }
 
-static int	table_hash_function(const char *key, const int len_table)
+int	table_hash_function(const char *key, const int len_table)
 {
 	long long int	hash;
 	int				prime_signature;
@@ -36,7 +36,7 @@ static int	table_hash_function(const char *key, const int len_table)
 	while (i < len_key)
 	{
 		hash += power(prime_signature, len_key - i + 1) * key[i];
-		hash = hash % len_table;
+		hash = hash % (len_table - 1);
 		i++;
 	}
 	return ((int)hash);
@@ -62,17 +62,8 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 	size_t		i;
 	const int	load = table->size * 100 / table->capacity;
 
-	if (load > 50)
-	{
-		printf("before resize\n");
-		print_hash_table_simpler(table);
-		if (table_resize(table) == 1)
-		{
-			free(table);
+	if (load > 50 && table_resize(table) == 1)
 			return (1);
-		}
-		print_hash_table_simpler(table);
-	}
 	i = table_hash_function(key, table->capacity);
 	while (i < table->capacity && table->items[i].key)
 	{
@@ -87,6 +78,12 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 	{
 		table->items[i] = (t_ht_item){.key = key, .value = value};
 		table->size++;
+	}
+	else
+	{
+		if (table_resize(table) == 1)
+			return (1);
+		table_insert(table, key, value);
 	}
 	return (0);
 }
