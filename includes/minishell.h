@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 16:51:19 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/26 12:45:55 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ typedef enum e_error
 	ERROR_QUOTE
 }	t_error;
 
-void	set_signal_handler_main(void);
+struct termios	set_signal_handler_main(void);
 
 #endif //MINISHELL_H

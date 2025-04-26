@@ -6,14 +6,16 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 14:54:19 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:01:28 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <bits/posix_opt.h>
 #include <readline/readline.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <termios.h>
 
 void	signal_handler_shell(int signum)
 {
@@ -24,23 +26,22 @@ void	signal_handler_shell(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (signum == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-		write(STDIN_FILENO, "  \b\b", 4);
-	}
 }
 
-void	set_signal_handler_main(void)
+struct termios	set_signal_handler_main(void)
 {
 	struct sigaction	sigset;
+	struct termios		old_termios;
+	struct termios		new_termios;
 
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
-	sigaddset(&sigset.sa_mask, SIGQUIT);
 	sigset.sa_flags = 0;
 	sigset.sa_handler = &signal_handler_shell;
 	sigaction(SIGINT, &sigset, 0);
-	sigaction(SIGQUIT, &sigset, 0);
+	tcgetattr(STDIN_FILENO, &old_termios);
+	new_termios = old_termios;
+	new_termios.c_cc[VQUIT] = _POSIX_VDISABLE;
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
+	return (old_termios);
 }
