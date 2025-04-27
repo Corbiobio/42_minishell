@@ -6,21 +6,48 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/22 10:05:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 10:11:26 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
+#include "minishell.h"
+#include <signal.h>
 #include <unistd.h>
+#include <termios.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-static int	write_heredoc(char	*eof_signal, int write_end)
+void	signal_handler_heredoc(int signum)
+{
+	(void)signum;
+	write(STDOUT_FILENO, "\n", 1);
+}
+
+void	set_signal_handler_heredoc(void)
+{
+	struct sigaction	sigset;
+	struct termios		termios;
+
+	sigemptyset(&sigset.sa_mask);
+	sigaddset(&sigset.sa_mask, SIGINT);
+	sigset.sa_flags = 0;
+	sigset.sa_handler = &signal_handler_heredoc;
+	sigaction(SIGINT, &sigset, 0);
+	tcgetattr(STDIN_FILENO, &termios);
+	termios.c_cc[VQUIT] = _POSIX_VDISABLE;
+	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+}
+static int	write_heredoc(char *eof_signal, int write_end)
 {
 	char	*buffer;
 	int		len_eof;
 
+	set_signal_handler_heredoc();
 	len_eof = ft_strlen(eof_signal);
 	while (1)
 	{
+		write(STDOUT_FILENO, "> ", 2);
 		buffer = get_next_line(STDIN_FILENO);
 		if (buffer == 0)
 			return (-1);

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/26 17:13:20 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 10:02:20 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ int	main(int ac, char **av, char **env)
 		if (*line)
 			add_history(line);
 		list = parser(line, env_table);
+		if (!list)
+			continue ;
 		create_child_and_exec_cmd(list, env_table, old_termios);
 		while (wait(&status) > 0)
 			;

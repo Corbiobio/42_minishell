@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 08:49:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 09:53:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*alloc_word(t_tokenized_line *line, int token_index)
 	return (word);
 }
 
-void	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
+int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 {
 	int	fd;
 
@@ -53,9 +53,10 @@ void	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 	if (redirect.type == TYPE_GREATER_GREATER)
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	cmd->io[1] = fd;
+	return (fd);
 }
 
-void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
+int	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 {
 	int	fd;
 
@@ -66,19 +67,24 @@ void	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 	else
 		fd = create_heredoc(filename);
 	cmd->io[0] = fd;
+	return (fd);
 }
 
-void	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)
+int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)
 {
 	const t_token	redirect = line->tokens[token_index];
 	char			*filename;
+	int				error;
 
 	filename = alloc_word(line, token_index + 1);
+	if (filename == 0)
+		return (-1);
 	if (redirect.type == TYPE_GREATER || redirect.type == TYPE_GREATER_GREATER)
-		redirect_out(redirect, filename, cmd);
+		error = redirect_out(redirect, filename, cmd);
 	else
-		redirect_in(redirect, filename, cmd);
+		error = redirect_in(redirect, filename, cmd);
 	free(filename);
+	return (error);
 }
 
 int	file_opening_did_not_fail(t_cmd cmd)
@@ -98,7 +104,7 @@ int	next_token_is_word(t_tokenized_line *line, size_t token_index)
 	return (0);
 }
 
-void	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
+int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
 {
 	size_t	i;
 	size_t	cmd_index;
@@ -112,10 +118,14 @@ void	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
 		if (is_type_redirect(line->tokens[i]) == 1 && next_token_is_word(line, i) == 1)
 		{
 			if (file_opening_did_not_fail(cmd_list->cmds[cmd_index]))
-				redirect_io(line, i, &(cmd_list->cmds[cmd_index]));
+			{
+				if (redirect_io(line, i, &(cmd_list->cmds[cmd_index])) <= 0)
+					return (1);
+			}
 		}
 		else
 			printf("ERROR_UNEXPECTED_TOKEN");
 		i++;
 	}
+	return (0);
 }

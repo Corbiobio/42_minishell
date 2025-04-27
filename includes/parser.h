@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/24 18:41:23 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:29:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void				expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary
 void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
 
 //io.c
-void				open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
+int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 //grammar.c
 void				grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
