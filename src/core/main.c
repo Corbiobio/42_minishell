@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 10:02:20 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:48:43 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	free_cmd_list(t_cmd_list *list)
 	i = 0;
 	while (i < list->nb_cmd)
 	{
-		ft_free_split(list->cmds[i].cmd);
+		if (list->cmds[i].cmd)
+			ft_free_split(list->cmds[i].cmd);
 		i++;
 	}
 	free(list);

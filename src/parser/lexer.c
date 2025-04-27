@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 12:49:44 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:43:29 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,7 @@ char	*line_surgery(char *line, t_token quote)
 	return (new_line);
 }
 
-void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
+int	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
 
@@ -265,6 +265,8 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 		if (input->tokens[i].type == TYPE_SINGLE_QUOTE || input->tokens[i].type == TYPE_DOUBLE_QUOTE)
 		{
 			output->line = line_surgery(input->line, input->tokens[i]);
+			if (output->line == 0)
+				return (1);
 			free(input->line);
 			input->line = output->line;
 			correct_positions(input, 0, 1, i);
@@ -274,6 +276,7 @@ void	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 		add_token(output, input->tokens[i]);
 		i++;
 	}
+	return (0);
 }
 
 t_tokenized_line *expander(char *line, t_hash_table *env)
@@ -288,10 +291,10 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 		return (0);
 	tokens_output = malloc(size);
 	if (tokens_output == 0)
-		return (free(tokens), (void *)0);
+		return (free_1_return_null(tokens));
 	tokenize_string(line, tokens);
 	if (turn_quoted_tokens_to_word(tokens) == 1)
-		return (free(tokens), NULL);
+		return (free_2_return_null(tokens, tokens_output));
 	expand_variables(tokens, tokens_output, env);
 	free(tokens);
 	return (tokens_output);
@@ -309,14 +312,14 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 		return (0);
 	tokens_output = malloc(size);
 	if (tokens_output == 0)
-		return (free(tokens), (void *)0);
+		return (free_1_return_null(tokens));
 	expand_token_list(input, tokens);
 	turn_whitespaces_to_word(tokens);
-	remove_quotes(tokens, tokens + size);
+	if (remove_quotes(tokens, tokens + size) == 1)
+		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
 	fuse_chevrons(tokens + size * 3, tokens_output);
-	mark_single_quote_words(tokens_output);
 	free(tokens);
 	return (tokens_output);
 }

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/26 11:07:49 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:46:29 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	table_delete_table(t_hash_table *table)
 			table_delete_item(table, i);
 		i++;
 	}
-	printf("capacity: %zu\n", table->size);
 	free(table->items);
 	free(table);
 }
