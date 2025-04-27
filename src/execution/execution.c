@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 13:43:30 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:00:57 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 	}
 	else
 		dprintf(2, "cannot find correct path for %s\n", cmd.cmd[0]);
-	free(path);
 	ft_free_split((char **)envp);
-	exit (EXIT_FAILURE);
+	free_cmd_list(list);
+	exit (free_1_return_1(path));
 }
 
 void	close_all_io(t_cmd_list *list)
