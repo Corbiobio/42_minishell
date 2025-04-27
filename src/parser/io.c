@@ -6,15 +6,17 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 09:53:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 12:06:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../libft/libft.h"
+#include "minishell.h"
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <unistd.h>
 
 int	is_type_redirect(t_token token)
 {
@@ -115,16 +117,19 @@ int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
 	{
 		if (line->tokens[i].type == TYPE_PIPE)
 			cmd_index++;
-		if (is_type_redirect(line->tokens[i]) == 1 && next_token_is_word(line, i) == 1)
+		if (is_type_redirect(line->tokens[i]) == 1)
 		{
-			if (file_opening_did_not_fail(cmd_list->cmds[cmd_index]))
+			if (next_token_is_word(line, i))
 			{
-				if (redirect_io(line, i, &(cmd_list->cmds[cmd_index])) <= 0)
-					return (1);
+				if (file_opening_did_not_fail(cmd_list->cmds[cmd_index]))
+				{
+					if (redirect_io(line, i, &(cmd_list->cmds[cmd_index])) <= 0)
+						return (1);
+				}
 			}
+			else
+				return (print_error_return_one(ERROR_REDIRECTION_NO_FILENAME));
 		}
-		else
-			printf("ERROR_UNEXPECTED_TOKEN");
 		i++;
 	}
 	return (0);

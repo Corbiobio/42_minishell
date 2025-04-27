@@ -17,6 +17,7 @@ HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h
 SRC =\
 	core/main.c\
 	core/signal.c\
+	core/errors.c\
 	parser/lexer.c\
 	parser/grammar.c\
 	parser/io.c\

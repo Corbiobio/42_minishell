@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 10:11:26 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 11:34:43 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	signal_handler_heredoc(int signum)
+static void	signal_handler_heredoc(int signum)
 {
 	(void)signum;
-	write(STDOUT_FILENO, "\n", 1);
 }
 
-void	set_signal_handler_heredoc(void)
+static void	set_signal_handler_heredoc(void)
 {
 	struct sigaction	sigset;
 	struct termios		termios;
@@ -50,7 +49,10 @@ static int	write_heredoc(char *eof_signal, int write_end)
 		write(STDOUT_FILENO, "> ", 2);
 		buffer = get_next_line(STDIN_FILENO);
 		if (buffer == 0)
+		{
+			write(STDOUT_FILENO, "\n", 1);
 			return (-1);
+		}
 		if (ft_strncmp(buffer, eof_signal, len_eof + 1) == 0)
 			break ;
 		if (write(write_end, buffer, ft_strlen(buffer)) == -1)

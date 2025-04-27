@@ -6,12 +6,13 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 11:36:50 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 12:49:44 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../libft/libft.h"
+#include "minishell.h"
 #include <stddef.h>
 #include <stdio.h>
 
@@ -117,7 +118,7 @@ void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
-void	turn_quoted_tokens_to_word(t_tokenized_line *line)
+int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 {
 	size_t		i;
 	t_type		quote_type;
@@ -129,18 +130,19 @@ void	turn_quoted_tokens_to_word(t_tokenized_line *line)
 		{
 			quote_type = line->tokens[i].type;
 			i++;
-			while (line->tokens[i].type != quote_type && i < line->nb_token)
+			while (i < line->nb_token && line->tokens[i].type != quote_type)
 			{
 				if (line->tokens[i].type != TYPE_WHITESPACE)
 					line->tokens[i].type = TYPE_WORD;
 				i++;
 			}
 			if (i >= line->nb_token)
-				printf("ERROR_QUOTE");
+				return (print_error_return_one(ERROR_QUOTE_UNCLOSED));
 			i++;
 		}
 		i++;
 	}
+	return (0);
 }
 
 void	turn_whitespaces_to_word(t_tokenized_line *line)
@@ -288,7 +290,8 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
 	tokenize_string(line, tokens);
-	turn_quoted_tokens_to_word(tokens);
+	if (turn_quoted_tokens_to_word(tokens) == 1)
+		return (free(tokens), NULL);
 	expand_variables(tokens, tokens_output, env);
 	free(tokens);
 	return (tokens_output);
@@ -308,7 +311,6 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free(tokens), (void *)0);
 	expand_token_list(input, tokens);
-	free(input);
 	turn_whitespaces_to_word(tokens);
 	remove_quotes(tokens, tokens + size);
 	fuse_words(tokens + size, tokens + size * 2);

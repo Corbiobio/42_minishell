@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 18:32:10 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 12:58:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,24 @@ int				push_array(t_dynamic_array *darray, char *elem);
 void			swap_int(int *a, int *b);
 void			ft_quicksort(int *arr, int low, int high);
 char			*ft_strndup(const char *s, size_t n);
+
+void			free_1(void *arg1);
+void			free_2(void *arg1, void *arg2);
+void			free_3(void *arg1, void *arg2, void *arg3);
+void			free_4(void *arg1, void *arg2, void *arg3, void *arg4);
+void			*free_1_return_null(void *arg1);
+void			*free_2_return_null(void *arg1, void *arg2);
+void			*free_3_return_null(void *arg1, void *arg2, void *arg3);
+void			*free_4_return_null(void *arg1, void *arg2, void *arg3,
+					void *arg4);
+int				free_1_return_0(void *arg1);
+int				free_2_return_0(void *arg1, void *arg2);
+int				free_3_return_0(void *arg1, void *arg2, void *arg3);
+int				free_4_return_0(void *arg1, void *arg2, void *arg3, void *arg4);
+int				free_1_return_1(void *arg1);
+int				free_2_return_1(void *arg1, void *arg2);
+int				free_3_return_1(void *arg1, void *arg2, void *arg3);
+int				free_4_return_1(void *arg1, void *arg2, void *arg3, void *arg4);
 
 int				table_insert(t_hash_table *table, char *key, char *value);
 int				table_resize(t_hash_table *table);

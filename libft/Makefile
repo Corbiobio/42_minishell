@@ -31,6 +31,10 @@ SRC_FILES = $(SRC_DIR)ft_isalpha.c\
 		$(SRC_DIR)hash_map.c\
 		$(SRC_DIR)ft_quicksort.c\
 		$(SRC_DIR)str_triple_join.c\
+		$(SRC_DIR)multifree.c\
+		$(SRC_DIR)multifree_return_null.c\
+		$(SRC_DIR)multifree_return_one.c\
+		$(SRC_DIR)multifree_return_zero.c\
 #		$(SRC_DIR)main.c\
 
 OBJ_FILES = $(SRC_FILES:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:26:59 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/25 11:11:48 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 11:26:09 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_cmd_path(t_cmd cmd, t_hash_table *env)
 	const char	**paths = (const char**)ft_split(paths_from_env, ':');
 	char		*curr_path;
 	size_t		i;
-	
+
 	if (paths == NULL)
 		return (NULL);
 	if (ft_strchr(cmd.cmd[0], '/') != NULL)
