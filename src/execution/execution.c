@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/25 16:21:59 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:27:41 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env)
 	int			fds[3];
 	int			pid;
 
-	if (list->nb_cmd == 1 && list->cmds[0].cmd[0] == NULL)
-		return ;
 	i = 0;
 	fds[0] = -1;
 	fds[1] = -1;

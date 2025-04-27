@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:13:00 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 16:23:09 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:05:31 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_flag(char *str)
 	return (0);
 }
 
-void	echo(t_cmd cmd)
+void	ft_echo(t_cmd cmd, int *status)
 {
 	const char	**arg = (const char **)cmd.cmd + 1;
 	int			i;
@@ -48,4 +48,5 @@ void	echo(t_cmd cmd)
 	}
 	if (!flag)
 		write(STDOUT_FILENO, "\n", 1);
+	*status = EXIT_SUCCESS;
 }

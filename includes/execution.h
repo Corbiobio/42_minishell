@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/23 17:19:35 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:12:52 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,9 @@ char	*get_cmd_path(t_cmd cmd, t_hash_table *env);
 void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env);
 
 //echo
-void	echo(t_cmd cmd);
+void	ft_echo(t_cmd cmd, int *status);
+
+//export
+void	ft_export(t_cmd cmd, t_hash_table *env, int *status);
+
 #endif

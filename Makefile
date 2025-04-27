@@ -26,6 +26,7 @@ SRC =\
 	execution/execution.c\
 	execution/path.c\
 	builtin/echo.c\
+	builtin/export.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 
