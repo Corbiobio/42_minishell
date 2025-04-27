@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 14:55:34 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:01:22 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ static void	put_to_env(char *str, t_hash_table *env, int *error)
 	str = ft_strdup(str);
 	if (str == NULL)
 		curr_error = 1;
-	if (curr_error == 0)
-		table_insert(env, str, value);
-	else
+	if (curr_error == 0 && table_insert(env, str, value) == 1)
+			curr_error = 1;
+	if (curr_error == 1)
 	{
 		free(str);
 		free(value);
