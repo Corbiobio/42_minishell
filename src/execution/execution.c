@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 13:43:30 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:39:47 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <termios.h>
 #include <unistd.h> 
 #include <fcntl.h>
@@ -93,9 +94,9 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 	}
 	else
 		dprintf(2, "cannot find correct path for %s\n", cmd.cmd[0]);
-	free(path);
 	ft_free_split((char **)envp);
-	exit (EXIT_FAILURE);
+	free_cmd_list(list);
+	exit (free_1_return_1(path));
 }
 
 void	close_all_io(t_cmd_list *list)
@@ -113,13 +114,14 @@ void	close_all_io(t_cmd_list *list)
 	}
 }
 
-void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
+int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
 {
 	t_position	pos;
 	size_t		i;
 	int			fds[3];
-	int			pid;
-
+	pid_t		pid;
+	int			status;
+	
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	fds[0] = -1;
@@ -145,5 +147,10 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termi
 		}
 		i++;
 	}
+	status = 0;
+	waitpid(pid, &status, 0);
+	while (wait(0) > 0)
+		;
 	close_all_io(list);
+	return (status);
 }

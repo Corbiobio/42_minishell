@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 13:43:56 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:55:34 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,19 @@
 
 static void	print_export(t_hash_table *env)
 {
-	//env->capacity;
-	(void)env;
-	printf("ollalala je print l'exoprt\n");
+	size_t		i;
+	t_ht_item	curr_item;
+
+	i = 0;
+	while (i < env->capacity)
+	{
+		curr_item = env->items[i];
+		if (curr_item.key && curr_item.value)
+			printf("declare -x %s=_\"%s\"_\n", curr_item.key, curr_item.value);
+		else if (curr_item.key)
+			printf("declare -x %s\n", curr_item.key);
+		i++;
+	}
 }
 
 void	print_error(char *str, int *error)
@@ -31,7 +41,7 @@ void	print_error(char *str, int *error)
 	equal = ft_strchr(str, '=');
 	if (equal)
 		*equal = '\0';
-	dprintf(2, "%s is not a valid identifier\n", str);
+	dprintf(2, "%s is not a valid identifier\n", str);//remove dprintf
 	*error = 1;
 }
 
@@ -42,7 +52,8 @@ static int	is_valid_str(char *str)
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (0);
 	i = 1;
-	while ((ft_isalnum(str[i]) || str[i] == '_') && str[i] != '=' && str[i] != '\0')
+	while ((ft_isalnum(str[i]) || str[i] == '_')
+		&& str[i] != '=' && str[i] != '\0')
 		i++;
 	if (str[i] == '\0' || str[i] == '=' || ft_isalnum(str[i]))
 		return (1);
@@ -70,11 +81,11 @@ static void	put_to_env(char *str, t_hash_table *env, int *error)
 	if (curr_error == 0)
 		table_insert(env, str, value);
 	else
-		*error = 1;
-	if (str != NULL)
+	{
 		free(str);
-	if (value != NULL)
 		free(value);
+		*error = 1;
+	}
 }
 
 void	ft_export(t_cmd cmd, t_hash_table *env, int *status)
@@ -85,18 +96,18 @@ void	ft_export(t_cmd cmd, t_hash_table *env, int *status)
 
 	i = 0;
 	error = 0;
-	if (*args == NULL)
+	if (args[0] == NULL)
 		print_export(env);
 	while (args[i] != NULL)
 	{
 		if (is_valid_str((char *)args[i]))
 			put_to_env((char *)args[i], env, &error);
 		else
-			print_error((char *)args[i], &error);	
+			print_error((char *)args[i], &error);
 		i++;
 	}
 	if (error)
 		*status = EXIT_FAILURE;
 	else
-	 	*status = EXIT_SUCCESS;
+		*status = EXIT_SUCCESS;
 }
