@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:10:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/26 17:05:10 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:15:08 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ void	set_signal_handler_exec(struct termios old_termios)
 
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
-	sigset.sa_flags = 0;
+	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_exec;
 	sigaction(SIGINT, &sigset, 0);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	sigemptyset(&sigset.sa_mask);
-	sigaddset(&sigset.sa_mask, SIGINT);
-	sigset.sa_flags = 0;
+	sigaddset(&sigset.sa_mask, SIGQUIT);
+	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &sigcatch;
 	sigaction(SIGQUIT, &sigset, 0);
 }

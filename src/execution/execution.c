@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 15:00:57 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:39:47 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <termios.h>
 #include <unistd.h> 
 #include <fcntl.h>
@@ -113,13 +114,14 @@ void	close_all_io(t_cmd_list *list)
 	}
 }
 
-void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
+int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
 {
 	t_position	pos;
 	size_t		i;
 	int			fds[3];
-	int			pid;
-
+	pid_t		pid;
+	int			status;
+	
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	fds[0] = -1;
@@ -145,5 +147,10 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termi
 		}
 		i++;
 	}
+	status = 0;
+	waitpid(pid, &status, 0);
+	while (wait(0) > 0)
+		;
 	close_all_io(list);
+	return (status);
 }
