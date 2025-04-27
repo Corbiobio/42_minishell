@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 13:43:29 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:06:58 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
+
+
 int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 {
 	size_t		i;
@@ -126,19 +128,21 @@ int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 	i = 0;
 	while (i < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_SINGLE_QUOTE || line->tokens[i].type == TYPE_DOUBLE_QUOTE)
+		if (line->tokens[i].type == TYPE_SINGLE_QUOTE
+			|| line->tokens[i].type == TYPE_DOUBLE_QUOTE)
 		{
 			quote_type = line->tokens[i].type;
 			i++;
 			while (i < line->nb_token && line->tokens[i].type != quote_type)
 			{
-				if (line->tokens[i].type != TYPE_WHITESPACE)
+				if (line->tokens[i].type != TYPE_WHITESPACE && !(quote_type
+						== TYPE_DOUBLE_QUOTE
+						&& line->tokens[i].type == TYPE_DOLLAR))
 					line->tokens[i].type = TYPE_WORD;
 				i++;
 			}
-			if (i >= line->nb_token)
+			if (i++ >= line->nb_token)
 				return (print_error_return_one(ERROR_QUOTE_UNCLOSED));
-			i++;
 		}
 		i++;
 	}
