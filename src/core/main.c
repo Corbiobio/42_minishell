@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 14:48:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:35:44 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,23 @@ int	split_key_value(char *input, char **key, char **value)
 	return (0);
 }
 
+int	add_return_value_to_env(t_hash_table *env)
+{
+	char	*key;
+	char	*value;
+
+	key = malloc(2 * sizeof(char));
+	value = malloc(2 * sizeof(char));
+	if (key == 0 || value == 0)
+		return (free_2_return_1(key, value));
+	key[0] = '?';
+	key[1] = 0;
+	value[0] = '0';
+	value[1] = 0;
+	table_insert(env, key, value);
+	return (0);
+}
+
 t_hash_table	*convert_env_to_table(char **env)
 {
 	t_hash_table	*env_table;
@@ -73,13 +90,13 @@ t_hash_table	*convert_env_to_table(char **env)
 		if (split_key_value(env[i], &key, &value) == 1)
 		{
 			table_delete_table(env_table);
-			free(key);
-			free(value);
-			return (0);
+			return (free_2_return_null(key, value));
 		}
 		table_insert(env_table, key, value);
 		i++;
 	}
+	if (add_return_value_to_env(env_table))
+		return (0);
 	return (env_table);
 }
 
@@ -118,30 +135,3 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 }
-
-//main without parsing and parsing print
-//int	main(int ac, char **av, char **env)
-//{
-//	t_cmd_list		*cmd_list = malloc(sizeof(t_cmd_list) + 3 * sizeof(t_cmd));
-//	t_hash_table	*env_table;
-//	int				status = 0;
-
-//	env_table = convert_env_to_table(env);
-//	if (env_table == 0)
-//		return (1);
-//	//int in = open("in", O_RDWR);
-//	//int out = open("out", O_RDWR);
-//	cmd_list->cmds[0] = (t_cmd){ {-2, -2},(char*[]){"ecsho","test", NULL}};
-//	cmd_list->cmds[1] = (t_cmd){ {-2, -2},(char*[]){"cat", "-e",NULL}};
-//	cmd_list->nb_cmd = 2;
-//	create_child_and_exec_cmd(cmd_list, env_table);
-//	while (wait(&status) > 0)
-//		;
-//	table_delete_table(env_table);
-//	//close(in);
-//	//close(out);
-//	free(cmd_list);
-//	return (status);
-//	(void)ac;
-//	(void)av;
-//}
