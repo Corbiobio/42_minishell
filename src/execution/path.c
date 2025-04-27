@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:26:59 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 11:26:09 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:07:38 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ char	*get_cmd_path(t_cmd cmd, t_hash_table *env)
 	char		*curr_path;
 	size_t		i;
 
+	if (ft_strchr(cmd.cmd[0], '/') != NULL)
+	{
+		ft_free_split((char **)paths);
+		return (ft_strdup(cmd.cmd[0]));
+	}
 	if (paths == NULL)
 		return (NULL);
-	if (ft_strchr(cmd.cmd[0], '/') != NULL)
-		return (ft_strdup(cmd.cmd[0]));
 	i = 0;
 	while (paths[i] != NULL)
 	{

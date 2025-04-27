@@ -18,6 +18,7 @@ SRC =\
 	core/main.c\
 	core/signal.c\
 	core/errors.c\
+	core/env_main.c\
 	parser/lexer.c\
 	parser/grammar.c\
 	parser/io.c\

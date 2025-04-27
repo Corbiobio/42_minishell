@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 12:06:26 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:41:15 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define MINISHELL_H
 
 # include <stddef.h>
+# include "libft.h"
 
 typedef struct s_cmd
 {
@@ -39,5 +40,6 @@ typedef enum e_error
 void			free_cmd_list(t_cmd_list *list);
 struct termios	set_signal_handler_main(void);
 int				print_error_return_one(t_error error);
+t_hash_table	*convert_env_to_table(char **env);
 
 #endif //MINISHELL_H
