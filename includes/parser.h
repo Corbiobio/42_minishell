@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/26 18:29:52 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:57:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
 int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 //grammar.c
-void				grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
+int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 //heredoc.c
 int					create_heredoc(char *eof);

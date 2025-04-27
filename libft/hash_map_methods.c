@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/26 12:11:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:44:59 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,13 @@ int	table_hash_function(const char *key, const int len_table)
 	return ((int)hash);
 }
 
-#include <stdio.h>
-
-void	print_hash_table_simpler(t_hash_table *table)
-{
-	size_t	i;
-
-	printf("size: %zu, capacity: %zu\n", table->size, table->capacity);
-	i = 0;
-	while (i < table->capacity)
-	{
-		printf("key: %p, value: %p\n", table->items[i].key, table->items[i].value);
-		i++;
-	}
-}
-
 int	table_insert(t_hash_table *table, char *key, char *value)
 {
 	size_t		i;
 	const int	load = table->size * 100 / table->capacity;
 
 	if (load > 50 && table_resize(table) == 1)
-			return (1);
+		return (1);
 	i = table_hash_function(key, table->capacity);
 	while (i < table->capacity && table->items[i].key)
 	{
