@@ -1,0 +1,2 @@
+in exec, if io replace pipe by io
+in exec, launch real builtin
