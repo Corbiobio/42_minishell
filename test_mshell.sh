@@ -61,7 +61,7 @@ export tests=tests | echo $tests
 export tests=tests
 echo $tests
 
-#builtin -> echo 
+#builtin -> echo
 echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnn
 echo -nnnnn -nnnnn -nnnnnnnnnnnnnnnnnnnnnnnm -nnnn
 echo -
@@ -70,3 +70,13 @@ echo "" -n
 echo "" -n - a ""
 echo -n ""
 echo -nnnnnn ""
+
+#builtin -> export
+export 1test
+export =test
+export test='$testtttt'
+export $test=testo
+export test=test=testttt
+export $test
+export 1test
+echo $?

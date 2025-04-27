@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 10:02:20 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:42:08 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	main(int ac, char **av, char **env)
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
 		return (1);
+	status = 0;
 	while (42)
 	{
 		old_termios = set_signal_handler_main();
@@ -105,9 +106,12 @@ int	main(int ac, char **av, char **env)
 		list = parser(line, env_table);
 		if (!list)
 			continue ;
-		create_child_and_exec_cmd(list, env_table, old_termios);
-		while (wait(&status) > 0)
-			;
+		if (list->nb_cmd == 1 && list->cmds[0].cmd[0] != NULL)
+		{
+			create_child_and_exec_cmd(list, env_table, old_termios);
+			while (wait(&status) > 0)
+				;
+		}
 		free_cmd_list(list);
 	}
 	rl_clear_history();

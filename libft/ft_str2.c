@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:40:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/23 14:38:58 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:31:52 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strndup(const char *s, size_t n)
 	size_t	len;
 	char	*dup;
 
+	if (s == NULL)
+		return (NULL);
 	len = ft_strlen(s);
 	dup = ft_calloc(n + 1, sizeof(char));
 	if (dup <= 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloced.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:56:43 by sflechel          #+#    #+#             */
-/*   Updated: 2024/11/08 10:49:17 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:31:01 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*ft_strdup(const char *s)
 	int		len;
 	char	*dup;
 
+	if (s == NULL)
+		return (NULL);
 	len = ft_strlen(s);
 	dup = ft_calloc(len + 1, sizeof(char));
 	if (dup <= 0)

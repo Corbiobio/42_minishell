@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/26 16:59:48 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:43:30 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
-void	close_all_unused_fds(t_cmd_list *list, size_t curr_cmd_index)
+void	close_all_unused_io(t_cmd_list *list, size_t curr_cmd_index)
 {
 	size_t	i;
 
@@ -83,7 +83,7 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 		infile_redirection(cmd, pos, fds);
 	if (cmd.io[1] >= 0 || pos != LAST)
 		outfile_redirection(cmd, pos, fds);
-	close_all_unused_fds(list, i);
+	close_all_unused_io(list, i);
 	path = get_cmd_path(cmd, env);
 	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
@@ -96,6 +96,21 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 	free(path);
 	ft_free_split((char **)envp);
 	exit (EXIT_FAILURE);
+}
+
+void	close_all_io(t_cmd_list *list)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < list->nb_cmd)
+	{
+		if (list->cmds[i].io[0] >= 0)
+			close(list->cmds[i].io[0]);
+		if (list->cmds[i].io[1] >= 0)
+			close(list->cmds[i].io[1]);
+		i++;
+	}
 }
 
 void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
@@ -128,10 +143,7 @@ void	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termi
 				close(fds[1]);
 			fds[2] = fds[0];
 		}
-		if (list->cmds[i].io[0] >= 0)
-			close(list->cmds[i].io[0]);
-		if (list->cmds[i].io[1] >= 0)
-			close(list->cmds[i].io[1]);
 		i++;
 	}
+	close_all_io(list);
 }

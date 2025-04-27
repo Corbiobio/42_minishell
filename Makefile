@@ -29,6 +29,7 @@ SRC =\
 	execution/signal_exec.c\
 	execution/env.c\
 	builtin/echo.c\
+	builtin/export.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 
