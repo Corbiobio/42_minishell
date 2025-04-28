@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 14:44:50 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:37:53 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status)
 	else if (ft_strcmp(cmd.cmd[0], "unset") == 0)
 	{
 		is_builtin = 1;
-		printf("unset is in developpement\n");
+		ft_unset(cmd, env, status);
 	}
 	else if (ft_strcmp(cmd.cmd[0], "exit") == 0)
 	{
