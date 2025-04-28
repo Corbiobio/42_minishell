@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 18:42:50 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:47:16 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ char	*type_to_str(t_type type)
 		return ("error");
 	if (type == TYPE_WORD)
 		return ("word");
-	if (type == TYPE_WORD_SINGLE_QUOTE)
-		return ("word_single_quote");
+	if (type == TYPE_DEAD_TOKEN)
+		return ("dead token");
 	if (type == TYPE_WHITESPACE)
 		return ("whitespace");
 	if (type == TYPE_SINGLE_QUOTE)
@@ -133,10 +133,10 @@ int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 			i++;
 			while (i < line->nb_token && line->tokens[i].type != quote_type)
 			{
-				if (line->tokens[i].type != TYPE_WHITESPACE && !(quote_type
-						== TYPE_DOUBLE_QUOTE
+				if (line->tokens[i].type != TYPE_WORD && line->tokens[i].type
+					!= TYPE_WHITESPACE && !(quote_type == TYPE_DOUBLE_QUOTE
 						&& line->tokens[i].type == TYPE_DOLLAR))
-					line->tokens[i].type = TYPE_WORD;
+					line->tokens[i].type = TYPE_DEAD_TOKEN;
 				i++;
 			}
 			if (i++ >= line->nb_token)
@@ -181,10 +181,12 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 	while (i < input->nb_token)
 	{
 		add_token(output, input->tokens[i]);
+		print_tokens(output);
 		if (input->tokens[i].type == TYPE_WORD)
 		{
 			i++;
-			while (i < input->nb_token && input->tokens[i].type == TYPE_WORD)
+			while (i < input->nb_token && (input->tokens[i].type
+					== TYPE_DEAD_TOKEN || input->tokens[i].type == TYPE_WORD))
 			{
 				output->tokens[output->nb_token - 1].len++;
 				i++;
@@ -218,25 +220,6 @@ void	fuse_chevrons(t_tokenized_line *input, t_tokenized_line *output)
 				output->tokens[output->nb_token - 1].type = TYPE_LESSER_LESSER;
 				output->tokens[output->nb_token - 1].len = 2;
 				i++;
-			}
-		}
-		i++;
-	}
-}
-
-void	mark_single_quote_words(t_tokenized_line *line)
-{
-	size_t	i;
-
-	i = 0;
-	while (i + 2 < line->nb_token)
-	{
-		if (line->tokens[i].type == TYPE_SINGLE_QUOTE)
-		{
-			if (line->tokens[i + 1].type == TYPE_WORD && line->tokens[i + 2].type == TYPE_SINGLE_QUOTE)
-			{
-				line->tokens[i + 1].type = TYPE_WORD_SINGLE_QUOTE;
-				i += 2;
 			}
 		}
 		i++;
@@ -297,7 +280,9 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 	tokenize_string(line, tokens);
 	if (turn_quoted_tokens_to_word(tokens) == 1)
 		return (free_2_return_null(tokens, tokens_output));
+	print_tokens(tokens);
 	expand_variables(tokens, tokens_output, env);
+	print_tokens(tokens);
 	free(tokens);
 	return (tokens_output);
 }
@@ -316,12 +301,17 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	expand_token_list(input, tokens);
+	print_tokens(tokens);
 	turn_whitespaces_to_word(tokens);
+	print_tokens(tokens);
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
+	print_tokens(tokens);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
+	print_tokens(tokens);
 	fuse_chevrons(tokens + size * 3, tokens_output);
+	print_tokens(tokens);
 	free(tokens);
 	return (tokens_output);
 }

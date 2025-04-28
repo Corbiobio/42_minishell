@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 18:45:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:15:39 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,5 +140,6 @@ void	expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t
 	char	*new_line;
 
 	fuse_dollars(input, intermediary);
+	print_tokens(intermediary);
 	new_line = search_and_replace(intermediary, env);
 }

@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 13:54:34 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:58:18 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,12 @@ static void	signal_handler_heredoc(int signum)
 static void	set_signal_handler_heredoc(void)
 {
 	struct sigaction	sigset;
-	struct termios		termios;
 
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_heredoc;
 	sigaction(SIGINT, &sigset, 0);
-	tcgetattr(STDIN_FILENO, &termios);
-	termios.c_cc[VQUIT] = _POSIX_VDISABLE;
-	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
 }
 
 static void	signal_handler_parent(int signum)
@@ -54,25 +50,18 @@ static void	signal_handler_parent(int signum)
 	{
 		write(STDOUT_FILENO, "^C", 2);
 		write(STDOUT_FILENO, "\n", 1);
-		// rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
 	}
 }
 
 static void	set_signal_handler_parent(void)
 {
 	struct sigaction	sigset;
-	struct termios		termios;
 
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_parent;
 	sigaction(SIGINT, &sigset, 0);
-	tcgetattr(STDIN_FILENO, &termios);
-	termios.c_cc[VQUIT] = _POSIX_VDISABLE;
-	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
 }
 
 void	delete_all_heredoc(t_free_close *stuff)
