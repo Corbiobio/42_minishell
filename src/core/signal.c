@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/26 17:01:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:04:16 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ struct termios	set_signal_handler_main(void)
 
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
-	sigset.sa_flags = 0;
+	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_shell;
 	sigaction(SIGINT, &sigset, 0);
 	tcgetattr(STDIN_FILENO, &old_termios);

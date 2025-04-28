@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 13:57:45 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:39:37 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,16 @@ typedef struct s_tokenized_line
 	t_token	tokens[];
 }	t_tokenized_line;
 
+typedef struct s_free_close
+{
+	int					fd_read_end;
+	t_tokenized_line	*line1;
+	t_tokenized_line	*line2;
+	char				*line3;
+	t_cmd_list			*cmds;
+	t_hash_table		*env;
+}	t_free_close;
+
 //lexer.c
 t_tokenized_line	*expander(char *line, t_hash_table *env);
 t_tokenized_line	*lexer(t_tokenized_line *input);
@@ -60,13 +70,13 @@ void				expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary
 void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
 
 //io.c
-int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
+int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_close *to_free);
 
 //grammar.c
 int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 //heredoc.c
-int					create_heredoc(char *eof);
+int					create_heredoc(char *eof, t_free_close *stuff);
 
 //parser.c
 t_cmd_list			*parser(char *line, t_hash_table *env);

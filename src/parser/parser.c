@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 14:32:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:13:50 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../../includes/minishell.h"
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 
 int	count_commands(t_tokenized_line *line)
@@ -82,6 +83,7 @@ void	word_single_quotes_to_word(t_tokenized_line *tokens)
 
 t_cmd_list	*parser(char *line, t_hash_table *env)
 {
+	t_free_close		*to_free;
 	t_tokenized_line	*raw;
 	t_tokenized_line	*expanded;
 	t_cmd_list			*cmds;
@@ -96,13 +98,20 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 	if (cmds == 0)
 		return (free_3_return_null(raw, expanded, expanded->line));
 	init_cmds(cmds, count_commands(expanded));
-	if (open_infile_outfile(expanded, cmds) != 0)
+	to_free = malloc(sizeof(t_free_close));
+	if (to_free == 0)
 		return (free_4_return_null(raw, expanded, expanded->line, cmds));
+	*to_free = (t_free_close){0, raw, expanded, expanded->line, cmds, env};
+	if (open_infile_outfile(expanded, cmds, to_free) != 0)
+	{
+		free(to_free);
+		return (free_4_return_null(raw, expanded, expanded->line, cmds));
+	}
 	if (grammarify(expanded, cmds) == 1)
 	{
 		free_cmd_list(cmds);
-		return (free_3_return_null(raw, expanded, expanded->line));
+		return (free_4_return_null(raw, expanded, expanded->line, to_free));
 	}
-	free_3(raw, expanded->line, expanded);
+	free_4(raw, expanded->line, expanded, to_free);
 	return (cmds);
 }

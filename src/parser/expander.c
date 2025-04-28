@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 08:50:32 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:45:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 		i++;
 	}
 }
-
+#include <stdio.h>
 char	*search_in_env(t_tokenized_line *input, size_t word_pos, t_hash_table *env)
 {
 	const size_t	pos = input->tokens[word_pos].pos + 1;

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 12:06:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:06:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,15 @@ int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 	if (redirect.type == TYPE_GREATER_GREATER)
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	cmd->io[1] = fd;
+	if (fd == -1)
+	{
+		write(2, "minishell: ", 11);
+		perror(filename);
+	}
 	return (fd);
 }
 
-int	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
+int	redirect_in(t_token redirect, char *filename, t_cmd *cmd, t_free_close *to_free)
 {
 	int	fd;
 
@@ -67,12 +72,17 @@ int	redirect_in(t_token redirect, char *filename, t_cmd *cmd)
 	if (redirect.type == TYPE_LESSER)
 		fd = open(filename, O_RDONLY);
 	else
-		fd = create_heredoc(filename);
+		fd = create_heredoc(filename, to_free);
 	cmd->io[0] = fd;
+	if (fd == -1 && redirect.type == TYPE_LESSER)
+	{
+		write(2, "minishell: ", 11);
+		perror(filename);
+	}
 	return (fd);
 }
 
-int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)
+int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd, t_free_close *to_free)
 {
 	const t_token	redirect = line->tokens[token_index];
 	char			*filename;
@@ -84,7 +94,7 @@ int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)
 	if (redirect.type == TYPE_GREATER || redirect.type == TYPE_GREATER_GREATER)
 		error = redirect_out(redirect, filename, cmd);
 	else
-		error = redirect_in(redirect, filename, cmd);
+		error = redirect_in(redirect, filename, cmd, to_free);
 	free(filename);
 	return (error);
 }
@@ -106,7 +116,7 @@ int	next_token_is_word(t_tokenized_line *line, size_t token_index)
 	return (0);
 }
 
-int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
+int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_close *to_free)
 {
 	size_t	i;
 	size_t	cmd_index;
@@ -123,7 +133,7 @@ int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list)
 			{
 				if (file_opening_did_not_fail(cmd_list->cmds[cmd_index]))
 				{
-					if (redirect_io(line, i, &(cmd_list->cmds[cmd_index])) <= 0)
+					if (redirect_io(line, i, &(cmd_list->cmds[cmd_index]), to_free) <= 0)
 						return (1);
 				}
 			}

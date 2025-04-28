@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 16:56:29 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:25:24 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,69 +35,6 @@ void	free_cmd_list(t_cmd_list *list)
 		i++;
 	}
 	free(list);
-}
-
-int	split_key_value(char *input, char **key, char **value)
-{
-	size_t	i;
-
-	i = 0;
-	while (input[i] && input[i] != '=')
-		i++;
-	if (!input[i])
-		return (1);
-	*key = ft_strndup(input, i);
-	*value = ft_strdup(&input[i + 1]);
-	if (*key == 0 || *value == 0)
-	{
-		free(*key);
-		free(*value);
-		return (1);
-	}
-	return (0);
-}
-
-int	add_return_value_to_env(t_hash_table *env)
-{
-	char	*key;
-	char	*value;
-
-	key = malloc(2 * sizeof(char));
-	value = malloc(2 * sizeof(char));
-	if (key == 0 || value == 0)
-		return (free_2_return_1(key, value));
-	key[0] = '?';
-	key[1] = 0;
-	value[0] = '0';
-	value[1] = 0;
-	table_insert(env, key, value);
-	return (0);
-}
-
-t_hash_table	*convert_env_to_table(char **env)
-{
-	t_hash_table	*env_table;
-	char			*key;
-	char			*value;
-	size_t			i;
-
-	env_table = table_alloc(100);
-	if (env_table == 0)
-		return (0);
-	i = 0;
-	while (env[i])
-	{
-		if (split_key_value(env[i], &key, &value) == 1)
-		{
-			table_delete_table(env_table);
-			return (free_2_return_null(key, value));
-		}
-		table_insert(env_table, key, value);
-		i++;
-	}
-	if (add_return_value_to_env(env_table))
-		return (0);
-	return (env_table);
 }
 
 int	main(int ac, char **av, char **env)

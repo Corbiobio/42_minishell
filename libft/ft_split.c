@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 08:15:07 by sflechel          #+#    #+#             */
-/*   Updated: 2024/11/07 18:37:38 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:07:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	ft_free_split(char **strs)
 	int	i;
 
 	i = 0;
+	if (!strs)
+		return ;
 	while (strs[i] != 0)
 	{
 		free(strs[i]);
@@ -91,6 +93,8 @@ char	**ft_split(char const *s, char c)
 {
 	char	**strs;
 
+	if (!s)
+		return (0);
 	if (!*s)
 		return (ft_calloc(1, sizeof(char *)));
 	strs = ft_calloc(ft_countwords(s, c) + 1, sizeof(char *));
