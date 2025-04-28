@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 11:03:03 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:02:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,54 +58,66 @@ void	delete_all_heredoc(t_free_close *stuff)
 	free(stuff);
 }
 
-void	write_protected_heredoc(char *buffer, int write_end)
+void	write_protected_heredoc(char *line, int write_end, t_hash_table *env)
 {
-	if (write(write_end, buffer, ft_strlen(buffer)) == -1)
+	t_tokenized_line	*tokens;
+
+	tokens = expander(line, env);
+	if (tokens == 0)
 	{
 		close(write_end);
-		free(buffer);
+		free(line);
+		exit(EXIT_FAILURE);
+	}
+	if (write(write_end, tokens->line, ft_strlen(tokens->line)) == -1)
+	{
+		free(tokens->line);
+		free(tokens);
+		close(write_end);
 		exit(EXIT_FAILURE);
 	}
 	if (write(write_end, "\n", 1) == -1)
 	{
+		free(tokens->line);
+		free(tokens);
 		close(write_end);
-		free(buffer);
 		exit(EXIT_FAILURE);
 	}
+	printf("%i, %s\n", write_end, tokens->line);
+	free(tokens->line);
+	free(tokens);
 }
 
 static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
 {
-	char	*buffer;
+	char	*line;
 	int		len_eof;
 
-	delete_all_heredoc(stuff);
 	set_signal_handler_heredoc();
 	len_eof = ft_strlen(eof);
 	while (1)
 	{
-		buffer = readline("> ");
-		if (buffer == 0)
+		line = readline("> ");
+		if (line == 0)
 		{
 			if (g_signum == SIGINT)
 			{
-				printf("here\n");
 				g_signum = 0;
 				close(write_end);
 				free(eof);
+				delete_all_heredoc(stuff);
 				exit(1);
 			}
 			else
 				print_error_return_one(ERROR_HEREDOC_EOF);
 			break ;
 		}
-		if (ft_strncmp(buffer, eof, len_eof + 1) == 0)
+		if (ft_strncmp(line, eof, len_eof + 1) == 0)
 			break ;
-		write_protected_heredoc(buffer, write_end);
-		free(buffer);
+		write_protected_heredoc(line, write_end, stuff->env);
 	}
+	delete_all_heredoc(stuff);
 	close(write_end);
-	free(buffer);
 	free(eof);
 	exit(EXIT_SUCCESS);
 }
@@ -123,8 +135,7 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
 		heredoc_child(eof, write_end, stuff);
 	else
 	{
-		printf("%i\n", waitpid(pid, &status, 0));
-		printf("%i\n", status);
+		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else if (WIFSIGNALED(status))
