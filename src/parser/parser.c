@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 10:13:50 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:19:41 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,19 +64,6 @@ void	print_cmds(t_cmd_list *list)
 			j++;
 		}
 		printf("\n");
-		i++;
-	}
-}
-
-void	word_single_quotes_to_word(t_tokenized_line *tokens)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < tokens->nb_token)
-	{
-		if (tokens->tokens[i].type == TYPE_WORD_SINGLE_QUOTE)
-			tokens->tokens[i].type = TYPE_WORD;
 		i++;
 	}
 }

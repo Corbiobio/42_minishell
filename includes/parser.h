@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 11:39:37 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:23:48 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_type
 {
 	TYPE_ERROR,
 	TYPE_WORD,
-	TYPE_WORD_SINGLE_QUOTE,
+	TYPE_DEAD_TOKEN,
 	TYPE_WHITESPACE,
 	TYPE_SINGLE_QUOTE,
 	TYPE_DOUBLE_QUOTE,
