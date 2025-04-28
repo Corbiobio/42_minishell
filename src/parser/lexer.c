@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 14:47:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:25:16 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,21 @@ void	tokenize_string(char *line, t_tokenized_line *tokens)
 	}
 }
 
+void	dollar_alone_is_dead(t_tokenized_line *line)
+{
+	size_t	i;
+
+	i = 0;
+	while (i + 1 < line->nb_token)
+	{
+		if (line->tokens[i].type == TYPE_DOLLAR && line->tokens[i + 1].type != TYPE_WORD)
+			line->tokens[i].type = TYPE_DEAD_TOKEN;
+		i++;
+	}
+	if (line->tokens[i].type == TYPE_DOLLAR)
+		line->tokens[i].type = TYPE_DEAD_TOKEN;
+}
+
 void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
@@ -172,6 +187,19 @@ void	turn_whitespaces_to_word(t_tokenized_line *line)
 	}
 }
 
+void	turn_dead_to_word(t_tokenized_line *line)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < line->nb_token)
+	{
+		if (line->tokens[i].type == TYPE_DEAD_TOKEN)
+			line->tokens[i].type = TYPE_WORD;
+		i++;
+	}
+}
+
 void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
@@ -181,7 +209,6 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 	while (i < input->nb_token)
 	{
 		add_token(output, input->tokens[i]);
-		print_tokens(output);
 		if (input->tokens[i].type == TYPE_WORD)
 		{
 			i++;
@@ -280,9 +307,8 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 	tokenize_string(line, tokens);
 	if (turn_quoted_tokens_to_word(tokens) == 1)
 		return (free_2_return_null(tokens, tokens_output));
-	print_tokens(tokens);
+	dollar_alone_is_dead(tokens);
 	expand_variables(tokens, tokens_output, env);
-	print_tokens(tokens);
 	free(tokens);
 	return (tokens_output);
 }
@@ -301,17 +327,13 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	expand_token_list(input, tokens);
-	print_tokens(tokens);
 	turn_whitespaces_to_word(tokens);
-	print_tokens(tokens);
+	turn_dead_to_word(tokens);
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
-	print_tokens(tokens);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
-	print_tokens(tokens);
 	fuse_chevrons(tokens + size * 3, tokens_output);
-	print_tokens(tokens);
 	free(tokens);
 	return (tokens_output);
 }
