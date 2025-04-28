@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 13:44:59 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:32:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 	i = table_hash_function(key, table->capacity);
 	while (i < table->capacity && table->items[i].key)
 	{
-		if (table->items[i].value && ft_strcmp(table->items[i].key, key) == 0)
+		if (ft_strcmp(table->items[i].key, key) == 0)
 		{
 			table_delete_item(table, i);
 			break ;
