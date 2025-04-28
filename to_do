@@ -1,4 +1,3 @@
 exec: verif if erro in io and not launch cmd
-exec: pass $? in print_export
 pars: multiple infile or outfile, with /dev/stdin or out mixed
 pars or exec: leak fd ???? ->      ls > sdfs > klk > kljk > lkj >l > j < m 
