@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 14:23:48 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:33:09 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 # include "minishell.h"
 # include <stddef.h>
 #include "../libft/libft.h"
+
+typedef enum e_infile
+{
+	INFILE_NORMAL,
+	INFILE_HEREDOC_EXPAND,
+	INFILE_HEREDOC_DONT
+}	t_infile;
 
 typedef enum e_type
 {
@@ -31,7 +38,8 @@ typedef enum e_type
 	TYPE_GREATER_GREATER,
 	TYPE_LESSER_LESSER,
 	TYPE_PIPE,
-	TYPE_DOLLAR
+	TYPE_DOLLAR,
+	TYPE_WORD_QUOTED
 }	t_type;
 
 typedef struct s_token
@@ -63,6 +71,7 @@ t_tokenized_line	*expander(char *line, t_hash_table *env);
 t_tokenized_line	*lexer(t_tokenized_line *input);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
 void				tokenize_string(char *line, t_tokenized_line *tokens);
+int					is_word(t_token token);
 
 //expander.c
 void				correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index);
@@ -76,7 +85,7 @@ int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free
 int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 //heredoc.c
-int					create_heredoc(char *eof, t_free_close *stuff);
+int					create_heredoc(char *eof, t_free_close *stuff, t_infile how_expand);
 
 //parser.c
 t_cmd_list			*parser(char *line, t_hash_table *env);

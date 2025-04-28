@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 15:51:04 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:37:00 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,25 @@ void	delete_all_heredoc(t_free_close *stuff)
 	free(stuff);
 }
 
+void	write_no_expand_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
+{
+	if (write(write_end, line, ft_strlen(line)) == -1)
+	{
+		free_2(line, eof);
+		delete_all_heredoc(stuff);
+		close(write_end);
+		exit(EXIT_FAILURE);
+	}
+	if (write(write_end, "\n", 1) == -1)
+	{
+		free_2(line, eof);
+		delete_all_heredoc(stuff);
+		close(write_end);
+		exit(EXIT_FAILURE);
+	}
+	free(line);
+}
+
 void	write_expander_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
 {
 	t_tokenized_line	*tokens;
@@ -116,7 +135,7 @@ void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
 	exit(SIGINT);
 }
 
-static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
+static int	heredoc_child(char *eof, int write_end, t_free_close *stuff, t_infile how_expand)
 {
 	char	*line;
 	int		len_eof;
@@ -130,7 +149,10 @@ static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
 			heredoc_no_line(write_end, eof, stuff);
 		if (ft_strncmp(line, eof, len_eof + 1) == 0)
 			break ;
-		write_expander_heredoc(line, write_end, stuff, eof);
+		if (how_expand == INFILE_HEREDOC_EXPAND)
+			write_expander_heredoc(line, write_end, stuff, eof);
+		else
+			write_no_expand_heredoc(line, write_end, stuff, eof);
 	}
 	delete_all_heredoc(stuff);
 	close(write_end);
@@ -138,7 +160,7 @@ static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
 	exit(EXIT_SUCCESS);
 }
 
-static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
+static int	write_heredoc(char *eof, int write_end, t_free_close *stuff, t_infile how_expand)
 {
 	int	pid;
 	int	status;
@@ -149,7 +171,7 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
 	if (pid < 0)
 		return (1);
 	else if (pid == 0)
-		heredoc_child(eof, write_end, stuff);
+		heredoc_child(eof, write_end, stuff, how_expand);
 	else
 	{
 		waitpid(pid, &status, 0);
@@ -165,14 +187,14 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
 	return (1);
 }
 
-int	create_heredoc(char *eof, t_free_close *stuff)
+int	create_heredoc(char *eof, t_free_close *stuff, t_infile how_expand)
 {
 	int		end[2];
 
 	if (pipe(end) == -1)
 		return (-1);
 	stuff->fd_read_end = end[0];
-	if (write_heredoc(eof, end[1], stuff) != 0)
+	if (write_heredoc(eof, end[1], stuff, how_expand) != 0)
 	{
 		close(end[1]);
 		close(end[0]);

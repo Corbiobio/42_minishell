@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 16:16:37 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:32:00 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 	return (0);
 }
 
-int	redirect_in(t_token redirect, char *filename, t_cmd *cmd, t_free_close *to_free)
+int	redirect_in(t_infile how_infile, char *filename, t_cmd *cmd, t_free_close *to_free)
 {
 	int	fd;
 
@@ -75,14 +75,14 @@ int	redirect_in(t_token redirect, char *filename, t_cmd *cmd, t_free_close *to_f
 		return (0);
 	if (cmd->io[0] >= 0)
 		close(cmd->io[0]);
-	if (redirect.type == TYPE_LESSER)
+	if (how_infile == INFILE_NORMAL)
 		fd = open(filename, O_RDONLY);
 	else
-		fd = create_heredoc(filename, to_free);
+		fd = create_heredoc(filename, to_free, how_infile);
 	cmd->io[0] = fd;
 	if (fd == -1)
 	{
-		if (redirect.type == TYPE_LESSER)
+		if (how_infile == INFILE_NORMAL)
 		{
 			write(2, "minishell: ", 11);
 			perror(filename);
@@ -98,14 +98,24 @@ int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd, t_free_clos
 	const t_token	redirect = line->tokens[token_index];
 	char			*filename;
 	int				error;
+	t_infile		how_infile;
 
+	if (redirect.type == TYPE_LESSER)
+		how_infile = INFILE_NORMAL;
+	else if (redirect.type == TYPE_LESSER_LESSER)
+	{
+		if (line->tokens[token_index + 1].type == TYPE_WORD)
+			how_infile = INFILE_HEREDOC_EXPAND;
+		else
+			how_infile = INFILE_HEREDOC_DONT;
+	}
 	filename = alloc_word(line, token_index + 1);
 	if (filename == 0)
 		return (-1);
 	if (redirect.type == TYPE_GREATER || redirect.type == TYPE_GREATER_GREATER)
 		error = redirect_out(redirect, filename, cmd);
 	else
-		error = redirect_in(redirect, filename, cmd, to_free);
+		error = redirect_in(how_infile, filename, cmd, to_free);
 	free(filename);
 	return (error);
 }
@@ -121,7 +131,7 @@ int	next_token_is_word(t_tokenized_line *line, size_t token_index)
 {
 	if (token_index + 1 < line->nb_token)
 	{
-		if (line->tokens[token_index + 1].type == TYPE_WORD)
+		if (is_word(line->tokens[token_index + 1]))
 			return (1);
 	}
 	return (0);
