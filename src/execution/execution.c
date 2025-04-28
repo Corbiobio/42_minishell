@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 15:20:16 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:05:20 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	
 	set_signal_handler_exec(old_termios);
 	i = 0;
+	status = 0;
 	while (i < list->nb_cmd)
 	{
 		pos = get_pos(list, i);
@@ -99,13 +100,13 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 		}
 		i++;
 	}
-	status = 0;
 	if (pos != ALONE || (pos == ALONE && is_builtin(list->cmds[0]) == 0))
 	{
 		waitpid(pid, &status, 0);
 		while (wait(0) > 0)
 			;
 	}
+	table_insert(env, ft_strdup("?"), ft_itoa(status));
 	close_all_io(list);
 	return (status);
 }
