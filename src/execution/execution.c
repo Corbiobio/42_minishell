@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 14:42:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:20:16 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	while (i < list->nb_cmd)
 	{
 		pos = get_pos(list, i);
+		if (list->cmds[i].io[0] == -1 || list->cmds[i].io[1] == -1)
+		{
+			i++;
+			continue ;
+		}
 		if (pos == ALONE && launch_builtin(list->cmds[i], env, &status) == 1)
 			break ;
 		if (pos != LAST && pos != ALONE && pipe(fds) == -1)
