@@ -23,7 +23,7 @@ SRC =\
 	parser/grammar.c\
 	parser/io.c\
 	parser/parser.c\
-	parser/heredoc_bonus.c\
+	parser/heredoc.c\
 	parser/expander.c\
 	execution/execution.c\
 	execution/path.c\
