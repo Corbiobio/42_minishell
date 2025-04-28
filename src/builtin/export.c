@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/27 17:01:22 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:50:38 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,13 @@ static void	print_export(t_hash_table *env)
 	while (i < env->capacity)
 	{
 		curr_item = env->items[i];
+		if (curr_item.key && ft_strcmp(curr_item.key, "?") == 0)
+		{
+			i++;	
+			continue ;
+		}
 		if (curr_item.key && curr_item.value)
-			printf("declare -x %s=_\"%s\"_\n", curr_item.key, curr_item.value);
+			printf("declare -x %s=\"%s\"\n", curr_item.key, curr_item.value);
 		else if (curr_item.key)
 			printf("declare -x %s\n", curr_item.key);
 		i++;
