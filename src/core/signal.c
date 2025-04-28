@@ -6,14 +6,13 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 13:47:45 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:49:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <bits/posix_opt.h>
 #include <readline/readline.h>
 #include <signal.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
 

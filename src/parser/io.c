@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 15:56:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:16:37 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,16 @@ int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 {
 	int	fd;
 
+	if (ft_strcmp(filename, "/dev/stdout") == 0)
+		return (0);
 	if (cmd->io[1] >= 0)
 		close(cmd->io[1]);
 	if (redirect.type == TYPE_GREATER)
 		fd = open(filename, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (redirect.type == TYPE_GREATER_GREATER)
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
+	if (fd == STDOUT_FILENO)
+		return (0);
 	cmd->io[1] = fd;
 	if (fd == -1)
 	{
@@ -67,6 +71,8 @@ int	redirect_in(t_token redirect, char *filename, t_cmd *cmd, t_free_close *to_f
 {
 	int	fd;
 
+	if (ft_strcmp(filename, "/dev/stdin") == 0)
+		return (0);
 	if (cmd->io[0] >= 0)
 		close(cmd->io[0]);
 	if (redirect.type == TYPE_LESSER)
