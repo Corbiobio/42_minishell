@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 16:41:15 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 08:04:56 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef enum e_error
 {
 	ERROR_UNKNOWN,
 	ERROR_QUOTE_UNCLOSED,
-	ERROR_REDIRECTION_NO_FILENAME
+	ERROR_REDIRECTION_NO_FILENAME,
+	ERROR_HEREDOC_EOF
 }	t_error;
 
 void			free_cmd_list(t_cmd_list *list);

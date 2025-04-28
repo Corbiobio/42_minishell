@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 11:34:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 09:34:03 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,14 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+volatile int	g_signum = 0;
+
 static void	signal_handler_heredoc(int signum)
 {
-	(void)signum;
+	if (signum == SIGINT)
+	{
+		g_signum = SIGINT;
+	}
 }
 
 static void	set_signal_handler_heredoc(void)
@@ -46,20 +51,16 @@ static int	write_heredoc(char *eof_signal, int write_end)
 	len_eof = ft_strlen(eof_signal);
 	while (1)
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		buffer = get_next_line(STDIN_FILENO);
+		buffer = readline("> ");
 		if (buffer == 0)
 		{
-			write(STDOUT_FILENO, "\n", 1);
-			return (-1);
+			print_error_return_one(ERROR_HEREDOC_EOF);
+			break ;
 		}
 		if (ft_strncmp(buffer, eof_signal, len_eof + 1) == 0)
 			break ;
 		if (write(write_end, buffer, ft_strlen(buffer)) == -1)
-		{
-			free(buffer);
-			return (-1);
-		}
+			return (free_1_return_1(buffer));
 		free(buffer);
 	}
 	free(buffer);
@@ -80,7 +81,7 @@ int	create_heredoc(char *eof)
 		close(end[1]);
 		return (-1);
 	}
-	if (write_heredoc(eof_signal, end[1]) == -1)
+	if (write_heredoc(eof, end[1]) == 1)
 	{
 		close(end[1]);
 		close(end[0]);
