@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 19:25:24 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:44:54 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ void	free_cmd_list(t_cmd_list *list)
 
 int	main(int ac, char **av, char **env)
 {
-	int				status;
 	t_cmd_list		*list;
 	t_hash_table	*env_table;
 	char			*line;
 	struct termios	old_termios;
 
-	status = 0;
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
 		return (1);
@@ -61,13 +59,13 @@ int	main(int ac, char **av, char **env)
 		if (!list)
 			continue ;
 		if (list->cmds[0].cmd[0] != NULL)
-			status = create_child_and_exec_cmd(list, env_table, old_termios);
+			create_child_and_exec_cmd(list, env_table, old_termios);
 		free_cmd_list(list);
 	}
 	rl_clear_history();
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
-	return (status);
+	return (EXIT_SUCCESS);
 	(void)ac;
 	(void)av;
 }
