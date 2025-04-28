@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 12:06:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 07:54:40 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,11 @@ int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd)
 		error = redirect_out(redirect, filename, cmd);
 	else
 		error = redirect_in(redirect, filename, cmd);
+	if (error == -1)
+	{
+		write(2, "minishell: ", 11);
+		perror(filename);
+	}
 	free(filename);
 	return (error);
 }

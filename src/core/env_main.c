@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:39:13 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 19:18:27 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:29:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,6 @@ int	split_key_value(char *input, char **key, char **value)
 	*value = ft_strdup(&input[i + 1]);
 	if (*key == 0 || *value == 0)
 		return (free_2_return_1(*key, *value));
-	return (0);
-}
-
-void	*table_delete_return_null(t_hash_table *table)
-{
-	table_delete_table(table);
 	return (0);
 }
 

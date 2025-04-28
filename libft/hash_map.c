@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 13:46:29 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:28:43 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+void	*table_delete_return_null(t_hash_table *table)
+{
+	table_delete_table(table);
+	return (0);
+}
 
 void	print_hash_table(t_hash_table *table)
 {
