@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 09:57:31 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:10:53 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,12 @@ typedef struct s_tokenized_line
 
 typedef struct s_free_close
 {
-	int	fd_read_end;
+	int					fd_read_end;
+	t_tokenized_line	*line1;
+	t_tokenized_line	*line2;
+	char				*line3;
+	t_cmd_list			*cmds;
+	t_hash_table		*env;
 }	t_free_close;
 
 //lexer.c
@@ -65,7 +70,7 @@ void				expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary
 void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
 
 //io.c
-int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list);
+int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_close *to_free);
 
 //grammar.c
 int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
