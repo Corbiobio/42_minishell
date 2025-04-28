@@ -33,6 +33,7 @@ SRC =\
 	execution/env.c\
 	builtin/echo.c\
 	builtin/export.c\
+	builtin/env.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 
