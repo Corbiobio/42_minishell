@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 15:25:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:19:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	dollar_alone_is_dead(t_tokenized_line *line)
 			line->tokens[i].type = TYPE_DEAD_TOKEN;
 		i++;
 	}
-	if (line->tokens[i].type == TYPE_DOLLAR)
+	if (i < line->nb_token && line->tokens[i].type == TYPE_DOLLAR)
 		line->tokens[i].type = TYPE_DEAD_TOKEN;
 }
 

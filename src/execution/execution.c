@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 17:11:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:41:09 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 	infile_redirection(cmd, pos, fds);
 	outfile_redirection(cmd, pos, fds);
 	close_all_unused_io(list, i);
-	if (launch_builtin(cmd, env, status) == 1)
+	if (launch_builtin(cmd, env, status, pos) == 1)
 	{
 		ft_free_split((char **)envp);
 		free_cmd_list(list);
@@ -82,7 +82,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 			i++;
 			continue ;
 		}
-		if (pos == ALONE && launch_builtin(list->cmds[i], env, &status) == 1)
+		if (pos == ALONE && launch_builtin(list->cmds[i], env, &status, pos) == 1)
 			break ;
 		if (pos != LAST && pos != ALONE && pipe(fds) == -1)
 			dprintf(2, "cannot pipe on %s\n", list->cmds[i].cmd[0]);

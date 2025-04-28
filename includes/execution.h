@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 17:04:43 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:28:55 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	close_all_unused_io(t_cmd_list *list, size_t curr_cmd_index);
 void	close_all_io(t_cmd_list *list);
 
 //builtin
-int		launch_builtin(t_cmd cmd, t_hash_table *env, int *status);
+int		launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos);
 int		is_builtin(t_cmd cmd);
 
 //signal_exec

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 17:10:55 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:10:25 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	is_builtin(t_cmd cmd)
 	return (0);
 }
 
-int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status)
+int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 {
 	const int	am_builtin = is_builtin(cmd);
 
@@ -43,14 +43,14 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status)
 	else if (ft_strcmp(cmd.cmd[0], "export") == 0)
 		ft_export(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "env") == 0)
-		printf("env is in developpement\n");
+		ft_env(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "cd") == 0)
 		printf("cd is in developpement\n");
 	else if (ft_strcmp(cmd.cmd[0], "pwd") == 0)
-		printf("pwd is in developpement\n");
+		ft_pwd(env, status);
 	else if (ft_strcmp(cmd.cmd[0], "unset") == 0)
 		printf("unset is in developpement\n");
 	else if (ft_strcmp(cmd.cmd[0], "exit") == 0)
-		ft_exit(&status);
+		ft_exit(status, pos);
 	return (am_builtin);
 }
