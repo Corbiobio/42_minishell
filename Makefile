@@ -25,6 +25,8 @@ SRC =\
 	parser/heredoc_bonus.c\
 	parser/expander.c\
 	execution/execution.c\
+	execution/io_and_pipe.c\
+	execution/builtin.c\
 	execution/path.c\
 	execution/signal_exec.c\
 	execution/env.c\
