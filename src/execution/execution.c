@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 14:42:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:55:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	int			fds[3];
 	pid_t		pid;
 	int			status;
-	
+
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	while (i < list->nb_cmd)
