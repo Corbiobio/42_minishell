@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 11:39:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:06:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 	if (redirect.type == TYPE_GREATER_GREATER)
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	cmd->io[1] = fd;
+	if (fd == -1)
+	{
+		write(2, "minishell: ", 11);
+		perror(filename);
+	}
 	return (fd);
 }
 
@@ -69,6 +74,11 @@ int	redirect_in(t_token redirect, char *filename, t_cmd *cmd, t_free_close *to_f
 	else
 		fd = create_heredoc(filename, to_free);
 	cmd->io[0] = fd;
+	if (fd == -1 && redirect.type == TYPE_LESSER)
+	{
+		write(2, "minishell: ", 11);
+		perror(filename);
+	}
 	return (fd);
 }
 
@@ -85,11 +95,6 @@ int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd, t_free_clos
 		error = redirect_out(redirect, filename, cmd);
 	else
 		error = redirect_in(redirect, filename, cmd, to_free);
-	if (error == -1)
-	{
-		write(2, "minishell: ", 11);
-		perror(filename);
-	}
 	free(filename);
 	return (error);
 }

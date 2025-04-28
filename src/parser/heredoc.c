@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 12:02:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:30:40 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "minishell.h"
 #include "parser.h"
 #include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -58,34 +59,47 @@ void	delete_all_heredoc(t_free_close *stuff)
 	free(stuff);
 }
 
-void	write_protected_heredoc(char *line, int write_end, t_hash_table *env)
+void	write_protected_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
 {
 	t_tokenized_line	*tokens;
 
-	tokens = expander(line, env);
+	tokens = expander(line, stuff->env);
 	if (tokens == 0)
 	{
 		close(write_end);
-		free(line);
+		free_2(line, eof);
+		delete_all_heredoc(stuff);
 		exit(EXIT_FAILURE);
 	}
 	if (write(write_end, tokens->line, ft_strlen(tokens->line)) == -1)
 	{
-		free(tokens->line);
-		free(tokens);
+		free_3(tokens->line, tokens, eof);
+		delete_all_heredoc(stuff);
 		close(write_end);
 		exit(EXIT_FAILURE);
 	}
 	if (write(write_end, "\n", 1) == -1)
 	{
-		free(tokens->line);
-		free(tokens);
+		free_3(tokens->line, tokens, eof);
+		delete_all_heredoc(stuff);
 		close(write_end);
 		exit(EXIT_FAILURE);
 	}
-	printf("%i, %s\n", write_end, tokens->line);
-	free(tokens->line);
-	free(tokens);
+	free_2(tokens->line, tokens);
+}
+
+void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
+{
+	if (g_signum == SIGINT)
+	{
+		g_signum = 0;
+		close(write_end);
+		free(eof);
+		delete_all_heredoc(stuff);
+		exit(EXIT_FAILURE);
+	}
+	else
+		print_error_return_one(ERROR_HEREDOC_EOF);
 }
 
 static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
@@ -100,21 +114,12 @@ static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
 		line = readline("> ");
 		if (line == 0)
 		{
-			if (g_signum == SIGINT)
-			{
-				g_signum = 0;
-				close(write_end);
-				free(eof);
-				delete_all_heredoc(stuff);
-				exit(1);
-			}
-			else
-				print_error_return_one(ERROR_HEREDOC_EOF);
+			heredoc_no_line(write_end, eof, stuff);
 			break ;
 		}
 		if (ft_strncmp(line, eof, len_eof + 1) == 0)
 			break ;
-		write_protected_heredoc(line, write_end, stuff->env);
+		write_protected_heredoc(line, write_end, stuff, eof);
 	}
 	delete_all_heredoc(stuff);
 	close(write_end);
@@ -137,7 +142,11 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
 	{
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status) == 1)
+				perror("minishell: ");
 			return (WEXITSTATUS(status));
+		}
 		else if (WIFSIGNALED(status))
 			return (1);
 	}
