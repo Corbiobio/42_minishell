@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 14:50:38 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:49:19 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static void	print_export(t_hash_table *env)
 			i++;	
 			continue ;
 		}
-		if (curr_item.key && curr_item.value)
-			printf("declare -x %s=\"%s\"\n", curr_item.key, curr_item.value);
-		else if (curr_item.key)
+		if (curr_item.key && curr_item.key[0] != '\0' && curr_item.value)
+			printf("declare -x -%s-=\"%s\"\n", curr_item.key, curr_item.value);
+		else if (curr_item.key && curr_item.key[0] != '\0')
 			printf("declare -x %s\n", curr_item.key);
 		i++;
 	}
@@ -41,11 +41,6 @@ static void	print_export(t_hash_table *env)
 
 void	print_error(char *str, int *error)
 {
-	char	*equal;
-
-	equal = ft_strchr(str, '=');
-	if (equal)
-		*equal = '\0';
 	dprintf(2, "%s is not a valid identifier\n", str);//remove dprintf
 	*error = 1;
 }
