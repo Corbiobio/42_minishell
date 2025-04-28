@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 14:34:21 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:43:52 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,6 @@ void	close_all_io(t_cmd_list *list);
 //builtin
 int		launch_builtin(t_cmd cmd, t_hash_table *env, int *status);
 int		is_builtin(t_cmd cmd);
-
-//separe in two header file
-//echo
-void	ft_echo(t_cmd cmd, int *status);
-
-//export
-void	ft_export(t_cmd cmd, t_hash_table *env, int *status);
 
 //signal_exec
 // void	set_signal_handler_exec(void);
