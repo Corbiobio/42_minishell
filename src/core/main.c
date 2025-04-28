@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 16:44:54 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:10:21 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ int	main(int ac, char **av, char **env)
 	char			*line;
 	struct termios	old_termios;
 
+	if (ac > 1)
+		return (EXIT_FAILURE);
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
-		return (1);
+		return (EXIT_FAILURE);
 	while (42)
 	{
 		old_termios = set_signal_handler_main();
@@ -59,7 +61,8 @@ int	main(int ac, char **av, char **env)
 		if (!list)
 			continue ;
 		if (list->cmds[0].cmd[0] != NULL)
-			create_child_and_exec_cmd(list, env_table, old_termios);
+			if (create_child_and_exec_cmd(list, env_table, old_termios) == 42)
+				break ;
 		free_cmd_list(list);
 	}
 	rl_clear_history();
@@ -67,5 +70,4 @@ int	main(int ac, char **av, char **env)
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	return (EXIT_SUCCESS);
 	(void)ac;
-	(void)av;
 }

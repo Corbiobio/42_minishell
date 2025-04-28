@@ -6,14 +6,13 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 11:04:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:49:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <bits/posix_opt.h>
 #include <readline/readline.h>
 #include <signal.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
 
@@ -21,7 +20,7 @@ void	signal_handler_shell(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

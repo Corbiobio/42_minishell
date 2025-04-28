@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 12:30:40 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:51:04 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,32 @@ static void	signal_handler_heredoc(int signum)
 static void	set_signal_handler_heredoc(void)
 {
 	struct sigaction	sigset;
-	struct termios		termios;
 
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_heredoc;
 	sigaction(SIGINT, &sigset, 0);
-	tcgetattr(STDIN_FILENO, &termios);
-	termios.c_cc[VQUIT] = _POSIX_VDISABLE;
-	tcsetattr(STDIN_FILENO, TCSANOW, &termios);
+}
+
+static void	signal_handler_parent(int signum)
+{
+	if (signum == SIGINT)
+	{
+		write(STDOUT_FILENO, "^C", 2);
+		write(STDOUT_FILENO, "\n", 1);
+	}
+}
+
+static void	set_signal_handler_parent(void)
+{
+	struct sigaction	sigset;
+
+	sigemptyset(&sigset.sa_mask);
+	sigaddset(&sigset.sa_mask, SIGINT);
+	sigset.sa_flags = SA_RESTART;
+	sigset.sa_handler = &signal_handler_parent;
+	sigaction(SIGINT, &sigset, 0);
 }
 
 void	delete_all_heredoc(t_free_close *stuff)
@@ -59,7 +75,7 @@ void	delete_all_heredoc(t_free_close *stuff)
 	free(stuff);
 }
 
-void	write_protected_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
+void	write_expander_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
 {
 	t_tokenized_line	*tokens;
 
@@ -90,16 +106,14 @@ void	write_protected_heredoc(char *line, int write_end, t_free_close *stuff, cha
 
 void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
 {
+	close(write_end);
+	free(eof);
+	delete_all_heredoc(stuff);
 	if (g_signum == SIGINT)
-	{
 		g_signum = 0;
-		close(write_end);
-		free(eof);
-		delete_all_heredoc(stuff);
-		exit(EXIT_FAILURE);
-	}
 	else
 		print_error_return_one(ERROR_HEREDOC_EOF);
+	exit(SIGINT);
 }
 
 static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
@@ -113,13 +127,10 @@ static int	heredoc_child(char *eof, int write_end, t_free_close *stuff)
 	{
 		line = readline("> ");
 		if (line == 0)
-		{
 			heredoc_no_line(write_end, eof, stuff);
-			break ;
-		}
 		if (ft_strncmp(line, eof, len_eof + 1) == 0)
 			break ;
-		write_protected_heredoc(line, write_end, stuff, eof);
+		write_expander_heredoc(line, write_end, stuff, eof);
 	}
 	delete_all_heredoc(stuff);
 	close(write_end);
@@ -132,6 +143,7 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
 	int	pid;
 	int	status;
 
+	set_signal_handler_parent();
 	status = 0;
 	pid = fork();
 	if (pid < 0)
@@ -148,7 +160,7 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff)
 			return (WEXITSTATUS(status));
 		}
 		else if (WIFSIGNALED(status))
-			return (1);
+			return (SIGINT);
 	}
 	return (1);
 }
@@ -160,7 +172,7 @@ int	create_heredoc(char *eof, t_free_close *stuff)
 	if (pipe(end) == -1)
 		return (-1);
 	stuff->fd_read_end = end[0];
-	if (write_heredoc(eof, end[1], stuff) == 1)
+	if (write_heredoc(eof, end[1], stuff) != 0)
 	{
 		close(end[1]);
 		close(end[0]);

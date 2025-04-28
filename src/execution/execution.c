@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 17:05:20 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:11:28 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 		free_cmd_list(list);
 		table_delete_table(env);
 		exit(*status);
-	}		
+	}
 	path = get_cmd_path(cmd, env);
 	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
@@ -70,7 +70,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	int			fds[3];
 	pid_t		pid;
 	int			status;
-	
+
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	status = 0;
