@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_map_methods.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 16:32:23 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/28 18:38:15 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	table_remove_item(t_hash_table *table, char *key)
 	i = table_hash_function(key, table->capacity);
 	while (table->capacity && table->items[i].key)
 	{
-		if (table->items[i].value && ft_strcmp(table->items[i].key, key) == 0)
+		if (ft_strcmp(table->items[i].key, key) == 0)
 		{
 			table_delete_item(table, i);
 			table->items[i].key = &deleted_item;
