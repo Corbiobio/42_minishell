@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 17:49:09 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:32:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ int	calc_correct_status(int status)
 {
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	printf("test\n");
 	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
 	return (status);

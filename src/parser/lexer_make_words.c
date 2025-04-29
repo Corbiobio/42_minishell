@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:45:40 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:47:06 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:56:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,17 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 	while (i < input->nb_token)
 	{
 		add_token(output, input->tokens[i]);
-		if (input->tokens[i].type == TYPE_WORD)
+		i++;
+		while (i < input->nb_token && is_word(input->tokens[i]))
 		{
+			if (input->tokens[i].type == TYPE_WORD_QUOTED)
+				output->tokens[output->nb_token - 1].type
+					= TYPE_WORD_QUOTED;
+			output->tokens[output->nb_token - 1].len++;
 			i++;
-			while (i < input->nb_token && is_word(input->tokens[i]))
-			{
-				if (input->tokens[i].type == TYPE_WORD_QUOTED)
-					output->tokens[output->nb_token - 1].type
-						= TYPE_WORD_QUOTED;
-				output->tokens[output->nb_token - 1].len++;
-				i++;
-			}
-			if (i < input->nb_token)
-				add_token(output, input->tokens[i]);
 		}
+		if (i < input->nb_token)
+			add_token(output, input->tokens[i]);
 		i++;
 	}
 }
