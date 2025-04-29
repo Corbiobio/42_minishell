@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 15:17:23 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:54:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 	to_free = malloc(sizeof(t_free_close));
 	if (cmds == 0 || to_free == 0)
 		return (free_4_return_null(cmds, to_free, expanded->line, expanded));
+	*to_free = (t_free_close){0, expanded, expanded->line, cmds, env};
 	init_cmds(cmds, count_cmds(expanded));
 	if (open_infile_outfile(expanded, cmds, to_free) != 0)
 		return (free_4_return_null(to_free, expanded->line, expanded, cmds));

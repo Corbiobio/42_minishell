@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 11:42:06 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:54:35 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,35 @@ void	free_cmd_list(t_cmd_list *list)
 	free(list);
 }
 
+struct termios	command_loop(t_hash_table *env)
+{
+	struct termios	old_termios;
+	char			*line;
+	t_cmd_list		*list;
+
+	while (42)
+	{
+		old_termios = set_signal_handler_main();
+		line = readline("beurre_demishell$ ");
+		if (!line)
+			return (old_termios);
+		if (*line)
+			add_history(line);
+		list = parser(line, env);
+		if (!list)
+			continue ;
+		if (list->cmds[0].cmd[0] != NULL)
+		{
+			if (create_child_and_exec_cmd(list, env, old_termios) == 42)
+			{
+				free_cmd_list(list);
+				return (old_termios);
+			}
+		}
+		free_cmd_list(list);
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_cmd_list		*list;
@@ -49,27 +78,7 @@ int	main(int ac, char **av, char **env)
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
 		return (EXIT_FAILURE);
-	while (42)
-	{
-		old_termios = set_signal_handler_main();
-		line = readline("beurre_demishell$ ");
-		if (!line)
-			break ;
-		if (*line)
-			add_history(line);
-		list = parser(line, env_table);
-		if (!list)
-			continue ;
-		if (list->cmds[0].cmd[0] != NULL)
-		{
-			if (create_child_and_exec_cmd(list, env_table, old_termios) == 42)
-			{
-				free_cmd_list(list);
-				break ;
-			}
-		}
-		free_cmd_list(list);
-	}
+	old_termios = command_loop(env_table);
 	rl_clear_history();
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);

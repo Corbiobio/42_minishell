@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 15:06:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:33:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ int	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list)
 {
 	t_tokenized_line	*line_no_redirect;
 
-	line_no_redirect = malloc(sizeof(t_tokenized_line) + sizeof(t_token) * line->nb_token);
+	line_no_redirect = malloc(sizeof(t_tokenized_line)
+			+ sizeof(t_token) * line->nb_token);
 	if (line_no_redirect == 0)
 		return (1);
 	remove_redirection(line, line_no_redirect);

@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 14:29:31 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:33:02 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,8 @@ void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
 	exit(EXIT_SUCCESS);
 }
 
-static int	heredoc_child(char *eof, int write_end, t_free_close *stuff, t_infile how_expand)
+static int	heredoc_child(char *eof, int write_end,
+					t_free_close *stuff, t_infile how_expand)
 {
 	char	*line;
 	int		len_eof;
@@ -163,7 +164,8 @@ static int	heredoc_child(char *eof, int write_end, t_free_close *stuff, t_infile
 	exit(EXIT_SUCCESS);
 }
 
-static int	write_heredoc(char *eof, int write_end, t_free_close *stuff, t_infile how_expand)
+static int	write_heredoc(char *eof, int write_end,
+						t_free_close *stuff, t_infile how_expand)
 {
 	int	pid;
 	int	status;
@@ -187,7 +189,7 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff, t_infile
 			return (WEXITSTATUS(status));
 		}
 		else if (WIFSIGNALED(status))
-			return (set_status(stuff->env, WTERMSIG(status)));
+			return (set_status(stuff->env, WTERMSIG(status) + 128));
 	}
 	return (1);
 }

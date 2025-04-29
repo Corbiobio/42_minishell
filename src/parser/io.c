@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 15:18:12 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:32:06 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ char	*alloc_word(t_tokenized_line *line, int token_index)
 	return (word);
 }
 
-int	redirect_out(t_token redirect, char *filename, t_cmd *cmd, t_hash_table *env)
+int	redirect_out(t_token redirect, char *filename,
+			t_cmd *cmd, t_hash_table *env)
 {
 	int	fd;
 
@@ -68,7 +69,8 @@ int	redirect_out(t_token redirect, char *filename, t_cmd *cmd, t_hash_table *env
 	return (0);
 }
 
-int	redirect_in(t_infile how_infile, char *filename, t_cmd *cmd, t_free_close *to_free)
+int	redirect_in(t_infile how_infile, char *filename,
+				t_cmd *cmd, t_free_close *to_free)
 {
 	int	fd;
 
@@ -91,7 +93,8 @@ int	redirect_in(t_infile how_infile, char *filename, t_cmd *cmd, t_free_close *t
 	return (0);
 }
 
-int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd, t_free_close *to_free)
+int	redirect_io(t_tokenized_line *line, int token_index,
+				t_cmd *cmd, t_free_close *to_free)
 {
 	const t_token	redirect = line->tokens[token_index];
 	char			*filename;
@@ -135,29 +138,30 @@ int	next_token_is_word(t_tokenized_line *line, size_t token_index)
 	return (0);
 }
 
-int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_close *to_free)
+int	open_infile_outfile(t_tokenized_line *line,
+						t_cmd_list *cmd_list, t_free_close *to_free)
 {
 	size_t	i;
-	size_t	cmd_index;
+	size_t	index;
 
 	i = 0;
-	cmd_index = 0;
+	index = 0;
 	while (i < line->nb_token)
 	{
 		if (line->tokens[i].type == TYPE_PIPE)
-			cmd_index++;
+			index++;
 		if (is_type_redirect(line->tokens[i]) == 1)
 		{
-			if (next_token_is_word(line, i))
+			if (next_token_is_word(line, i)
+				&& file_opening_did_not_fail(cmd_list->cmds[index]))
 			{
-				if (file_opening_did_not_fail(cmd_list->cmds[cmd_index]))
-				{
-					if (redirect_io(line, i, &(cmd_list->cmds[cmd_index]), to_free) == -1)
-						return (1);
-				}
+				if (redirect_io(line, i,
+						&(cmd_list->cmds[index]), to_free) == -1)
+					return (1);
 			}
 			else
-				return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME, to_free->env));
+				return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME,
+						to_free->env));
 		}
 		i++;
 	}
