@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 18:58:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:06:36 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,22 @@ int	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_lis
 	exit (free_1_return_1(path));
 }
 
+size_t count_cmds_with_correct_io(t_cmd_list *list)
+{
+	size_t count;
+	size_t i;
+
+	count = 0;
+	i = 0;
+	while (i < list->nb_cmd)
+	{
+		if (list->cmds[i].io[0] != -1 && list->cmds[i].io[1] != -1)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
 {
 	t_position	pos;
@@ -100,13 +116,14 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 		}
 		i++;
 	}
-	if (pos != ALONE || (pos == ALONE && is_builtin(list->cmds[0]) == 0))
+	if ((pos != ALONE || (pos == ALONE && is_builtin(list->cmds[0]) == 0)) && count_cmds_with_correct_io(list) >= 1)
 	{
 		waitpid(pid, &status, 0);
 		while (wait(0) > 0)
 			;
 	}
-	table_insert(env, ft_strdup("?"), ft_itoa(status));
+	if (count_cmds_with_correct_io(list) >= 1)
+		table_insert(env, ft_strdup("?"), ft_itoa(status));
 	close_all_io(list);
 	return (status);
 }
