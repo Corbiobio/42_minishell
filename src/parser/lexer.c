@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 09:47:03 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:48:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
-int	turn_quoted_tokens_to_word(t_tokenized_line *line)
+int	turn_quoted_tokens_to_word(t_tokenized_line *line, t_hash_table *env)
 {
 	size_t		i;
 	t_type		quote_type;
@@ -177,7 +177,7 @@ int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 			}
 		}
 		if (i++ >= line->nb_token)
-			return (print_error_return_one(ERROR_QUOTE_UNCLOSED));
+			return (print_error_set_status(ERROR_QUOTE_UNCLOSED, env));
 	}
 	return (0);
 }
@@ -328,7 +328,7 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 		return (free_1_return_null(tokens));
 	tokenize_string(line, tokens);
 	print_tokens(tokens);
-	if (turn_quoted_tokens_to_word(tokens) == 1)
+	if (turn_quoted_tokens_to_word(tokens, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	print_tokens(tokens);
 	dollar_alone_is_dead(tokens);

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 19:32:00 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:35:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*alloc_word(t_tokenized_line *line, int token_index)
 	return (word);
 }
 
-int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
+int	redirect_out(t_token redirect, char *filename, t_cmd *cmd, t_hash_table *env)
 {
 	int	fd;
 
@@ -61,6 +61,7 @@ int	redirect_out(t_token redirect, char *filename, t_cmd *cmd)
 	cmd->io[1] = fd;
 	if (fd == -1)
 	{
+		table_insert(env, ft_strdup("?"), ft_strdup("1"));
 		write(2, "minishell: ", 11);
 		perror(filename);
 	}
@@ -83,10 +84,7 @@ int	redirect_in(t_infile how_infile, char *filename, t_cmd *cmd, t_free_close *t
 	if (fd == -1)
 	{
 		if (how_infile == INFILE_NORMAL)
-		{
-			write(2, "minishell: ", 11);
-			perror(filename);
-		}
+			perror_set_status(to_free->env, 1, filename);
 		else
 			return (-1);
 	}
@@ -113,7 +111,7 @@ int	redirect_io(t_tokenized_line *line, int token_index, t_cmd *cmd, t_free_clos
 	if (filename == 0)
 		return (-1);
 	if (redirect.type == TYPE_GREATER || redirect.type == TYPE_GREATER_GREATER)
-		error = redirect_out(redirect, filename, cmd);
+		error = redirect_out(redirect, filename, cmd, to_free->env);
 	else
 		error = redirect_in(how_infile, filename, cmd, to_free);
 	free(filename);
@@ -159,7 +157,7 @@ int	open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_clo
 				}
 			}
 			else
-				return (print_error_return_one(ERROR_REDIRECTION_NO_FILENAME));
+				return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME, to_free->env));
 		}
 		i++;
 	}

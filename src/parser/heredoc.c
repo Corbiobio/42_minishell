@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 19:37:00 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:21:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,13 @@ void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
 	free(eof);
 	delete_all_heredoc(stuff);
 	if (g_signum == SIGINT)
+	{
 		g_signum = 0;
+		exit(SIGINT);
+	}
 	else
-		print_error_return_one(ERROR_HEREDOC_EOF);
-	exit(SIGINT);
+		print_error_dont_set_status(ERROR_HEREDOC_EOF);
+	exit(EXIT_SUCCESS);
 }
 
 static int	heredoc_child(char *eof, int write_end, t_free_close *stuff, t_infile how_expand)
@@ -178,11 +181,11 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff, t_infile
 		if (WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status) == 1)
-				perror("minishell: ");
+				perror_set_status(stuff->env, 1, 0);
 			return (WEXITSTATUS(status));
 		}
 		else if (WIFSIGNALED(status))
-			return (SIGINT);
+			return (set_status(stuff->env, WTERMSIG(status)));
 	}
 	return (1);
 }
