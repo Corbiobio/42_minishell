@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:39:13 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 19:29:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:33:56 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_hash_table	*convert_env_to_table(char **env)
 		if (split_key_value(env[i], &key, &value) == 1)
 		{
 			table_delete_table(env_table);
-			return (free_2_return_null(key, value));
+			return (0);
 		}
 		if (table_insert(env_table, key, value) == 1)
 			return (table_delete_return_null(env_table));

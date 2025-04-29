@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 11:21:45 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:29:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	delete_all_heredoc(t_free_close *stuff)
 	close(stuff->fd_read_end);
 	free(stuff->line1);
 	free(stuff->line2);
-	free(stuff->line3);
 	free(stuff->cmds);
 	table_delete_table(stuff->env);
 	free(stuff);
@@ -131,6 +130,7 @@ void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
 	if (g_signum == SIGINT)
 	{
 		g_signum = 0;
+		printf("there\n");
 		exit(SIGINT);
 	}
 	else
@@ -182,6 +182,8 @@ static int	write_heredoc(char *eof, int write_end, t_free_close *stuff, t_infile
 		{
 			if (WEXITSTATUS(status) == 1)
 				perror_set_status(stuff->env, 1, 0);
+			if (WEXITSTATUS(status) == SIGINT)
+				return (set_status(stuff->env, SIGINT));
 			return (WEXITSTATUS(status));
 		}
 		else if (WIFSIGNALED(status))

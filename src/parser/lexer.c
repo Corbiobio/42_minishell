@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 10:48:31 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:20:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,13 +327,11 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	tokenize_string(line, tokens);
-	print_tokens(tokens);
 	if (turn_quoted_tokens_to_word(tokens, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
-	print_tokens(tokens);
 	dollar_alone_is_dead(tokens);
-	print_tokens(tokens);
-	expand_variables(tokens, tokens_output, env);
+	if (expand_variables(tokens, tokens_output, env) == 1)
+		return (free_2_return_null(tokens, tokens_output));
 	free(tokens);
 	return (tokens_output);
 }
@@ -352,17 +350,12 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	expand_token_list(input, tokens);
-	print_tokens(tokens);
 	turn_whitespaces_to_word(tokens);
-	print_tokens(tokens);
 	turn_dead_to_word(tokens);
-	print_tokens(tokens);
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
-	print_tokens(tokens + size * 2);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
-	print_tokens(tokens + size * 3);
 	fuse_chevrons(tokens + size * 3, tokens_output);
 	free(tokens);
 	return (tokens_output);

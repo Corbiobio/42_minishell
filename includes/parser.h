@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 19:33:09 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:15:21 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ typedef struct s_free_close
 {
 	int					fd_read_end;
 	t_tokenized_line	*line1;
-	t_tokenized_line	*line2;
-	char				*line3;
+	char				*line2;
 	t_cmd_list			*cmds;
 	t_hash_table		*env;
 }	t_free_close;
@@ -75,8 +74,8 @@ int					is_word(t_token token);
 
 //expander.c
 void				correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index);
-void				expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env);
 void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
+int					expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env);
 
 //io.c
 int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_close *to_free);

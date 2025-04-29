@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 08:20:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:08:29 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,11 @@ char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 		if (line->tokens[i].type == TYPE_DOLLAR)
 		{
 			replacement = search_in_env(line, i, env);
+			if (replacement == 0)
+				return (0);
 			new_line = token_line_triple_join(line->line, line->tokens[i], replacement);
+			if (new_line == 0)
+				return (0);
 			correct_positions(line, ft_strlen(replacement), line->tokens[i].len, i);
 			line->tokens[i].len = ft_strlen(replacement);
 			free(line->line);
@@ -135,10 +139,13 @@ void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
-void	expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)
+int	expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)
 {
 	char	*new_line;
 
 	fuse_dollars(input, intermediary);
 	new_line = search_and_replace(intermediary, env);
+	if (new_line == 0)
+		return (1);
+	return (0);
 }

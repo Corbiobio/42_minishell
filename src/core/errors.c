@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:57:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 11:10:51 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:14:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	perror_set_status(t_hash_table *env, int status, char *optional)
 
 int	set_status(t_hash_table *env, int status)
 {
+	printf("hello\n");
 	table_insert(env, ft_strdup("?"), ft_itoa(status));
 	return (1);
 }

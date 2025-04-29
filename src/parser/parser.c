@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 15:19:41 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:17:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-int	count_commands(t_tokenized_line *line)
+int	count_cmds(t_tokenized_line *line)
 {
 	size_t	i;
 	int		nb_commands;
@@ -80,25 +80,17 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 		return (0);
 	expanded = lexer(raw);
 	if (expanded == 0)
-		return (0);
-	cmds = malloc(sizeof(t_cmd_list) + sizeof(t_cmd) * count_commands(expanded));
-	if (cmds == 0)
-		return (free_3_return_null(raw, expanded, expanded->line));
-	init_cmds(cmds, count_commands(expanded));
+		return (free_2_return_null(raw->line, raw));
+	free(raw);
+	cmds = malloc(sizeof(t_cmd_list) + sizeof(t_cmd) * count_cmds(expanded));
 	to_free = malloc(sizeof(t_free_close));
-	if (to_free == 0)
-		return (free_4_return_null(raw, expanded, expanded->line, cmds));
-	*to_free = (t_free_close){0, raw, expanded, expanded->line, cmds, env};
+	if (cmds == 0 || to_free == 0)
+		return (free_4_return_null(cmds, to_free, expanded->line, expanded));
+	init_cmds(cmds, count_cmds(expanded));
 	if (open_infile_outfile(expanded, cmds, to_free) != 0)
-	{
-		free(to_free);
-		return (free_4_return_null(raw, expanded, expanded->line, cmds));
-	}
+		return (free_4_return_null(to_free, expanded->line, expanded, cmds));
 	if (grammarify(expanded, cmds) == 1)
-	{
-		free_cmd_list(cmds);
-		return (free_4_return_null(raw, expanded, expanded->line, to_free));
-	}
-	free_4(raw, expanded->line, expanded, to_free);
+		return (free_3_return_null(expanded->line, expanded, to_free));
+	free_3(expanded->line, expanded, to_free);
 	return (cmds);
 }

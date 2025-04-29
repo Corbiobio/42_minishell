@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 08:47:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:06:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,20 @@ void	remove_redirection(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
+void	free_cmd_special(t_cmd_list *list)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < list->nb_cmd)
+	{
+		if (list->cmds[i].cmd)
+			free(list->cmds[i].cmd);
+		i++;
+	}
+	free(list);
+}
+
 int	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 {
 	size_t	i;
@@ -54,7 +68,7 @@ int	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 			counter++;
 		if (line->tokens[i].type == TYPE_PIPE)
 		{
-			cmd_list->cmds[cmd_index].cmd = malloc(sizeof(int *) * counter);
+			cmd_list->cmds[cmd_index].cmd = ft_calloc(counter, sizeof(int *));
 			if (cmd_list->cmds[cmd_index].cmd == 0)
 				return (1);
 			counter = 1;
@@ -62,7 +76,7 @@ int	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 		}
 		i++;
 	}
-	cmd_list->cmds[cmd_index].cmd = malloc(sizeof(int *) * counter);
+	cmd_list->cmds[cmd_index].cmd = ft_calloc(counter, sizeof(int *));
 	if (cmd_list->cmds[cmd_index].cmd == 0)
 		return (1);
 	return (0);
@@ -106,9 +120,15 @@ int	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list)
 		return (1);
 	remove_redirection(line, line_no_redirect);
 	if (alloc_cmd_list(line_no_redirect, cmd_list) == 1)
+	{
+		free_cmd_list(cmd_list);
 		return (free_1_return_1(line_no_redirect));
+	}
 	if (convert_to_cmd_list(line_no_redirect, cmd_list) == 1)
+	{
+		free_cmd_list(cmd_list);
 		return (free_1_return_1(line_no_redirect));
+	}
 	free(line_no_redirect);
 	return (0);
 }
