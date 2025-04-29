@@ -1,5 +1,3 @@
 if command not found, specific $?
 if directory, say is directory and return specific $?
 cat < inf | ls: unitialized bytes in close and dup2
-cat < in: syscall waitpid contains unitialized bytes
-echo $? should not set $?
