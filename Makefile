@@ -19,12 +19,20 @@ SRC =\
 	core/signal.c\
 	core/errors.c\
 	core/env_main.c\
+	core/print_structs.c\
 	parser/lexer.c\
+	parser/lexer_make_words.c\
 	parser/grammar.c\
 	parser/io.c\
+	parser/io_conditions.c\
 	parser/parser.c\
 	parser/heredoc.c\
+	parser/heredoc_signals.c\
+	parser/heredoc_write.c\
 	parser/expander.c\
+	parser/expander_core.c\
+	parser/expander_search.c\
+	parser/token_utils.c\
 	execution/execution.c\
 	execution/io_and_pipe.c\
 	execution/builtin.c\

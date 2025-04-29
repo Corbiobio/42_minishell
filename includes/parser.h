@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 14:15:21 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:15:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 
 # include "minishell.h"
 # include <stddef.h>
-#include "../libft/libft.h"
+# include "../libft/libft.h"
+
+static int	g_signum = 0;
 
 typedef enum e_infile
 {
@@ -72,19 +74,64 @@ void				add_token(t_tokenized_line *line, t_token token_to_add);
 void				tokenize_string(char *line, t_tokenized_line *tokens);
 int					is_word(t_token token);
 
+//lexer_make_words.c
+void				fuse_words(t_tokenized_line *input,
+						t_tokenized_line *output);
+void				remove_whitespaces(t_tokenized_line *input,
+						t_tokenized_line *output);
+void				fuse_chevrons(t_tokenized_line *in, t_tokenized_line *out);
+
 //expander.c
-void				correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index);
-void				expand_token_list(t_tokenized_line *input, t_tokenized_line *output);
-int					expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env);
+void				tokenize_string(char *line, t_tokenized_line *tokens);
+int					turn_quoted_tokens_to_word(t_tokenized_line *line,
+						t_hash_table *env);
+void				dollar_alone_is_dead(t_tokenized_line *line);
+
+//expander_search.c
+char				*search_and_replace(t_tokenized_line *line,
+						t_hash_table *env);
+void				fuse_dollars(t_tokenized_line *input,
+						t_tokenized_line *output);
+
+//expander_core.c
+void				correct_positions(t_tokenized_line *line,
+						size_t new_len, size_t old_len, size_t index);
+void				expand_token_list(t_tokenized_line *input,
+						t_tokenized_line *output);
+int					expand_variables(t_tokenized_line *input,
+						t_tokenized_line *intermediary, t_hash_table *env);
 
 //io.c
-int					open_infile_outfile(t_tokenized_line *line, t_cmd_list *cmd_list, t_free_close *to_free);
+int					open_infile_outfile(t_tokenized_line *line,
+						t_cmd_list *cmd_list, t_free_close *to_free);
+//io_conditions.c
+int					file_opening_did_not_fail(t_cmd cmd);
+int					next_token_is_word(t_tokenized_line *line,
+						size_t token_index);
 
 //grammar.c
 int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
 
 //heredoc.c
-int					create_heredoc(char *eof, t_free_close *stuff, t_infile how_expand);
+int					create_heredoc(char *eof, t_free_close *stuff,
+						t_infile how_expand);
+void				delete_all_heredoc(t_free_close *stuff);
+
+//heredoc_signals.c
+void				set_signal_handler_parent(void);
+void				set_signal_handler_heredoc(void);
+
+//heredoc_write.c
+void				write_no_expand_heredoc(char *line, int write_end,
+						t_free_close *stuff, char *eof);
+void				write_expander_heredoc(char *line, int write_end,
+						t_free_close *stuff, char *eof);
+
+//token_utils.c
+int					is_type_redirect(t_token token);
+int					is_word(t_token token);
+int					is_quote(t_token token);
+void				add_token(t_tokenized_line *line, t_token token_to_add);
 
 //parser.c
 t_cmd_list			*parser(char *line, t_hash_table *env);
@@ -93,7 +140,7 @@ char				*alloc_word(t_tokenized_line *line, int token_index);
 
 int					is_type_redirect(t_token token);
 
-void	print_tokens(t_tokenized_line *line);
-void	print_cmds(t_cmd_list *list);
+void				print_tokens(t_tokenized_line *line);
+void				print_cmds(t_cmd_list *list);
 
 #endif //PARSER_H

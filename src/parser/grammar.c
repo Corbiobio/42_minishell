@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 16:33:52 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:47:41 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,6 @@ void	remove_redirection(t_tokenized_line *input, t_tokenized_line *output)
 			i++;
 		}
 	}
-}
-
-void	free_cmd_special(t_cmd_list *list)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < list->nb_cmd)
-	{
-		if (list->cmds[i].cmd)
-			free(list->cmds[i].cmd);
-		i++;
-	}
-	free(list);
 }
 
 int	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)

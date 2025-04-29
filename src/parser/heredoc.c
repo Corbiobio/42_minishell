@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 16:33:02 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:55:11 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,48 +22,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static int	g_signum = 0;
-
-static void	signal_handler_heredoc(int signum)
-{
-	if (signum == SIGINT)
-	{
-		close(STDIN_FILENO);
-		g_signum = SIGINT;
-	}
-}
-
-static void	set_signal_handler_heredoc(void)
-{
-	struct sigaction	sigset;
-
-	sigemptyset(&sigset.sa_mask);
-	sigaddset(&sigset.sa_mask, SIGINT);
-	sigset.sa_flags = SA_RESTART;
-	sigset.sa_handler = &signal_handler_heredoc;
-	sigaction(SIGINT, &sigset, 0);
-}
-
-static void	signal_handler_parent(int signum)
-{
-	if (signum == SIGINT)
-	{
-		write(STDOUT_FILENO, "^C", 2);
-		write(STDOUT_FILENO, "\n", 1);
-	}
-}
-
-static void	set_signal_handler_parent(void)
-{
-	struct sigaction	sigset;
-
-	sigemptyset(&sigset.sa_mask);
-	sigaddset(&sigset.sa_mask, SIGINT);
-	sigset.sa_flags = SA_RESTART;
-	sigset.sa_handler = &signal_handler_parent;
-	sigaction(SIGINT, &sigset, 0);
-}
-
 void	delete_all_heredoc(t_free_close *stuff)
 {
 	close(stuff->fd_read_end);
@@ -72,54 +30,6 @@ void	delete_all_heredoc(t_free_close *stuff)
 	free(stuff->cmds);
 	table_delete_table(stuff->env);
 	free(stuff);
-}
-
-void	write_no_expand_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
-{
-	if (write(write_end, line, ft_strlen(line)) == -1)
-	{
-		free_2(line, eof);
-		delete_all_heredoc(stuff);
-		close(write_end);
-		exit(EXIT_FAILURE);
-	}
-	if (write(write_end, "\n", 1) == -1)
-	{
-		free_2(line, eof);
-		delete_all_heredoc(stuff);
-		close(write_end);
-		exit(EXIT_FAILURE);
-	}
-	free(line);
-}
-
-void	write_expander_heredoc(char *line, int write_end, t_free_close *stuff, char *eof)
-{
-	t_tokenized_line	*tokens;
-
-	tokens = expander(line, stuff->env);
-	if (tokens == 0)
-	{
-		close(write_end);
-		free_2(line, eof);
-		delete_all_heredoc(stuff);
-		exit(EXIT_FAILURE);
-	}
-	if (write(write_end, tokens->line, ft_strlen(tokens->line)) == -1)
-	{
-		free_3(tokens->line, tokens, eof);
-		delete_all_heredoc(stuff);
-		close(write_end);
-		exit(EXIT_FAILURE);
-	}
-	if (write(write_end, "\n", 1) == -1)
-	{
-		free_3(tokens->line, tokens, eof);
-		delete_all_heredoc(stuff);
-		close(write_end);
-		exit(EXIT_FAILURE);
-	}
-	free_2(tokens->line, tokens);
 }
 
 void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)

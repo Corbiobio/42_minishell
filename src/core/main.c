@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 16:54:35 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:59:29 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ struct termios	command_loop(t_hash_table *env)
 
 int	main(int ac, char **av, char **env)
 {
-	t_cmd_list		*list;
 	t_hash_table	*env_table;
-	char			*line;
 	struct termios	old_termios;
 
 	if (ac > 1)

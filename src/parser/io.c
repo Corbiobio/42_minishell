@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 16:32:06 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:49:33 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
-
-int	is_type_redirect(t_token token)
-{
-	if (token.type == TYPE_LESSER)
-		return (1);
-	if (token.type == TYPE_GREATER)
-		return (1);
-	if (token.type == TYPE_LESSER_LESSER)
-		return (1);
-	if (token.type == TYPE_GREATER_GREATER)
-		return (1);
-	return (0);
-}
 
 char	*alloc_word(t_tokenized_line *line, int token_index)
 {
@@ -119,23 +106,6 @@ int	redirect_io(t_tokenized_line *line, int token_index,
 		error = redirect_in(how_infile, filename, cmd, to_free);
 	free(filename);
 	return (error);
-}
-
-int	file_opening_did_not_fail(t_cmd cmd)
-{
-	if (cmd.io[0] == -1 || cmd.io[1] == -1)
-		return (0);
-	return (1);
-}
-
-int	next_token_is_word(t_tokenized_line *line, size_t token_index)
-{
-	if (token_index + 1 < line->nb_token)
-	{
-		if (is_word(line->tokens[token_index + 1]))
-			return (1);
-	}
-	return (0);
 }
 
 int	open_infile_outfile(t_tokenized_line *line,

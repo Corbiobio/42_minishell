@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 15:54:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:07:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,6 @@ void	init_cmds(t_cmd_list *cmds, size_t count_commands)
 	while (i < count_commands)
 	{
 		cmds->cmds[i] = (t_cmd){.io[0] = -2, .io[1] = -2};
-		i++;
-	}
-}
-
-void	print_cmds(t_cmd_list *list)
-{
-	size_t	i;
-	int		j;
-
-	printf("nb_cmd: %zu\n", list->nb_cmd);
-	i = 0;
-	while (i < list->nb_cmd)
-	{
-		printf("i: %i, o: %i\n", list->cmds[i].io[0], list->cmds[i].io[1]);
-		j = 0;
-		while (list->cmds[i].cmd[j] != 0)
-		{
-			printf("%s, ", list->cmds[i].cmd[j]);
-			j++;
-		}
-		printf("\n");
 		i++;
 	}
 }
