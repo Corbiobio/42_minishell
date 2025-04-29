@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 17:07:38 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:49:09 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,18 @@ static t_position	get_pos(t_cmd_list *list, size_t curr_cmd_index)
 		return (MID);
 }
 
-void	free_exit_error_exec(t_cmd_list *list, char *path, int *status, size_t i)
+void	free_exit_error_exec(t_cmd_list *list, int *status, size_t i)
 {
 	struct stat sb;
 
 	*status = 126;
 	write(STDERR_FILENO, "minishell: ", 12);
-	if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode))
+	if (stat(list->cmds[i].cmd[0], &sb) == 0 && S_ISDIR(sb.st_mode))
 	{
-		write(STDERR_FILENO, path, ft_strlen(path));
+		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
 		write(STDERR_FILENO, " is a directory\n", 17);
 	}
-	else if (access(path, F_OK) == -1)
+	else if (access(list->cmds[i].cmd[0], F_OK) == -1)
 	{
 		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
 		if (ft_strchr(list->cmds[i].cmd[0], '/') != NULL)
@@ -55,13 +55,12 @@ void	free_exit_error_exec(t_cmd_list *list, char *path, int *status, size_t i)
 			write(STDERR_FILENO, " command not found\n", 20);
 		*status = 127;
 	}
-	else if (access(path, X_OK) == -1)
+	else if (access(list->cmds[i].cmd[0], X_OK) == -1)
 	{
 		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
 		write(STDERR_FILENO, " Permission denied\n", 20);
 	}
 	free_cmd_list(list);
-	free(path);
 	exit(*status);
 }
 
@@ -88,9 +87,8 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 			dprintf(2, "cannot exec %s\n", cmd.cmd[0]);
 	}
 	ft_free_split((char **)envp);
-	if (path == NULL)
-		exit(EXIT_FAILURE);
-	free_exit_error_exec(list, path, status, i);
+	free(path);
+	free_exit_error_exec(list, status, i);
 }
 
 size_t count_cmds_with_correct_io(t_cmd_list *list)
