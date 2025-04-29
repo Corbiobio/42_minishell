@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 14:20:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:24:48 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,8 @@ void	dollar_alone_is_dead(t_tokenized_line *line)
 	i = 0;
 	while (i + 1 < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_DOLLAR && !is_word(line->tokens[i + 1]))
+		if (line->tokens[i].type == TYPE_DOLLAR
+			&& !is_word(line->tokens[i + 1]))
 			line->tokens[i].type = TYPE_DEAD_TOKEN;
 		i++;
 	}
@@ -236,7 +237,8 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 			while (i < input->nb_token && is_word(input->tokens[i]))
 			{
 				if (input->tokens[i].type == TYPE_WORD_QUOTED)
-					output->tokens[output->nb_token - 1].type = TYPE_WORD_QUOTED;
+					output->tokens[output->nb_token - 1].type
+						= TYPE_WORD_QUOTED;
 				output->tokens[output->nb_token - 1].len++;
 				i++;
 			}
@@ -247,32 +249,33 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
-void	fuse_chevrons(t_tokenized_line *input, t_tokenized_line *output)
+void	fuse_chevrons(t_tokenized_line *in, t_tokenized_line *out)
 {
 	size_t	i;
 
 	i = 0;
-	*output = (t_tokenized_line){.line = input->line};
-	while (i < input->nb_token)
+	*out = (t_tokenized_line){.line = in->line};
+	while (i + 1 < in->nb_token)
 	{
-		add_token(output, input->tokens[i]);
-		if (i + 1 < input->nb_token)
+		add_token(out, in->tokens[i]);
+		if (in->tokens[i].type == TYPE_GREATER
+			&& in->tokens[i + 1].type == TYPE_GREATER)
 		{
-			if (input->tokens[i].type == TYPE_GREATER && input->tokens[i + 1].type == TYPE_GREATER)
-			{
-				output->tokens[output->nb_token - 1].type = TYPE_GREATER_GREATER;
-				output->tokens[output->nb_token - 1].len = 2;
-				i++;
-			}
-			else if (input->tokens[i].type == TYPE_LESSER && input->tokens[i + 1].type == TYPE_LESSER)
-			{
-				output->tokens[output->nb_token - 1].type = TYPE_LESSER_LESSER;
-				output->tokens[output->nb_token - 1].len = 2;
-				i++;
-			}
+			out->tokens[out->nb_token - 1].type = TYPE_GREATER_GREATER;
+			out->tokens[out->nb_token - 1].len = 2;
+			i++;
+		}
+		else if (in->tokens[i].type == TYPE_LESSER
+			&& in->tokens[i + 1].type == TYPE_LESSER)
+		{
+			out->tokens[out->nb_token - 1].type = TYPE_LESSER_LESSER;
+			out->tokens[out->nb_token - 1].len = 2;
+			i++;
 		}
 		i++;
 	}
+	if (i < in->nb_token)
+		add_token(out, in->tokens[i]);
 }
 
 char	*line_surgery(char *line, t_token quote)
@@ -313,12 +316,13 @@ int	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	return (0);
 }
 
-t_tokenized_line *expander(char *line, t_hash_table *env)
+t_tokenized_line	*expander(char *line, t_hash_table *env)
 {
 	void			*tokens;
 	void			*tokens_output;
 	const size_t	len_line = ft_strlen(line);
-	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
+	const size_t	size = sizeof(t_tokenized_line)
+		+ sizeof(t_token) * len_line;
 
 	tokens = malloc(size);
 	if (tokens == 0)
@@ -341,7 +345,8 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	void			*tokens;
 	void			*tokens_output;
 	const size_t	len_line = ft_strlen(input->line);
-	const size_t	size = sizeof(t_tokenized_line) + sizeof(t_token) * len_line;
+	const size_t	size = sizeof(t_tokenized_line)
+		+ sizeof(t_token) * len_line;
 
 	tokens = malloc(size * 4);
 	if (tokens == 0)
@@ -356,7 +361,9 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
+	print_tokens(tokens + size * 3);
 	fuse_chevrons(tokens + size * 3, tokens_output);
+	print_tokens(tokens_output);
 	free(tokens);
 	return (tokens_output);
 }

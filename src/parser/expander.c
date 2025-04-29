@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 14:08:29 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:35:23 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 		i++;
 	}
 }
-#include <stdio.h>
-char	*search_in_env(t_tokenized_line *input, size_t word_pos, t_hash_table *env)
+
+char	*search_in_env(t_tokenized_line *input,
+					size_t word_pos, t_hash_table *env)
 {
 	const size_t	pos = input->tokens[word_pos].pos + 1;
 	const size_t	len = input->tokens[word_pos].len - 1;
@@ -69,7 +70,8 @@ char	*search_in_env(t_tokenized_line *input, size_t word_pos, t_hash_table *env)
 	return (value);
 }
 
-void	correct_positions(t_tokenized_line *line, size_t new_len, size_t old_len, size_t index)
+void	correct_positions(t_tokenized_line *line, size_t new_len,
+					size_t old_len, size_t index)
 {
 	size_t	i;
 
@@ -96,10 +98,12 @@ char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 			replacement = search_in_env(line, i, env);
 			if (replacement == 0)
 				return (0);
-			new_line = token_line_triple_join(line->line, line->tokens[i], replacement);
+			new_line = token_line_triple_join(line->line,
+					line->tokens[i], replacement);
 			if (new_line == 0)
 				return (0);
-			correct_positions(line, ft_strlen(replacement), line->tokens[i].len, i);
+			correct_positions(line, ft_strlen(replacement),
+				line->tokens[i].len, i);
 			line->tokens[i].len = ft_strlen(replacement);
 			free(line->line);
 			line->line = new_line;
@@ -139,7 +143,8 @@ void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
-int	expand_variables(t_tokenized_line *input, t_tokenized_line *intermediary, t_hash_table *env)
+int	expand_variables(t_tokenized_line *input,
+				t_tokenized_line *intermediary, t_hash_table *env)
 {
 	char	*new_line;
 
