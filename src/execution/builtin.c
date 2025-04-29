@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 11:42:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:24:33 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 {
 	const int	am_builtin = is_builtin(cmd);
 
+	if (cmd.io[0] == -1 || cmd.io[1] == -1)
+		return (am_builtin);
 	if (ft_strcmp(cmd.cmd[0], "echo") == 0)
 		ft_echo(cmd, status);
 	else if (ft_strcmp(cmd.cmd[0], "export") == 0)
