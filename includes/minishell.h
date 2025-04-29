@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 08:04:56 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:11:47 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,12 @@ typedef enum e_error
 
 void			free_cmd_list(t_cmd_list *list);
 struct termios	set_signal_handler_main(void);
-int				print_error_return_one(t_error error);
 t_hash_table	*convert_env_to_table(char **env);
+
+//error
+int				print_error_set_status(t_error error, t_hash_table *env);
+int				print_error_dont_set_status(t_error error);
+int				perror_set_status(t_hash_table *env, int status, char *optional);
+int				set_status(t_hash_table *env, int status);
 
 #endif //MINISHELL_H

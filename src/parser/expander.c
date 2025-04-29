@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 15:20:37 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 08:20:39 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 		if (input->tokens[i].type == TYPE_DOLLAR)
 		{
 			i++;
-			while (i < input->nb_token && input->tokens[i].type == TYPE_WORD)
+			while (i < input->nb_token && is_word(input->tokens[i]))
 			{
 				output->tokens[output->nb_token - 1].len++;
 				i++;

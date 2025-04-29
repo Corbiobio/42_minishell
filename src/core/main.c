@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 18:25:38 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:42:06 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,18 @@ int	main(int ac, char **av, char **env)
 		if (!list)
 			continue ;
 		if (list->cmds[0].cmd[0] != NULL)
+		{
 			if (create_child_and_exec_cmd(list, env_table, old_termios) == 42)
+			{
+				free_cmd_list(list);
 				break ;
+			}
+		}
 		free_cmd_list(list);
 	}
 	rl_clear_history();
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	return (EXIT_SUCCESS);
-	(void)ac;
 	(void)av;
 }

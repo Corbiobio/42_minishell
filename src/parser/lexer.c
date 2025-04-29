@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 15:25:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:48:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,24 @@ int	is_token_character(char c)
 	if (c == '>')
 		return (0);
 	return (1);
+}
+
+int	is_word(t_token token)
+{
+	if (token.type == TYPE_WORD)
+		return (1);
+	else if (token.type == TYPE_WORD_QUOTED)
+		return (1);
+	return (0);
+}
+
+int	is_quote(t_token token)
+{
+	if (token.type == TYPE_SINGLE_QUOTE)
+		return (1);
+	else if (token.type == TYPE_DOUBLE_QUOTE)
+		return (1);
+	return (0);
 }
 
 void	add_token(t_tokenized_line *line, t_token token_to_add)
@@ -59,6 +77,8 @@ char	*type_to_str(t_type type)
 		return ("pipe");
 	if (type == TYPE_DOLLAR)
 		return ("dollar");
+	if (type == TYPE_WORD_QUOTED)
+		return ("quoted word");
 	return ("error");
 }
 
@@ -111,11 +131,11 @@ void	dollar_alone_is_dead(t_tokenized_line *line)
 	i = 0;
 	while (i + 1 < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_DOLLAR && line->tokens[i + 1].type != TYPE_WORD)
+		if (line->tokens[i].type == TYPE_DOLLAR && !is_word(line->tokens[i + 1]))
 			line->tokens[i].type = TYPE_DEAD_TOKEN;
 		i++;
 	}
-	if (line->tokens[i].type == TYPE_DOLLAR)
+	if (i < line->nb_token && line->tokens[i].type == TYPE_DOLLAR)
 		line->tokens[i].type = TYPE_DEAD_TOKEN;
 }
 
@@ -133,7 +153,7 @@ void	remove_whitespaces(t_tokenized_line *input, t_tokenized_line *output)
 	}
 }
 
-int	turn_quoted_tokens_to_word(t_tokenized_line *line)
+int	turn_quoted_tokens_to_word(t_tokenized_line *line, t_hash_table *env)
 {
 	size_t		i;
 	t_type		quote_type;
@@ -141,8 +161,7 @@ int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 	i = 0;
 	while (i < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_SINGLE_QUOTE
-			|| line->tokens[i].type == TYPE_DOUBLE_QUOTE)
+		if (is_quote(line->tokens[i]))
 		{
 			quote_type = line->tokens[i].type;
 			i++;
@@ -152,12 +171,13 @@ int	turn_quoted_tokens_to_word(t_tokenized_line *line)
 					!= TYPE_WHITESPACE && !(quote_type == TYPE_DOUBLE_QUOTE
 						&& line->tokens[i].type == TYPE_DOLLAR))
 					line->tokens[i].type = TYPE_DEAD_TOKEN;
+				else if (line->tokens[i].type == TYPE_WORD)
+					line->tokens[i].type = TYPE_WORD_QUOTED;
 				i++;
 			}
-			if (i++ >= line->nb_token)
-				return (print_error_return_one(ERROR_QUOTE_UNCLOSED));
 		}
-		i++;
+		if (i++ >= line->nb_token)
+			return (print_error_set_status(ERROR_QUOTE_UNCLOSED, env));
 	}
 	return (0);
 }
@@ -170,13 +190,14 @@ void	turn_whitespaces_to_word(t_tokenized_line *line)
 	i = 0;
 	while (i < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_SINGLE_QUOTE || line->tokens[i].type == TYPE_DOUBLE_QUOTE)
+		if (is_quote(line->tokens[i]))
 		{
 			quote_type = line->tokens[i].type;
 			i++;
-			while (line->tokens[i].type != quote_type && i < line->nb_token)
+			while (i < line->nb_token && line->tokens[i].type != quote_type)
 			{
-				line->tokens[i].type = TYPE_WORD;
+				if (line->tokens[i].type == TYPE_WHITESPACE)
+					line->tokens[i].type = TYPE_WORD;
 				i++;
 			}
 			if (i >= line->nb_token)
@@ -195,7 +216,7 @@ void	turn_dead_to_word(t_tokenized_line *line)
 	while (i < line->nb_token)
 	{
 		if (line->tokens[i].type == TYPE_DEAD_TOKEN)
-			line->tokens[i].type = TYPE_WORD;
+			line->tokens[i].type = TYPE_WORD_QUOTED;
 		i++;
 	}
 }
@@ -212,9 +233,10 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 		if (input->tokens[i].type == TYPE_WORD)
 		{
 			i++;
-			while (i < input->nb_token && (input->tokens[i].type
-					== TYPE_DEAD_TOKEN || input->tokens[i].type == TYPE_WORD))
+			while (i < input->nb_token && is_word(input->tokens[i]))
 			{
+				if (input->tokens[i].type == TYPE_WORD_QUOTED)
+					output->tokens[output->nb_token - 1].type = TYPE_WORD_QUOTED;
 				output->tokens[output->nb_token - 1].len++;
 				i++;
 			}
@@ -274,7 +296,7 @@ int	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	*output = (t_tokenized_line){.line = input->line};
 	while (i < input->nb_token)
 	{
-		if (input->tokens[i].type == TYPE_SINGLE_QUOTE || input->tokens[i].type == TYPE_DOUBLE_QUOTE)
+		if (is_quote(input->tokens[i]))
 		{
 			output->line = line_surgery(input->line, input->tokens[i]);
 			if (output->line == 0)
@@ -305,9 +327,12 @@ t_tokenized_line *expander(char *line, t_hash_table *env)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	tokenize_string(line, tokens);
-	if (turn_quoted_tokens_to_word(tokens) == 1)
+	print_tokens(tokens);
+	if (turn_quoted_tokens_to_word(tokens, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
+	print_tokens(tokens);
 	dollar_alone_is_dead(tokens);
+	print_tokens(tokens);
 	expand_variables(tokens, tokens_output, env);
 	free(tokens);
 	return (tokens_output);
@@ -327,12 +352,17 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	expand_token_list(input, tokens);
+	print_tokens(tokens);
 	turn_whitespaces_to_word(tokens);
+	print_tokens(tokens);
 	turn_dead_to_word(tokens);
+	print_tokens(tokens);
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
+	print_tokens(tokens + size * 2);
 	remove_whitespaces(tokens + size * 2, tokens + size * 3);
+	print_tokens(tokens + size * 3);
 	fuse_chevrons(tokens + size * 3, tokens_output);
 	free(tokens);
 	return (tokens_output);

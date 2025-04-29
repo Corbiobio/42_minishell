@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 18:38:15 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:41:11 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 	size_t		i;
 	const int	load = table->size * 100 / table->capacity;
 
+	if (!key)
+		return (free_1_return_1(value));
 	if (load > 50 && table_resize(table) == 1)
 		return (1);
 	i = table_hash_function(key, table->capacity);

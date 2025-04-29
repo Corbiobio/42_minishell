@@ -35,6 +35,8 @@ SRC =\
 	builtin/export.c\
 	builtin/env.c\
 	builtin/unset.c\
+	builtin/exit.c\
+	builtin/pwd.c\
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRC))
 

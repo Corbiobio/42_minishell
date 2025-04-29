@@ -1,3 +1,7 @@
-exec: protect dup2
-pars: multiple infile or outfile, with /dev/stdin or out mixed
-pars or exec: leak fd ???? ->      ls > sdfs > klk > kljk > lkj >l > j < m 
+dont expand in heredoc if eof contains quotes anywhere
+if dollar followed by quote, $ expand to nothing (is removed)
+if command not found, specific $?
+if directory, say is directory and return specific $?
+cat < inf | ls: unitialized bytes in close and dup2
+cat < in: syscall waitpid contains unitialized bytes
+echo $? should not set $?

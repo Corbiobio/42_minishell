@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 18:52:46 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:42:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	is_builtin(t_cmd cmd)
 	return (0);
 }
 
-int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status)
+int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 {
 	const int	am_builtin = is_builtin(cmd);
 
@@ -47,10 +47,10 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status)
 	else if (ft_strcmp(cmd.cmd[0], "cd") == 0)
 		printf("cd is in developpement\n");
 	else if (ft_strcmp(cmd.cmd[0], "pwd") == 0)
-		printf("pwd is in developpement\n");
+		ft_pwd(env, status);
 	else if (ft_strcmp(cmd.cmd[0], "unset") == 0)
 		ft_unset(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "exit") == 0)
-		ft_exit(&status);
+		ft_exit(status, pos);
 	return (am_builtin);
 }

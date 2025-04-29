@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 15:07:19 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 08:47:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	remove_redirection(t_tokenized_line *input, t_tokenized_line *output)
 		if (is_type_redirect(input->tokens[i]))
 		{
 			i++;
-			if (input->tokens[i].type == TYPE_WORD && i < input->nb_token)
+			if (is_word(input->tokens[i]) && i < input->nb_token)
 				i++;
 		}
 		else if (i < input->nb_token)
@@ -50,7 +50,7 @@ int	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 	counter = 1;
 	while (i < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_WORD)
+		if (is_word(line->tokens[i]))
 			counter++;
 		if (line->tokens[i].type == TYPE_PIPE)
 		{
@@ -79,7 +79,7 @@ int	convert_to_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 	counter = 0;
 	while (++i < line->nb_token)
 	{
-		if (line->tokens[i].type == TYPE_WORD)
+		if (is_word(line->tokens[i]))
 		{
 			cmd_list->cmds[cmd_index].cmd[counter] = alloc_word(line, i);
 			if (cmd_list->cmds[cmd_index].cmd[counter] == 0)
