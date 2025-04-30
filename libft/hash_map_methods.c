@@ -6,12 +6,13 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 11:41:11 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:19:47 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stddef.h>
+#include <strings.h>
 
 int	power(int nb, int exponent)
 {
@@ -56,7 +57,7 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 	{
 		if (ft_strcmp(table->items[i].key, key) == 0)
 		{
-			table_delete_item(table, i);
+			table_remove_item(table, key, MODE_DELETE, i);
 			break ;
 		}
 		i++;
@@ -89,17 +90,25 @@ char	*table_search(t_hash_table *table, const char *key)
 	return (0);
 }
 
-void	table_remove_item(t_hash_table *table, char *key)
+void	table_remove_item(t_hash_table *table, char *key, t_hash_mode mode, int index)
 {
 	static char	deleted_item;
 	size_t		i;
 
+	if (mode == MODE_DELETE)
+	{
+		if (table->items[index].key != &deleted_item)
+			free(table->items[index].key);
+		free(table->items[index].value);
+		table->items[index] = (t_ht_item){.key = NULL, .value = NULL};
+		return ;
+	}
 	i = table_hash_function(key, table->capacity);
 	while (table->capacity && table->items[i].key)
 	{
 		if (ft_strcmp(table->items[i].key, key) == 0)
 		{
-			table_delete_item(table, i);
+			table_remove_item(table, key, MODE_DELETE, i);
 			table->items[i].key = &deleted_item;
 		}
 		i++;

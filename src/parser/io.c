@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 11:58:10 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:23:27 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,9 @@ int	redirect_out(t_token redirect, char *filename,
 		fd = open(filename, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (redirect.type == TYPE_GREATER_GREATER)
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
-	if (fd == STDOUT_FILENO)
-		return (0);
 	cmd->io[1] = fd;
 	if (fd == -1)
-	{
-		table_insert(env, ft_strdup("?"), ft_strdup("1"));
-		write(2, "minishell: ", 11);
-		perror(filename);
-	}
+		perror_set_status(env, 1, filename);
 	return (0);
 }
 
@@ -120,19 +114,17 @@ int	open_infile_outfile(t_tokenized_line *line,
 	{
 		if (line->tokens[i].type == TYPE_PIPE)
 			index++;
-		if (is_type_redirect(line->tokens[i]) == 1)
+		if (!is_type_redirect(line->tokens[i]))
 		{
-			if (next_token_is_word(line, i)
-				&& file_opening_did_not_fail(cmd_list->cmds[index]))
-			{
-				if (redirect_io(line, i,
-						&(cmd_list->cmds[index]), to_free) == -1)
-					return (1);
-			}
-			else
-				return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME,
-						to_free->env));
+			i++;
+			continue ;
 		}
+		if (!next_token_is_word(line, i))
+			return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME,
+					to_free->env));
+		if (file_opening_did_not_fail(cmd_list->cmds[index]))
+			if (redirect_io(line, i, &(cmd_list->cmds[index]), to_free) == -1)
+				return (1);
 		i++;
 	}
 	return (0);

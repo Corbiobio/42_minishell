@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 19:28:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:20:35 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ t_hash_table	*table_alloc(int capacity)
 	return (table);
 }
 
-void	table_delete_item(t_hash_table *table, int index)
-{
-	free(table->items[index].key);
-	free(table->items[index].value);
-	table->items[index] = (t_ht_item){.key = NULL, .value = NULL};
-}
+// void	table_delete_item(t_hash_table *table, int index)
+// {
+// 	free(table->items[index].key);
+// 	free(table->items[index].value);
+// 	table->items[index] = (t_ht_item){.key = NULL, .value = NULL};
+// }
 
 void	table_delete_table(t_hash_table *table)
 {
@@ -71,7 +71,7 @@ void	table_delete_table(t_hash_table *table)
 	while (i < table->capacity)
 	{
 		if (table->items[i].key != 0)
-			table_delete_item(table, i);
+			table_remove_item(table, 0, MODE_DELETE, i);
 		i++;
 	}
 	free(table->items);
