@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 18:15:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 09:18:14 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int					is_type_redirect(t_token token);
 int					is_word(t_token token);
 int					is_quote(t_token token);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
+void				change_last_token_type(t_tokenized_line *line, t_type type);
 
 //parser.c
 t_cmd_list			*parser(char *line, t_hash_table *env);

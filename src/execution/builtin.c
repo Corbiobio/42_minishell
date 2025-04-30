@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 15:24:33 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:08:40 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 	else if (ft_strcmp(cmd.cmd[0], "unset") == 0)
 		ft_unset(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "exit") == 0)
-		ft_exit(status, pos);
+	{
+		if (ft_exit(cmd, status, pos) == 42)
+			return (42);
+	}
 	return (am_builtin);
 }

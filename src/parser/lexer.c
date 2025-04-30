@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 07:28:16 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:09:36 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (tokens_output == 0)
 		return (free_1_return_null(tokens));
 	expand_token_list(input, tokens);
-	print_tokens(tokens);
 	turn_whitespaces_to_word(tokens);
-	print_tokens(tokens);
 	turn_dead_to_word(tokens);
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));

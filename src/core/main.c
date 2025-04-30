@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 16:59:29 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:20:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_hash_table	*env_table;
 	struct termios	old_termios;
+	int				status;
 
 	if (ac > 1)
 		return (EXIT_FAILURE);
@@ -78,8 +79,10 @@ int	main(int ac, char **av, char **env)
 		return (EXIT_FAILURE);
 	old_termios = command_loop(env_table);
 	rl_clear_history();
+	status = ft_atoi(table_search(env_table, "?"));
+	// printf("%i\n", status);
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
-	return (EXIT_SUCCESS);
+	return (status);
 	(void)av;
 }

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 11:11:47 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:42:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 typedef struct s_cmd
 {
 	int		io[2];
+	size_t	nb_arg;
 	char	**cmd;
 }	t_cmd;
 //-1 in IO indicates error while opening file, -2 indicates no file provided

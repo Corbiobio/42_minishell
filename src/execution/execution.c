@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 18:32:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:34:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,15 +123,20 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	int			fds[3];
 	pid_t		pid;
 	int			status;
+	int			exit_status;
 
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	status = 0;
+	exit_status = 0;
 	while (i < list->nb_cmd)
 	{
 		pos = get_pos(list, i);
-		if (pos == ALONE && launch_builtin(list->cmds[i], env, &status, pos) == 1)
+		if (pos == ALONE && is_builtin(list->cmds[i]))
+		{
+			exit_status = launch_builtin(list->cmds[i], env, &status, pos);
 			break ;
+		}
 		if (pos != LAST && pos != ALONE && pipe(fds) == -1)
 			dprintf(2, "cannot pipe on %s\n", list->cmds[i].cmd[0]);
 		if (list->cmds[i].io[0] != -1 && list->cmds[i].io[1] != -1)
@@ -160,5 +165,5 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	if (count_cmds_with_correct_io(list) >= 1)
 		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status)));
 	close_all_io(list);
-	return (status);
+	return (exit_status);
 }

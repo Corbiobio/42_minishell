@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 18:31:59 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:53:56 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int				ft_toupper(int c);
 int				ft_tolower(int c);
 int				ft_atoi(const char *nptr);
 int				ft_atoi_base(char *str, char *base);
+int				safe_atoi(const char *nptr, int *num);
 void			*ft_memset(void *s, int c, size_t n);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			*ft_memmove(void *dest, const void *src, size_t n);
