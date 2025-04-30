@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 15:24:33 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:58:52 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 	else if (ft_strcmp(cmd.cmd[0], "env") == 0)
 		ft_env(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "cd") == 0)
-		printf("cd is in developpement\n");
+		ft_cd(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "pwd") == 0)
 		ft_pwd(env, status);
 	else if (ft_strcmp(cmd.cmd[0], "unset") == 0)

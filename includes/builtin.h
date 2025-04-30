@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:43:41 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 11:40:35 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:59:14 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,8 @@ void	ft_exit(int *status, t_position pos);
 
 //pwd
 void	ft_pwd(t_hash_table *env, int *status);
+
+//cd
+void	ft_cd(t_cmd cmd, t_hash_table *env, int *status);
 
 #endif
