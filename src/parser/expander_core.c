@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 18:55:34 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 08:33:59 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ t_tokenized_line	*expander(char *line, t_hash_table *env)
 	return (tokens_output);
 }
 
+void	change_last_token_type(t_tokenized_line *line, t_type type)
+{
+	line->tokens[line->nb_token - 1].type = type;
+}
+
 void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
 {
 	size_t	i;
@@ -55,24 +60,28 @@ void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
 
 	i = 0;
 	*output = (t_tokenized_line){.line = input->line};
+	print_tokens(input);
 	while (i < input->nb_token)
 	{
+		print_tokens(output);
 		if (input->tokens[i].type == TYPE_DOLLAR)
 		{
 			j = 0;
 			while (j < input->tokens[i].len)
 			{
-				output->tokens[i + j] = (t_token){.pos = i + j, .len = 1};
+				add_token(output, (t_token){.pos = input->tokens[i].pos + j, .len = 1});
+				print_tokens(output);
 				if (ft_iswhitespace(input->line[input->tokens[i].pos + j]))
-					output->tokens[i + j].type = TYPE_WHITESPACE;
+					change_last_token_type(output, TYPE_WHITESPACE);
 				else
-					output->tokens[i + j].type = TYPE_WORD;
-				output->nb_token++;
+					change_last_token_type(output, TYPE_WORD);
+				print_tokens(output);
 				j++;
 			}
 			i++;
 			continue ;
 		}
-		add_token(output, input->tokens[i++]);
+		add_token(output, input->tokens[i]);
+		i++;
 	}
 }
