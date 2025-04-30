@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 16:49:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:54:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stddef.h>
 # include "libft.h"
+#include <termios.h>
 
 typedef struct s_cmd
 {
@@ -40,7 +41,7 @@ typedef enum e_error
 }	t_error;
 
 void			free_cmd_list(t_cmd_list *list);
-struct termios	set_signal_handler_main(void);
+void			set_signal_handler_main(struct termios old_termios);
 t_hash_table	*convert_env_to_table(char **env);
 
 //error

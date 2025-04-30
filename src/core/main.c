@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 18:08:59 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:53:44 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ struct termios	command_loop(t_hash_table *env)
 	char			*line;
 	t_cmd_list		*list;
 
+	tcgetattr(STDIN_FILENO, &old_termios);
 	while (42)
 	{
-		old_termios = set_signal_handler_main();
+		set_signal_handler_main(old_termios);
 		line = readline("beurre_demishell$ ");
 		if (!line)
 			return (old_termios);

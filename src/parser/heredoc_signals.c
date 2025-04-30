@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:50:35 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 17:51:14 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:57:26 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ static void	signal_handler_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("sigint!\n");
 		close(STDIN_FILENO);
 		g_signum = SIGINT;
-		printf("g_signum: %i\n", g_signum);
 	}
 }
 

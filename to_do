@@ -1,6 +1,5 @@
 exit nb must return nb from the shell
 builtin redirections dont work
-expand only allow letter, numerals and _ (and ?)
 fix cannot exec then is a directory
 heredoc leak fd
 heredoc eof shouldnt expand

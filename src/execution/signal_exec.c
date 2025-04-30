@@ -6,19 +6,19 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:10:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 16:15:08 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:37:36 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <bits/posix_opt.h>
 #include <readline/readline.h>
 #include <signal.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
 
 void	signal_handler_exec(int signum)
 {
+	write(STDIN_FILENO, "\n", 1);
 	(void)signum;
 }
 
@@ -32,12 +32,12 @@ void	set_signal_handler_exec(struct termios old_termios)
 {
 	struct sigaction	sigset;
 
+	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_exec;
 	sigaction(SIGINT, &sigset, 0);
-	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	sigemptyset(&sigset.sa_mask);
 	sigaddset(&sigset.sa_mask, SIGQUIT);
 	sigset.sa_flags = SA_RESTART;
