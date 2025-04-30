@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:43:41 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/29 17:59:14 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:10:33 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	ft_env(t_cmd cmd, t_hash_table *env, int *status);
 void	ft_unset(t_cmd cmd, t_hash_table *env, int *status);
 
 //exit
-void	ft_exit(int *status, t_position pos);
+int		ft_exit(t_cmd cmd, int *status, t_position pos);
 
 //pwd
-void	ft_pwd(t_hash_table *env, int *status);
+void	ft_pwd(int *status);
 
 //cd
 void	ft_cd(t_cmd cmd, t_hash_table *env, int *status);

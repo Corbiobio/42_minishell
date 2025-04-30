@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:43:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:54:43 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,15 @@ void	dollar_alone_is_dead(t_tokenized_line *line)
 	}
 	if (i < line->nb_token && line->tokens[i].type == TYPE_DOLLAR)
 		line->tokens[i].type = TYPE_DEAD_TOKEN;
+}
+
+int	is_allowed_in_variable_name(t_tokenized_line *line, int token_index)
+{
+	const char	c = line->line[line->tokens[token_index].pos];
+
+	if (ft_isalnum(c))
+		return (1);
+	if (c == '_')
+		return (1);
+	return (0);
 }

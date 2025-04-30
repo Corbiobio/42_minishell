@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:02:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 18:07:35 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:11:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	print_cmds(t_cmd_list *list)
 	while (i < list->nb_cmd)
 	{
 		printf("i: %i, o: %i\n", list->cmds[i].io[0], list->cmds[i].io[1]);
+		printf("nb_arg: %zu\n", list->cmds[i].nb_arg);
 		j = 0;
 		while (list->cmds[i].cmd[j] != 0)
 		{

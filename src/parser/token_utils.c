@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:00:52 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:48:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 09:17:53 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ void	add_token(t_tokenized_line *line, t_token token_to_add)
 {
 	line->tokens[line->nb_token] = token_to_add;
 	line->nb_token++;
+}
+
+void	change_last_token_type(t_tokenized_line *line, t_type type)
+{
+	line->tokens[line->nb_token - 1].type = type;
 }
 
 int	is_type_redirect(t_token token)

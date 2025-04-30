@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 18:15:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:03:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 # define PARSER_H
 
 # include "minishell.h"
+# include <signal.h>
 # include <stddef.h>
 # include "../libft/libft.h"
 
-static int	g_signum = 0;
+static sig_atomic_t	g_signum = 0;
 
 typedef enum e_infile
 {
@@ -86,6 +87,8 @@ void				tokenize_string(char *line, t_tokenized_line *tokens);
 int					turn_quoted_tokens_to_word(t_tokenized_line *line,
 						t_hash_table *env);
 void				dollar_alone_is_dead(t_tokenized_line *line);
+int					is_allowed_in_variable_name(t_tokenized_line *line,
+						int token_index);
 
 //expander_search.c
 char				*search_and_replace(t_tokenized_line *line,
@@ -132,6 +135,7 @@ int					is_type_redirect(t_token token);
 int					is_word(t_token token);
 int					is_quote(t_token token);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
+void				change_last_token_type(t_tokenized_line *line, t_type type);
 
 //parser.c
 t_cmd_list			*parser(char *line, t_hash_table *env);

@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:55:11 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:07:38 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	heredoc_no_line(int write_end, char *eof, t_free_close *stuff)
 	close(write_end);
 	free(eof);
 	delete_all_heredoc(stuff);
+	printf("g_signum: %i\n", g_signum);
 	if (g_signum == SIGINT)
 	{
 		g_signum = 0;

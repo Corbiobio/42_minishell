@@ -6,10 +6,11 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:35:03 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:54:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "parser.h"
 
 static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
@@ -99,7 +100,13 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 		if (input->tokens[i].type == TYPE_DOLLAR)
 		{
 			i++;
-			while (i < input->nb_token && is_word(input->tokens[i]))
+			if (i < input->nb_token && input->line[input->tokens[i].pos] == '?')
+			{
+				i++;
+				output->tokens[output->nb_token - 1].len++;
+				continue ;
+			}
+			while (i < input->nb_token && is_allowed_in_variable_name(input, i))
 			{
 				output->tokens[output->nb_token - 1].len++;
 				i++;

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 16:34:03 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:11:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int				ft_toupper(int c);
 int				ft_tolower(int c);
 int				ft_atoi(const char *nptr);
 int				ft_atoi_base(char *str, char *base);
+int				safe_atoi(const char *nptr, int *num);
 void			*ft_memset(void *s, int c, size_t n);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
 void			*ft_memmove(void *dest, const void *src, size_t n);
@@ -134,6 +135,12 @@ int				free_2_return_1(void *arg1, void *arg2);
 int				free_3_return_1(void *arg1, void *arg2, void *arg3);
 int				free_4_return_1(void *arg1, void *arg2, void *arg3, void *arg4);
 
+typedef enum e_hash_mode
+{
+	MODE_REMOVE,
+	MODE_DELETE
+}	t_hash_mode;
+
 int				table_insert(t_hash_table *table, char *key, char *value);
 int				table_resize(t_hash_table *table);
 void			table_delete_item(t_hash_table *table, int index);
@@ -144,7 +151,7 @@ void			print_hash_table(t_hash_table *table);
 int				table_hash_function(const char *key, const int len_table);
 int				power(int nb, int exponent);
 void			*table_delete_return_null(t_hash_table *table);
-void			table_remove_item(t_hash_table *table, char *key);
+void			table_remove_item(t_hash_table *table, char *key, t_hash_mode mode, int index);
 
 char			*ft_str_triple_join(char const *s1,
 					char const *s2, char const *s3);

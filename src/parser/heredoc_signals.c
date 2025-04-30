@@ -6,11 +6,12 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:50:35 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 18:14:22 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:07:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
+#include <stdio.h>
 #include <unistd.h>
 #include "parser.h"
 
@@ -18,8 +19,10 @@ static void	signal_handler_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
+		printf("sigint!\n");
 		close(STDIN_FILENO);
 		g_signum = SIGINT;
+		printf("g_signum: %i\n", g_signum);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:42:53 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 09:19:12 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ void	expand_token_list(t_tokenized_line *input, t_tokenized_line *output)
 			j = 0;
 			while (j < input->tokens[i].len)
 			{
-				output->tokens[i + j] = (t_token){.pos = i + j, .len = 1};
+				add_token(output, (t_token){.pos
+					= input->tokens[i].pos + j, .len = 1});
 				if (ft_iswhitespace(input->line[input->tokens[i].pos + j]))
-					output->tokens[i + j].type = TYPE_WHITESPACE;
+					change_last_token_type(output, TYPE_WHITESPACE);
 				else
-					output->tokens[i + j].type = TYPE_WORD;
-				output->nb_token++;
+					change_last_token_type(output, TYPE_WORD);
 				j++;
 			}
 			i++;

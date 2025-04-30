@@ -6,13 +6,14 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/29 17:49:33 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:52:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../libft/libft.h"
 #include "minishell.h"
+#include <stddef.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -44,15 +45,9 @@ int	redirect_out(t_token redirect, char *filename,
 		fd = open(filename, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (redirect.type == TYPE_GREATER_GREATER)
 		fd = open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
-	if (fd == STDOUT_FILENO)
-		return (0);
 	cmd->io[1] = fd;
 	if (fd == -1)
-	{
-		table_insert(env, ft_strdup("?"), ft_strdup("1"));
-		write(2, "minishell: ", 11);
-		perror(filename);
-	}
+		perror_set_status(env, 1, filename);
 	return (0);
 }
 
@@ -108,6 +103,22 @@ int	redirect_io(t_tokenized_line *line, int token_index,
 	return (error);
 }
 
+int	close_all_fd(t_cmd_list *cmd_list)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < cmd_list->nb_cmd)
+	{
+		if (cmd_list->cmds[i].io[0] >= 0)
+			close(cmd_list->cmds[i].io[0]);
+		if (cmd_list->cmds[i].io[1] >= 0)
+			close(cmd_list->cmds[i].io[1]);
+		i++;
+	}
+	return (1);
+}
+
 int	open_infile_outfile(t_tokenized_line *line,
 						t_cmd_list *cmd_list, t_free_close *to_free)
 {
@@ -120,19 +131,19 @@ int	open_infile_outfile(t_tokenized_line *line,
 	{
 		if (line->tokens[i].type == TYPE_PIPE)
 			index++;
-		if (is_type_redirect(line->tokens[i]) == 1)
+		if (!is_type_redirect(line->tokens[i]))
 		{
-			if (next_token_is_word(line, i)
-				&& file_opening_did_not_fail(cmd_list->cmds[index]))
-			{
-				if (redirect_io(line, i,
-						&(cmd_list->cmds[index]), to_free) == -1)
-					return (1);
-			}
-			else
-				return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME,
-						to_free->env));
+			i++;
+			continue ;
 		}
+		if (!next_token_is_word(line, i))
+		{
+			close_all_fd(cmd_list);
+			return (print_error_set_status(ERROR_FILENAME, to_free->env));
+		}
+		if (file_opening_did_not_fail(cmd_list->cmds[index]))
+			if (redirect_io(line, i, &(cmd_list->cmds[index]), to_free) == -1)
+				return (close_all_fd(cmd_list));
 		i++;
 	}
 	return (0);

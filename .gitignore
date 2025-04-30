@@ -6,3 +6,4 @@ out*
 .NotRelink
 ooomfie
 compile_flags.txt
+minishell_tester

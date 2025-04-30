@@ -1,3 +1,7 @@
-if command not found, specific $?
-if directory, say is directory and return specific $?
-pwd does not use $PWD -> use getcwd
+exit nb must return nb from the shell
+builtin redirections dont work
+expand only allow letter, numerals and _ (and ?)
+fix cannot exec then is a directory
+heredoc leak fd
+heredoc eof shouldnt expand
+signal issue (Ctrl-C in blocking command, Ctrl-\ in blocking command)
