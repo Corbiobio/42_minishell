@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 09:18:14 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:55:09 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void				tokenize_string(char *line, t_tokenized_line *tokens);
 int					turn_quoted_tokens_to_word(t_tokenized_line *line,
 						t_hash_table *env);
 void				dollar_alone_is_dead(t_tokenized_line *line);
+int					is_allowed_in_variable_name(t_tokenized_line *line,
+						int token_index);
 
 //expander_search.c
 char				*search_and_replace(t_tokenized_line *line,
