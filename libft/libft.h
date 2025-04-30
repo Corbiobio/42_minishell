@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/28 18:31:59 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:34:03 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,8 @@ void			table_remove_item(t_hash_table *table, char *key);
 
 char			*ft_str_triple_join(char const *s1,
 					char const *s2, char const *s3);
+
+int				strchr_index(const char *s, int c);
+int				strchr_last_index(const char *s, int c);
 
 #endif
