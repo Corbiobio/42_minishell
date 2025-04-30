@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:50:35 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 17:07:32 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:51:14 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "parser.h"
+
+volatile sig_atomic_t	g_signum;
 
 static void	signal_handler_heredoc(int signum)
 {

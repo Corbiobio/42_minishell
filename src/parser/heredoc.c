@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 17:07:38 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:54:27 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <termios.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+extern volatile sig_atomic_t	g_signum;
 
 void	delete_all_heredoc(t_free_close *stuff)
 {

@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 17:03:57 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:06:29 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,8 @@
 # define PARSER_H
 
 # include "minishell.h"
-# include <signal.h>
 # include <stddef.h>
 # include "../libft/libft.h"
-
-static sig_atomic_t	g_signum = 0;
 
 typedef enum e_infile
 {
@@ -107,6 +104,8 @@ int					expand_variables(t_tokenized_line *input,
 //io.c
 int					open_infile_outfile(t_tokenized_line *line,
 						t_cmd_list *cmd_list, t_free_close *to_free);
+int					close_all_fd(t_cmd_list *cmd_list);
+
 //io_conditions.c
 int					file_opening_did_not_fail(t_cmd cmd);
 int					next_token_is_word(t_tokenized_line *line,
