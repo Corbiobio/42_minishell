@@ -6,13 +6,14 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 14:23:27 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:52:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../libft/libft.h"
 #include "minishell.h"
+#include <stddef.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -102,6 +103,22 @@ int	redirect_io(t_tokenized_line *line, int token_index,
 	return (error);
 }
 
+int	close_all_fd(t_cmd_list *cmd_list)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < cmd_list->nb_cmd)
+	{
+		if (cmd_list->cmds[i].io[0] >= 0)
+			close(cmd_list->cmds[i].io[0]);
+		if (cmd_list->cmds[i].io[1] >= 0)
+			close(cmd_list->cmds[i].io[1]);
+		i++;
+	}
+	return (1);
+}
+
 int	open_infile_outfile(t_tokenized_line *line,
 						t_cmd_list *cmd_list, t_free_close *to_free)
 {
@@ -120,11 +137,13 @@ int	open_infile_outfile(t_tokenized_line *line,
 			continue ;
 		}
 		if (!next_token_is_word(line, i))
-			return (print_error_set_status(ERROR_REDIRECTION_NO_FILENAME,
-					to_free->env));
+		{
+			close_all_fd(cmd_list);
+			return (print_error_set_status(ERROR_FILENAME, to_free->env));
+		}
 		if (file_opening_did_not_fail(cmd_list->cmds[index]))
 			if (redirect_io(line, i, &(cmd_list->cmds[index]), to_free) == -1)
-				return (1);
+				return (close_all_fd(cmd_list));
 		i++;
 	}
 	return (0);

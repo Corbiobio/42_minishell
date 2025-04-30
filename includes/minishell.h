@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 10:42:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:49:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef enum e_error
 {
 	ERROR_UNKNOWN,
 	ERROR_QUOTE_UNCLOSED,
-	ERROR_REDIRECTION_NO_FILENAME,
+	ERROR_FILENAME,
 	ERROR_HEREDOC_EOF
 }	t_error;
 

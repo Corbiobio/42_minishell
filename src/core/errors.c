@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:57:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 10:42:21 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:53:20 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	print_error_set_status(t_error error, t_hash_table *env)
 		table_insert(env, ft_strdup("?"), ft_strdup("2"));
 		write(2, "unclosed quote\n", 15);
 	}
-	else if (error == ERROR_REDIRECTION_NO_FILENAME)
+	else if (error == ERROR_FILENAME)
 	{
 		table_insert(env, ft_strdup("?"), ft_strdup("2"));
 		write(2, "missing filename after redirection\n", 35);

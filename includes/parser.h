@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 15:55:09 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:03:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 # define PARSER_H
 
 # include "minishell.h"
+# include <signal.h>
 # include <stddef.h>
 # include "../libft/libft.h"
 
-static int	g_signum = 0;
+static sig_atomic_t	g_signum = 0;
 
 typedef enum e_infile
 {
