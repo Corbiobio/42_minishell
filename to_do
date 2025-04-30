@@ -1,2 +1,3 @@
 if command not found, specific $?
 if directory, say is directory and return specific $?
+pwd does not use $PWD -> use getcwd
