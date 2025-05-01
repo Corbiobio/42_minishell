@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 10:42:54 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:58:45 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 	infile_redirection(cmd, pos, fds);
 	outfile_redirection(cmd, pos, fds);
 	close_all_unused_io(list, i);
+	if (cmd.cmd[0] == NULL)
+	{
+		ft_free_split((char **)envp);
+		free_cmd_list(list);
+		table_delete_table(env);
+		*status = 0;
+		exit(*status);
+	}
 	if (is_builtin(cmd))
 	{
 		launch_builtin(cmd, env, status, pos);
@@ -130,6 +138,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	int			status;
 	int			exit_status;
 
+	//if (list->cmds[0].cmd[0] != NULL)
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	status = 0;

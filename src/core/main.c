@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 10:41:15 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:47:08 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,10 @@ struct termios	command_loop(t_hash_table *env)
 		list = parser(line, env);
 		if (!list)
 			continue ;
-		if (list->cmds[0].cmd[0] != NULL)
+		if (create_child_and_exec_cmd(list, env, old_termios) == 42)
 		{
-			if (create_child_and_exec_cmd(list, env, old_termios) == 42)
-			{
-				free_cmd_list(list);
-				return (old_termios);
-			}
+			free_cmd_list(list);
+			return (old_termios);
 		}
 		free_cmd_list(list);
 	}
