@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 13:26:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:16:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	fuse_words(tokens + size, tokens + size * 2);
-	remove_whitespaces(tokens + size * 2, tokens + size * 3);
-	fuse_chevrons(tokens + size * 3, tokens_output);
+	fuse_chevrons(tokens + size * 2, tokens + size * 3);
+	remove_whitespaces(tokens + size * 3, tokens_output);
 	free(tokens);
 	return (tokens_output);
 }

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 15:05:35 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:31:44 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,11 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 	{
 		if (is_builtin(cmd))
 			launch_builtin(cmd, env, status, pos);
+		else
+			*status = 0;
 		ft_free_split((char **)envp);
 		free_cmd_list(list);
 		table_delete_table(env);
-		*status = 0;
 		exit(*status);
 	}
 	path = get_cmd_path(cmd, env);
@@ -107,10 +108,13 @@ int	calc_correct_status(int status, t_cmd_list *list, size_t i, t_position pos)
 {
 	if (i >= list->nb_cmd)
 		i--;
+	printf("here %i\n", status);
 	if (pos == ALONE && is_builtin(list->cmds[i]))
 		return (status);
+	printf("there %i\n", WEXITSTATUS(status));
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
+	printf("hiiiiii %i\n", status);
 	if (WIFSIGNALED(status))
 		return (WTERMSIG(status) + 128);
 	return (status);
