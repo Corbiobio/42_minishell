@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 19:14:54 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 19:19:43 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	create_childs_and_exec_cmds(t_cmd_list *list, t_hash_table *env,
 	}
 }
 
-int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
+int	exec_cdms_list(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
 {
 	const int	is_alone = get_pos(list, 0) == ALONE;
 	pid_t		pid;
