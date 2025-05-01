@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/30 10:34:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:58:45 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,17 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 	infile_redirection(cmd, pos, fds);
 	outfile_redirection(cmd, pos, fds);
 	close_all_unused_io(list, i);
-	if (launch_builtin(cmd, env, status, pos) == 1)
+	if (cmd.cmd[0] == NULL)
 	{
+		ft_free_split((char **)envp);
+		free_cmd_list(list);
+		table_delete_table(env);
+		*status = 0;
+		exit(*status);
+	}
+	if (is_builtin(cmd))
+	{
+		launch_builtin(cmd, env, status, pos);
 		ft_free_split((char **)envp);
 		free_cmd_list(list);
 		table_delete_table(env);
@@ -107,8 +116,12 @@ size_t count_cmds_with_correct_io(t_cmd_list *list)
 	return (count);
 }
 
-int	calc_correct_status(int status)
+int	calc_correct_status(int status, t_cmd_list *list, size_t i, t_position pos)
 {
+	if (i >= list->nb_cmd)
+		i--;
+	if (pos == ALONE && is_builtin(list->cmds[i]))
+		return (status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
@@ -125,6 +138,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	int			status;
 	int			exit_status;
 
+	//if (list->cmds[0].cmd[0] != NULL)
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	status = 0;
@@ -163,7 +177,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 			;
 	}
 	if (count_cmds_with_correct_io(list) >= 1)
-		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status)));
+		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status, list, i, pos)));
 	close_all_io(list);
 	return (exit_status);
 }

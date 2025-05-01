@@ -6,16 +6,19 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/30 17:16:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:02:09 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include "builtin.h"
 #include "libft.h"
+#include <stdio.h>
 
 int	is_builtin(t_cmd cmd)
 {
+	if (cmd.cmd[0] == NULL)
+			return (0);
 	if (ft_strcmp(cmd.cmd[0], "echo") == 0)
 		return (1);
 	else if (ft_strcmp(cmd.cmd[0], "export") == 0)
