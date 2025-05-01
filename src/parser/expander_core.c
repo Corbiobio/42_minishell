@@ -6,11 +6,12 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 09:19:12 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:04:26 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include <stddef.h>
 
 int	expand_variables(t_tokenized_line *input,
 				t_tokenized_line *intermediary, t_hash_table *env)
@@ -22,6 +23,37 @@ int	expand_variables(t_tokenized_line *input,
 	if (new_line == 0)
 		return (1);
 	return (0);
+}
+
+void	prevent_expand_in_eof(t_tokenized_line *line)
+{
+	size_t	i;
+
+	i = 0;
+	while (i + 1 < line->nb_token)
+	{
+		if (line->tokens[i].type != TYPE_LESSER
+			|| line->tokens[i + 1].type != TYPE_LESSER)
+		{
+			i++;
+			continue ;
+		}
+		i += 2;
+		while (i < line->nb_token && line->tokens[i].type == TYPE_WHITESPACE)
+			i++;
+		while (i < line->nb_token && (line->tokens[i].type == TYPE_DEAD_TOKEN
+				|| is_word(line->tokens[i])
+				|| line->tokens[i].type == TYPE_DOLLAR
+				|| line->tokens[i].type == TYPE_SINGLE_QUOTE
+				|| line->tokens[i].type == TYPE_DOUBLE_QUOTE))
+		{
+			if (i < line->nb_token && line->tokens[i].type == TYPE_DOLLAR)
+				line->tokens[i].type = TYPE_DEAD_TOKEN;
+			i++;
+		}
+		i++;
+	}
+	print_tokens(line);
 }
 
 t_tokenized_line	*expander(char *line, t_hash_table *env)
@@ -42,6 +74,7 @@ t_tokenized_line	*expander(char *line, t_hash_table *env)
 	if (turn_quoted_tokens_to_word(tokens, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	dollar_alone_is_dead(tokens);
+	prevent_expand_in_eof(tokens);
 	if (expand_variables(tokens, tokens_output, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	free(tokens);
