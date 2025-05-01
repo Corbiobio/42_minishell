@@ -1,5 +1,2 @@
-exit nb must return nb from the shell
-fix cannot exec then is a directory
-heredoc eof shouldnt expand
-signal issue (Ctrl-C in blocking command, Ctrl-\ in blocking command)
 cd error if dir doesnt exist
+valid identifier variable being with letter or _, not numeral

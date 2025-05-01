@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 11:03:16 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:10:39 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ struct termios	command_loop(t_hash_table *env)
 	tcgetattr(STDIN_FILENO, &old_termios);
 	while (42)
 	{
+		printf("echo $?: %s\n", table_search(env, "?"));
 		set_signal_handler_main(old_termios);
 		line = readline("beurre_demishell$ ");
 		if (!line)
@@ -81,6 +82,7 @@ int	main(int ac, char **av, char **env)
 	printf("%i exited main\n", status);
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
+	write(STDERR_FILENO, "exit\n", 5);
 	return (status);
 	(void)av;
 }

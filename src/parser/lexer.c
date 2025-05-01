@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 12:09:36 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:26:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ void	turn_whitespaces_to_word(t_tokenized_line *line)
 					line->tokens[i].type = TYPE_WORD;
 				i++;
 			}
-			if (i >= line->nb_token)
-				printf("ERROR_QUOTE");
-			i++;
 		}
 		i++;
 	}
