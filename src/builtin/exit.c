@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:04:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 11:09:38 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:02:30 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include "minishell.h"
 #include <unistd.h>
-#include <stdio.h>
 
-int	ft_exit(t_cmd cmd, int *status, t_position pos)
+int	ft_exit(t_cmd cmd, int *status, t_position pos, int stds[2])
 {
 	int	arg;
 
 	arg = 0;
+	set_stds_to_default(cmd, pos, stds);
 	if (pos == ALONE)
 		write(STDIN_FILENO, "exit\n", 5);
 	if (cmd.nb_arg > 1)
