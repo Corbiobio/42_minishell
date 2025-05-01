@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 14:37:11 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:05:35 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,21 @@ void	free_exit_error_exec(t_cmd_list *list, int *status, size_t i, char *path)
 
 	*status = 126;
 	write(STDERR_FILENO, "minishell: ", 12);
+	write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
 	if (stat(list->cmds[i].cmd[0], &sb) == -1)
 	{
-		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
 		if (ft_strchr(list->cmds[i].cmd[0], '/') != NULL)
-			write(STDERR_FILENO, "no such file or directory\n", 27);
+			write(STDERR_FILENO, " no such file or directory\n", 27);
 		else
-			write(STDERR_FILENO, "command not found\n", 19);
+			write(STDERR_FILENO, " command not found\n", 19);
 		*status = 127;
 	}
 	else if (path != NULL && S_ISDIR(sb.st_mode))
-	{
-		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
-		write(STDERR_FILENO, "is a directory\n", 16);
-	}
+		write(STDERR_FILENO, " is a directory\n", 16);
 	else if (path != NULL)
-	{
-		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
-		write(STDERR_FILENO, "permission denied\n", 19);
-	}
+		write(STDERR_FILENO, " permission denied\n", 19);
 	else
-		write(STDERR_FILENO, "command not found\n", 19);
+		write(STDERR_FILENO, " command not found\n", 19);
 	free(path);
 	free_cmd_list(list);
 	exit(*status);
@@ -75,28 +69,20 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 	infile_redirection(cmd, pos, fds);
 	outfile_redirection(cmd, pos, fds);
 	close_all_unused_io(list, i);
-	if (cmd.cmd[0] == NULL)
+	if (cmd.cmd[0] == NULL || is_builtin(cmd))
 	{
+		if (is_builtin(cmd))
+			launch_builtin(cmd, env, status, pos);
 		ft_free_split((char **)envp);
 		free_cmd_list(list);
 		table_delete_table(env);
 		*status = 0;
 		exit(*status);
 	}
-	if (is_builtin(cmd))
-	{
-		launch_builtin(cmd, env, status, pos);
-		ft_free_split((char **)envp);
-		free_cmd_list(list);
-		table_delete_table(env);
-		exit(*status);
-	}
 	path = get_cmd_path(cmd, env);
 	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
-	{
 		execve(path, cmd.cmd, (char **)envp);
-	}
 	ft_free_split((char **)envp);
 	free_exit_error_exec(list, status, i, path);
 }
