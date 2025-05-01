@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 15:44:55 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:17:52 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,116 +19,54 @@
 #include <unistd.h>
 #include <limits.h>
 
-static int	count_args(const char **args)
+void	get_cwd(char **cwd)
 {
-	int	i;
-
-	i = 0;
-	while (args[i] != NULL)
-		i++;
-	return (i);
+	*cwd = malloc(PATH_MAX * sizeof(char));
+	if (getcwd(*cwd, PATH_MAX) == NULL)
+		write(2, "minishell: cd: cannot use your current directory\n", 50);
 }
 
-static char	*get_start_path(char *path)
-{
-	char	*start_path;
-
-	if (path[0] == '/')
-		start_path = ft_strdup("/");
-	else
-	{
-		start_path = malloc(PATH_MAX * sizeof(char));
-		if (getcwd(start_path, PATH_MAX) == NULL)
-			write(2, "minishell: cd: cannot use your current directory\n", 50);
-	}
-	return (start_path);
-}
-
-static char *add_dirs_to_path(char *start_path, char **dirs)
-{
-	int		curr_len;
-	char	*final_path;
-	char	*tmp_path;
-	int		i;
-
-	final_path = start_path;
-	i = 0;
-	while (dirs[i] != NULL)
-	{
-		curr_len = ft_strlen(final_path);
-		if (curr_len >= 2 && ft_strcmp(dirs[i], "..") == 0)
-		{
-			if (final_path[curr_len - 1] == '/')
-				final_path[curr_len - 1] = '\0';
-			final_path[strchr_last_index(final_path, '/') + 1] = '\0';
-		}
-		else if (ft_strcmp(dirs[i], ".") != 0)
-		{
-			
-			if (final_path[curr_len - 1] != '/')
-			{
-				tmp_path = ft_strjoin(final_path, "/");
-				free(final_path);
-				final_path = tmp_path;
-			}
-			tmp_path = ft_strjoin(final_path, dirs[i]);
-			free(final_path);
-			final_path = tmp_path;
-		}
-		i++;
-	}
-	return (final_path);
-}
-
-void	move_to_final_path(char *path, int *status)
+int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 {
 	struct stat sb;
 
-	*status = 0;
-	dprintf(2, "%s path\n", path);
-	if (chdir(path) == -1)
+	if (chdir(path_to_add) == -1)
 	{
-		*status = 1;
 		write(2, "minishell: cd: ", 16);
-		write(2, path, ft_strlen(path));
-		if (ft_strlen(path) >= PATH_MAX)
-			write(2, " file name too long\n", 35);
-		else if (stat(path, &sb) == -1)
-			write(2, " no such file or directory\n", 42);
+		write(2, path_to_add, ft_strlen(path_to_add));
+		if (ft_strlen(path_to_add) >= PATH_MAX)
+			write(2, " file name too long\n", 21);
+		else if (stat(path_to_add, &sb) == -1)
+			write(2, " no such file or directory\n", 28);
 		else if (S_ISREG(sb.st_mode))
-			write(2, " not a directory\n", 32);
+			write(2, " not a directory\n", 18);
 		else
-			write(2, " permission denied\n", 34);
+			write(2, " permission denied\n", 20);
+		return (free_1_return_1( cwd));
 	}
+	table_insert(env, ft_strdup("OLD_PWD"), cwd);
+	get_cwd(&cwd);
+	table_insert(env, ft_strdup("PWD"), cwd);
+	return (0);
 }
 
-static void	handle_path(char *path, int *status)
+void	handle_path(t_hash_table *env, char *path_to_add, int *status)
 {
-	char	*start_path;
-	char	*final_path;
-	char	**dirs;
+	char	*cwd;
 	
-	if (path == NULL || path[0] == '\0')
+	if (path_to_add == NULL || path_to_add[0] == '\0')
 		return ;
-	start_path = get_start_path(path);
-	dirs = ft_split(path, '/');
-	if (start_path == NULL || dirs == NULL)
+	cwd = NULL;
+	get_cwd(&cwd);
+	if (cwd == NULL)
 	{
-		free(start_path);
-		ft_free_split(dirs);
 		*status = 1;
-		return ;
+		return (free_1(cwd));
 	}
-	final_path = add_dirs_to_path(start_path, dirs);
-	if (final_path == NULL)
-		*status = 1;
-	else
-		move_to_final_path(final_path, status);
-	free(final_path);
-	ft_free_split(dirs);
+	*status = move_to_final_path(env, path_to_add, cwd);
 }
 
-static void	go_home(t_hash_table *env, int *status)
+void	go_home(t_hash_table *env, int *status)
 {
 	char *path;
 
@@ -138,23 +76,21 @@ static void	go_home(t_hash_table *env, int *status)
 		write(2, "minishell: cd: HOME not set\n", 29);
 		*status = 1; 
 	}
-	else
-		handle_path(path, status);
+	handle_path(env, path, status);
 }
 
 void	ft_cd(t_cmd cmd, t_hash_table *env, int *status)
 {
 	const char	**args = (const char **)cmd.cmd + 1;
-	const int	args_count = count_args(args);
 
 	*status = 0;
-	if (args_count >= 2)
+	if (cmd.nb_arg >= 2)
 	{
 		write(2, "minishell: cd: too many arguments\n", 35);
 		*status = 1;
 	}
-	else if (args_count == 0)
+	else if (cmd.nb_arg == 0)
 		go_home(env, status);
 	else
-		handle_path((char *)args[0], status);
+		handle_path(env, (char *)args[0], status);
 }
