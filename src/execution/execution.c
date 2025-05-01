@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 19:10:22 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 19:14:54 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ void	exec_cmd(t_cmd_list *list, t_hash_table *env, t_curr_cmd curr_cmd,
 	{
 		if (is_builtin(cmd_param))
 			launch_builtin(cmd_param, env, status, curr_cmd.pos);
+		else
+			*status = 0;
 		ft_free_split((char **)envp);
 		free_cmd_list(list);
 		table_delete_table(env);
-		*status = 0;
 		exit(*status);
 	}
 	path = get_cmd_path(cmd_param, env);
@@ -121,8 +122,7 @@ void	create_childs_and_exec_cmds(t_cmd_list *list, t_hash_table *env,
 	}
 }
 
-int	exec_cdms_list(t_cmd_list *list, t_hash_table *env,
-		struct termios old_termios)
+int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
 {
 	const int	is_alone = get_pos(list, 0) == ALONE;
 	pid_t		pid;

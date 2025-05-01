@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:04:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 14:41:22 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:28:14 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ int	ft_exit(t_cmd cmd, int *status, t_position pos, int stds[2])
 		*status = 2;
 		return (0);
 	}
-	if (cmd.nb_arg == 1)
-		*status = arg;
-	else if (pos == ALONE)
-		*status = 0;
+	*status = arg;
 	if (pos == ALONE)
 		return (42);
 	return (0);
