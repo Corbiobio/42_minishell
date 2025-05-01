@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 18:06:29 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:21:07 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int					turn_quoted_tokens_to_word(t_tokenized_line *line,
 void				dollar_alone_is_dead(t_tokenized_line *line);
 int					is_allowed_in_variable_name(t_tokenized_line *line,
 						int token_index);
+int					variable_name_start_correctly(t_tokenized_line *line,
+						size_t token_index);
 
 //expander_search.c
 char				*search_and_replace(t_tokenized_line *line,
@@ -110,6 +112,7 @@ int					close_all_fd(t_cmd_list *cmd_list);
 int					file_opening_did_not_fail(t_cmd cmd);
 int					next_token_is_word(t_tokenized_line *line,
 						size_t token_index);
+int					close_all_fd(t_cmd_list *cmd_list);
 
 //grammar.c
 int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);

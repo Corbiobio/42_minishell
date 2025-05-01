@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 11:38:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:19:51 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,17 @@ void	tokenize_string(char *line, t_tokenized_line *tokens)
 			tokens->tokens[i].type = TYPE_WORD;
 		i++;
 	}
+}
+
+int	variable_name_start_correctly(t_tokenized_line *line, size_t token_index)
+{
+	const char	c = line->line[line->tokens[token_index].pos];
+
+	if (ft_isalpha(c))
+		return (1);
+	if (c == '_')
+		return (1);
+	return (0);
 }
 
 int	turn_quoted_tokens_to_word(t_tokenized_line *line, t_hash_table *env)

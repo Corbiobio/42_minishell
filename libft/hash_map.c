@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:45:20 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 15:20:35 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:31:46 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-void	*table_delete_return_null(t_hash_table *table)
-{
-	table_delete_table(table);
-	return (0);
-}
-
-void	print_hash_table(t_hash_table *table)
-{
-	size_t	i;
-
-	printf("size: %zu, capacity: %zu\n", table->size, table->capacity);
-	i = 0;
-	while (i < table->capacity)
-	{
-		if (table->items[i].key == 0)
-			printf("%zu: no value  \n", i);
-		else if (table->items[i].value == 0)
-			printf("%zu: empty/removed  \n", i);
-		else
-			printf("%zu: ,key: %s, value: %s\n", i, table->items[i].key, table->items[i].value);
-		i++;
-	}
-}
 
 t_hash_table	*table_alloc(int capacity)
 {

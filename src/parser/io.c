@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 16:52:57 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:18:37 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,22 +101,6 @@ int	redirect_io(t_tokenized_line *line, int token_index,
 		error = redirect_in(how_infile, filename, cmd, to_free);
 	free(filename);
 	return (error);
-}
-
-int	close_all_fd(t_cmd_list *cmd_list)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < cmd_list->nb_cmd)
-	{
-		if (cmd_list->cmds[i].io[0] >= 0)
-			close(cmd_list->cmds[i].io[0]);
-		if (cmd_list->cmds[i].io[1] >= 0)
-			close(cmd_list->cmds[i].io[1]);
-		i++;
-	}
-	return (1);
 }
 
 int	open_infile_outfile(t_tokenized_line *line,

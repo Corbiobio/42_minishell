@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 18:54:45 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:21:42 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 # include <stddef.h>
 # include "libft.h"
-#include <termios.h>
+# include <termios.h>
 
 typedef struct s_cmd
 {
@@ -47,7 +47,8 @@ t_hash_table	*convert_env_to_table(char **env);
 //error
 int				print_error_set_status(t_error error, t_hash_table *env);
 int				print_error_dont_set_status(t_error error);
-int				perror_set_status(t_hash_table *env, int status, char *optional);
+int				perror_set_status(t_hash_table *env, int status,
+					char *optional);
 int				set_status(t_hash_table *env, int status);
 
 #endif //MINISHELL_H

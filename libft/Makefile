@@ -29,6 +29,7 @@ SRC_FILES = $(SRC_DIR)ft_isalpha.c\
 		$(SRC_DIR)dynamic_array.c\
 		$(SRC_DIR)hash_map_methods.c\
 		$(SRC_DIR)hash_map.c\
+		$(SRC_DIR)hash_map_utils.c\
 		$(SRC_DIR)ft_quicksort.c\
 		$(SRC_DIR)str_triple_join.c\
 		$(SRC_DIR)multifree.c\

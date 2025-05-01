@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:21:23 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 15:19:47 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:30:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,21 @@
 #include <stddef.h>
 #include <strings.h>
 
-int	power(int nb, int exponent)
+int	table_find_nearest_free_spot(t_hash_table *table, char *key)
 {
-	if (exponent < 0)
-		return (0);
-	if (exponent <= 1)
-		return (nb);
-	return (power(nb * nb, exponent - 1));
-}
+	size_t	i;
 
-int	table_hash_function(const char *key, const int len_table)
-{
-	long long int	hash;
-	int				prime_signature;
-	int				len_key;
-	int				i;
-
-	prime_signature = 163;
-	len_key = ft_strlen(key);
-	hash = 0;
-	i = 0;
-	while (i < len_key)
+	i = table_hash_function(key, table->capacity);
+	while (i < table->capacity && table->items[i].key)
 	{
-		hash += power(prime_signature, len_key - i + 1) * key[i];
-		hash = hash % (len_table - 1);
+		if (ft_strcmp(table->items[i].key, key) == 0)
+		{
+			table_remove_item(table, key, MODE_DELETE, i);
+			break ;
+		}
 		i++;
 	}
-	return ((int)hash);
+	return (i);
 }
 
 int	table_insert(t_hash_table *table, char *key, char *value)
@@ -52,16 +40,7 @@ int	table_insert(t_hash_table *table, char *key, char *value)
 		return (free_1_return_1(value));
 	if (load > 50 && table_resize(table) == 1)
 		return (1);
-	i = table_hash_function(key, table->capacity);
-	while (i < table->capacity && table->items[i].key)
-	{
-		if (ft_strcmp(table->items[i].key, key) == 0)
-		{
-			table_remove_item(table, key, MODE_DELETE, i);
-			break ;
-		}
-		i++;
-	}
+	i = table_find_nearest_free_spot(table, key);
 	if (i < table->capacity)
 	{
 		table->items[i] = (t_ht_item){.key = key, .value = value};
@@ -90,7 +69,8 @@ char	*table_search(t_hash_table *table, const char *key)
 	return (0);
 }
 
-void	table_remove_item(t_hash_table *table, char *key, t_hash_mode mode, int index)
+void	table_remove_item(t_hash_table *table, char *key,
+					t_hash_mode mode, int index)
 {
 	static char	deleted_item;
 	size_t		i;

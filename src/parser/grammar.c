@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 10:53:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:16:05 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,14 @@ int	convert_to_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 		if (is_word(line->tokens[i]))
 		{
 			cmd_list->cmds[cmd_index].cmd[counter] = alloc_word(line, i);
-			if (cmd_list->cmds[cmd_index].cmd[counter] == 0)
+			if (cmd_list->cmds[cmd_index].cmd[counter++] == 0)
 				return (1);
-			counter++;
 		}
 		if (line->tokens[i].type == TYPE_PIPE)
 		{
 			cmd_list->cmds[cmd_index].nb_arg = counter - 1;
-			cmd_list->cmds[cmd_index].cmd[counter] = 0;
+			cmd_list->cmds[cmd_index++].cmd[counter] = 0;
 			counter = 0;
-			cmd_index++;
 		}
 	}
 	cmd_list->cmds[cmd_index].nb_arg = counter - 1;
