@@ -1,5 +1,4 @@
-exit nb must return nb from the shell
 builtin redirections dont work
 fix cannot exec then is a directory
-<salut: segfault (add protection against empty commands, and free fd)
-
+infile : Permission denied
+valid identifier variable being with letter or _, not numeral

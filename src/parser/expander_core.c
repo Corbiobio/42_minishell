@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 10:12:19 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:33:30 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,19 @@ int	expand_variables(t_tokenized_line *input,
 				t_tokenized_line *intermediary, t_hash_table *env)
 {
 	char	*new_line;
+	t_token	token;
+	size_t	i;
 
 	fuse_dollars(input, intermediary);
+	i = 0;
+	while (i < intermediary->nb_token)
+	{
+		token = intermediary->tokens[i];
+		if (intermediary->tokens[i].type == TYPE_DOLLAR
+			&& intermediary->tokens[i].len == 1)
+			intermediary->tokens[i].type = TYPE_DEAD_TOKEN;
+		i++;
+	}
 	new_line = search_and_replace(intermediary, env);
 	if (new_line == 0)
 		return (1);

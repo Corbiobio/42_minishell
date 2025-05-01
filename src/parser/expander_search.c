@@ -6,12 +6,13 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 15:54:46 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:40:03 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "parser.h"
+#include <stddef.h>
 
 static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
 {
@@ -20,7 +21,7 @@ static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
 
 	len = ft_strlen(line) - dollar.len + ft_strlen(s2) + 1;
 	new_line = ft_calloc(len, sizeof(char));
-	if (new_line <= 0)
+if (new_line <= 0)
 		return (0);
 	ft_strlcat(new_line, line, dollar.pos + 1);
 	if (s2)
@@ -71,8 +72,6 @@ char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 		if (line->tokens[i].type == TYPE_DOLLAR)
 		{
 			replacement = search_in_env(line, i, env);
-			if (replacement == 0)
-				return (0);
 			new_line = token_line_triple_join(line->line,
 					line->tokens[i], replacement);
 			if (new_line == 0)
@@ -86,6 +85,17 @@ char	*search_and_replace(t_tokenized_line *line, t_hash_table *env)
 		i++;
 	}
 	return (line->line);
+}
+
+int	variable_name_start_correctly(t_tokenized_line *line, size_t token_index)
+{
+	const char	c = line->line[line->tokens[token_index].pos];
+
+	if (ft_isalpha(c))
+		return (1);
+	if (c == '_')
+		return (1);
+	return (0);
 }
 
 void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
@@ -106,10 +116,15 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 				output->tokens[output->nb_token - 1].len++;
 				continue ;
 			}
+			if (!variable_name_start_correctly(input, i))
+			{
+				i++;
+				continue ;
+			}
 			while (i < input->nb_token && is_allowed_in_variable_name(input, i))
 			{
-				output->tokens[output->nb_token - 1].len++;
 				i++;
+				output->tokens[output->nb_token - 1].len++;
 			}
 			continue ;
 		}
