@@ -6,14 +6,16 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 11:02:09 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:00:23 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include "builtin.h"
 #include "libft.h"
+#include "minishell.h"
 #include <stdio.h>
+#include <unistd.h>
 
 int	is_builtin(t_cmd cmd)
 {
@@ -36,12 +38,46 @@ int	is_builtin(t_cmd cmd)
 	return (0);
 }
 
+void	redirect_std(t_cmd cmd, t_position pos, int stds[2])
+{
+	if (pos != ALONE)
+		return ;
+	if (cmd.io[0] >= 0)
+	{
+		stds[0] = dup(STDIN_FILENO);
+		dup2(cmd.io[0], STDIN_FILENO);
+	}
+	if (cmd.io[1] >= 0)
+	{
+		stds[1] = dup(STDOUT_FILENO);
+		dup2(cmd.io[1], STDOUT_FILENO);
+	}
+}
+
+void	set_stds_to_default(t_cmd cmd, t_position pos, int stds[2])
+{
+	if (pos != ALONE)
+		return ;
+	if (cmd.io[0] >= 0)
+	{
+		dup2(stds[0], STDIN_FILENO);
+		close(stds[0]);
+	}
+	if (cmd.io[1] >= 0)
+	{
+		dup2(stds[1], STDOUT_FILENO);
+		close(stds[1]);
+	}
+}
+
 int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 {
 	const int	am_builtin = is_builtin(cmd);
+	int			stds[2];
 
 	if (cmd.io[0] == -1 || cmd.io[1] == -1)
 		return (am_builtin);
+	redirect_std(cmd, pos, stds);
 	if (ft_strcmp(cmd.cmd[0], "echo") == 0)
 		ft_echo(cmd, status);
 	else if (ft_strcmp(cmd.cmd[0], "export") == 0)
@@ -56,8 +92,9 @@ int	launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos)
 		ft_unset(cmd, env, status);
 	else if (ft_strcmp(cmd.cmd[0], "exit") == 0)
 	{
-		if (ft_exit(cmd, status, pos) == 42)
+		if (ft_exit(cmd, status, pos, stds) == 42)
 			return (42);
 	}
+	set_stds_to_default(cmd, pos, stds);
 	return (am_builtin);
 }

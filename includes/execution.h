@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 17:28:55 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:03:17 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	close_all_io(t_cmd_list *list);
 //builtin
 int		launch_builtin(t_cmd cmd, t_hash_table *env, int *status, t_position pos);
 int		is_builtin(t_cmd cmd);
+void	set_stds_to_default(t_cmd cmd, t_position pos, int stds[2]);
 
 //signal_exec
 // void	set_signal_handler_exec(void);
