@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 10:04:26 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:12:19 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@ int	expand_variables(t_tokenized_line *input,
 	fuse_dollars(input, intermediary);
 	new_line = search_and_replace(intermediary, env);
 	if (new_line == 0)
+		return (1);
+	return (0);
+}
+
+int	is_token_allowed_in_word(t_token token)
+{
+	if (is_word(token))
+		return (1);
+	if (token.type == TYPE_DEAD_TOKEN)
+		return (1);
+	if (token.type == TYPE_SINGLE_QUOTE)
+		return (1);
+	if (token.type == TYPE_DOUBLE_QUOTE)
+		return (1);
+	if (token.type == TYPE_DOLLAR)
 		return (1);
 	return (0);
 }
@@ -41,11 +56,7 @@ void	prevent_expand_in_eof(t_tokenized_line *line)
 		i += 2;
 		while (i < line->nb_token && line->tokens[i].type == TYPE_WHITESPACE)
 			i++;
-		while (i < line->nb_token && (line->tokens[i].type == TYPE_DEAD_TOKEN
-				|| is_word(line->tokens[i])
-				|| line->tokens[i].type == TYPE_DOLLAR
-				|| line->tokens[i].type == TYPE_SINGLE_QUOTE
-				|| line->tokens[i].type == TYPE_DOUBLE_QUOTE))
+		while (i < line->nb_token && is_token_allowed_in_word(line->tokens[i]))
 		{
 			if (i < line->nb_token && line->tokens[i].type == TYPE_DOLLAR)
 				line->tokens[i].type = TYPE_DEAD_TOKEN;
@@ -53,7 +64,6 @@ void	prevent_expand_in_eof(t_tokenized_line *line)
 		}
 		i++;
 	}
-	print_tokens(line);
 }
 
 t_tokenized_line	*expander(char *line, t_hash_table *env)
