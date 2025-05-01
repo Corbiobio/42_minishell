@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 15:32:32 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:49:00 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ struct termios	command_loop(t_hash_table *env)
 		list = parser(line, env);
 		if (!list)
 			continue ;
-		if (create_child_and_exec_cmd(list, env, old_termios) == 42)
+		if (exec_cdms_list(list, env, old_termios) == 42)
 		{
 			free_cmd_list(list);
 			return (old_termios);
