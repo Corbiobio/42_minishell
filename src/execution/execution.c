@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 10:58:45 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:37:11 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,34 @@ static t_position	get_pos(t_cmd_list *list, size_t curr_cmd_index)
 		return (MID);
 }
 
-void	free_exit_error_exec(t_cmd_list *list, int *status, size_t i)
+void	free_exit_error_exec(t_cmd_list *list, int *status, size_t i, char *path)
 {
 	struct stat sb;
 
 	*status = 126;
 	write(STDERR_FILENO, "minishell: ", 12);
-	if (stat(list->cmds[i].cmd[0], &sb) == 0 && S_ISDIR(sb.st_mode))
-	{
-		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
-		write(STDERR_FILENO, " is a directory\n", 17);
-	}
-	else if (access(list->cmds[i].cmd[0], F_OK) == -1)
+	if (stat(list->cmds[i].cmd[0], &sb) == -1)
 	{
 		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
 		if (ft_strchr(list->cmds[i].cmd[0], '/') != NULL)
-			write(STDERR_FILENO, " no such file or directory\n", 28);
+			write(STDERR_FILENO, "no such file or directory\n", 27);
 		else
-			write(STDERR_FILENO, " command not found\n", 20);
+			write(STDERR_FILENO, "command not found\n", 19);
 		*status = 127;
 	}
-	else if (access(list->cmds[i].cmd[0], X_OK) == -1)
+	else if (path != NULL && S_ISDIR(sb.st_mode))
 	{
 		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
-		write(STDERR_FILENO, " Permission denied\n", 20);
+		write(STDERR_FILENO, "is a directory\n", 16);
 	}
+	else if (path != NULL)
+	{
+		write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
+		write(STDERR_FILENO, "permission denied\n", 19);
+	}
+	else
+		write(STDERR_FILENO, "command not found\n", 19);
+	free(path);
 	free_cmd_list(list);
 	exit(*status);
 }
@@ -92,12 +95,10 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
 	{
-		if (execve(path, cmd.cmd, (char **)envp) == -1)
-			dprintf(2, "cannot exec %s\n", cmd.cmd[0]);
+		execve(path, cmd.cmd, (char **)envp);
 	}
 	ft_free_split((char **)envp);
-	free(path);
-	free_exit_error_exec(list, status, i);
+	free_exit_error_exec(list, status, i, path);
 }
 
 size_t count_cmds_with_correct_io(t_cmd_list *list)
@@ -138,7 +139,6 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 	int			status;
 	int			exit_status;
 
-	//if (list->cmds[0].cmd[0] != NULL)
 	set_signal_handler_exec(old_termios);
 	i = 0;
 	status = 0;
