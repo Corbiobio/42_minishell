@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/30 10:34:30 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:11:10 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,9 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 	infile_redirection(cmd, pos, fds);
 	outfile_redirection(cmd, pos, fds);
 	close_all_unused_io(list, i);
-	if (launch_builtin(cmd, env, status, pos) == 1)
+	if (is_builtin(cmd))
 	{
+		launch_builtin(cmd, env, status, pos);
 		ft_free_split((char **)envp);
 		free_cmd_list(list);
 		table_delete_table(env);
@@ -107,8 +108,12 @@ size_t count_cmds_with_correct_io(t_cmd_list *list)
 	return (count);
 }
 
-int	calc_correct_status(int status)
+int	calc_correct_status(int status, t_cmd_list *list, size_t i)
 {
+	if (i >= list->nb_cmd)
+		i--;
+	if (ft_strcmp(list->cmds[i].cmd[0], "exit") == 0)
+		return (status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
@@ -163,7 +168,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 			;
 	}
 	if (count_cmds_with_correct_io(list) >= 1)
-		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status)));
+		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status, list, i)));
 	close_all_io(list);
 	return (exit_status);
 }
