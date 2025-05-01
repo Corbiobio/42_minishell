@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/30 16:56:56 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:44:55 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <limits.h>
 
@@ -78,6 +79,29 @@ static char *add_dirs_to_path(char *start_path, char **dirs)
 	}
 	return (final_path);
 }
+
+void	move_to_final_path(char *path, int *status)
+{
+	struct stat sb;
+
+	*status = 0;
+	dprintf(2, "%s path\n", path);
+	if (chdir(path) == -1)
+	{
+		*status = 1;
+		write(2, "minishell: cd: ", 16);
+		write(2, path, ft_strlen(path));
+		if (ft_strlen(path) >= PATH_MAX)
+			write(2, " file name too long\n", 35);
+		else if (stat(path, &sb) == -1)
+			write(2, " no such file or directory\n", 42);
+		else if (S_ISREG(sb.st_mode))
+			write(2, " not a directory\n", 32);
+		else
+			write(2, " permission denied\n", 34);
+	}
+}
+
 static void	handle_path(char *path, int *status)
 {
 	char	*start_path;
@@ -95,24 +119,11 @@ static void	handle_path(char *path, int *status)
 		*status = 1;
 		return ;
 	}
-	printf("path to add --%s--\n", path);
-	printf("start_path __%s__\n", start_path);
-	printf("-----------------------\n");
 	final_path = add_dirs_to_path(start_path, dirs);
-	printf("-----------------------\n");
-	printf("final_path __%s__\n", final_path);
 	if (final_path == NULL)
 		*status = 1;
 	else
-	{
-		if (ft_strlen(final_path) >= PATH_MAX)
-		{
-			write(2, "minishell: cd: file name too long\n", 25);
-			*status = 1;
-		}
-		else
-			chdir(final_path);
-	}
+		move_to_final_path(final_path, status);
 	free(final_path);
 	ft_free_split(dirs);
 }
