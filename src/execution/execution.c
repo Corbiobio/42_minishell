@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 10:11:10 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:42:54 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,11 @@ size_t count_cmds_with_correct_io(t_cmd_list *list)
 	return (count);
 }
 
-int	calc_correct_status(int status, t_cmd_list *list, size_t i)
+int	calc_correct_status(int status, t_cmd_list *list, size_t i, t_position pos)
 {
 	if (i >= list->nb_cmd)
 		i--;
-	if (ft_strcmp(list->cmds[i].cmd[0], "exit") == 0)
+	if (pos == ALONE && is_builtin(list->cmds[i]))
 		return (status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -168,7 +168,7 @@ int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termio
 			;
 	}
 	if (count_cmds_with_correct_io(list) >= 1)
-		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status, list, i)));
+		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status, list, i, pos)));
 	close_all_io(list);
 	return (exit_status);
 }

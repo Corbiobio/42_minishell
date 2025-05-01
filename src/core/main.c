@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 17:11:31 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:41:15 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	main(int ac, char **av, char **env)
 	old_termios = command_loop(env_table);
 	rl_clear_history();
 	status = ft_atoi(table_search(env_table, "?"));
-	printf("%i\n", status);
+	printf("%i exited main\n", status);
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	return (status);
