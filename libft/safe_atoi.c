@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:52:08 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 10:53:17 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:29:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	safe_atoi(const char *nptr, int *num)
 	int			sign;
 	long long	buf;
 
+	if (!nptr)
+		return (1);
 	i = 0;
 	sign = 1;
 	buf = 0;
