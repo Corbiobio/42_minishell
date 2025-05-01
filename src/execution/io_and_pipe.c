@@ -6,39 +6,39 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:34:24 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 13:45:30 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 19:06:26 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include <unistd.h>
 
-void	infile_redirection(t_cmd cmd, t_position pos, int fds[3])
+void	infile_redirection(t_curr_cmd curr_cmd)
 {
-	if (cmd.io[0] >= 0)
+	if (curr_cmd.cmd.io[0] >= 0)
 	{
-		dup2(cmd.io[0], STDIN_FILENO);
-		close(cmd.io[0]);
+		dup2(curr_cmd.cmd.io[0], STDIN_FILENO);
+		close(curr_cmd.cmd.io[0]);
 	}
-	else if (pos != FIRST && pos != ALONE)
-		dup2(fds[2], STDIN_FILENO);
-	if (pos != FIRST && pos != ALONE)
-		close(fds[2]);
+	else if (curr_cmd.pos != FIRST && curr_cmd.pos != ALONE)
+		dup2(curr_cmd.fds[2], STDIN_FILENO);
+	if (curr_cmd.pos != FIRST && curr_cmd.pos != ALONE)
+		close(curr_cmd.fds[2]);
 }
 
-void	outfile_redirection(t_cmd cmd, t_position pos, int fds[3])
+void	outfile_redirection(t_curr_cmd curr_cmd)
 {
-	if (cmd.io[1] >= 0)
+	if (curr_cmd.cmd.io[1] >= 0)
 	{
-		dup2(cmd.io[1], STDOUT_FILENO);
-		close(cmd.io[1]);
+		dup2(curr_cmd.cmd.io[1], STDOUT_FILENO);
+		close(curr_cmd.cmd.io[1]);
 	}
-	else if (pos != LAST && pos != ALONE)
-		dup2(fds[1], STDOUT_FILENO);
-	if (pos != LAST && pos != ALONE)
+	else if (curr_cmd.pos != LAST && curr_cmd.pos != ALONE)
+		dup2(curr_cmd.fds[1], STDOUT_FILENO);
+	if (curr_cmd.pos != LAST && curr_cmd.pos != ALONE)
 	{
-		close(fds[1]);
-		close(fds[0]);
+		close(curr_cmd.fds[1]);
+		close(curr_cmd.fds[0]);
 	}
 }
 
@@ -70,4 +70,20 @@ void	close_all_unused_io(t_cmd_list *list, size_t curr_cmd_index)
 			close(list->cmds[i].io[1]);
 		i++;
 	}
+}
+
+size_t	count_cmds_with_correct_io(t_cmd_list *list)
+{
+	size_t	count;
+	size_t	i;
+
+	count = 0;
+	i = 0;
+	while (i < list->nb_cmd)
+	{
+		if (list->cmds[i].io[0] != -1 && list->cmds[i].io[1] != -1)
+			count++;
+		i++;
+	}
+	return (count);
 }

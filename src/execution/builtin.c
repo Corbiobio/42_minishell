@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 13:00:23 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:22:03 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 int	is_builtin(t_cmd cmd)
 {
 	if (cmd.cmd[0] == NULL)
-			return (0);
+		return (0);
 	if (ft_strcmp(cmd.cmd[0], "echo") == 0)
 		return (1);
 	else if (ft_strcmp(cmd.cmd[0], "export") == 0)

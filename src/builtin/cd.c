@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 17:17:52 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:36:32 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 void	get_cwd(char **cwd)
 {
-	*cwd = malloc(PATH_MAX * sizeof(char));
+	*cwd = ft_calloc(sizeof(char), PATH_MAX);
 	if (getcwd(*cwd, PATH_MAX) == NULL)
 		write(2, "minishell: cd: cannot use your current directory\n", 50);
 }
@@ -46,6 +46,8 @@ int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 	}
 	table_insert(env, ft_strdup("OLD_PWD"), cwd);
 	get_cwd(&cwd);
+	if (cwd == NULL || cwd[0] == '\0')
+		return (free_1_return_1(cwd));
 	table_insert(env, ft_strdup("PWD"), cwd);
 	return (0);
 }
