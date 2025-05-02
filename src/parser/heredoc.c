@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 10:28:21 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:10:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	heredoc_child(char *eof, int write_end,
 		if (how_expand == INFILE_HEREDOC_EXPAND)
 			write_expander_heredoc(line, write_end, stuff, eof);
 		else
-			write_no_expand_heredoc(line, write_end, stuff, eof);
+			write_no_expand_heredoc(line, write_end);
 	}
 	delete_all_heredoc(stuff);
 	close(write_end);
