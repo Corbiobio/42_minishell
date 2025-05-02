@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:56:43 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/25 16:31:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:31:15 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*joined;
 	size_t	len;
 
+	if (!s1 || !s2)
+		return (0);
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
 	joined = ft_calloc(len, sizeof(char));
 	if (joined <= 0)

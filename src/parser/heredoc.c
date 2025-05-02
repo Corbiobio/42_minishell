@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 18:57:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 10:28:21 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "minishell.h"
 #include "parser.h"
 #include <signal.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -75,7 +74,7 @@ static int	heredoc_child(char *eof, int write_end,
 	exit(EXIT_SUCCESS);
 }
 
-static int	write_heredoc(char *eof, int write_end,
+static int	fork_heredoc(char *eof, int write_end,
 						t_free_close *stuff, t_infile how_expand)
 {
 	int	pid;
@@ -112,7 +111,7 @@ int	create_heredoc(char *eof, t_free_close *stuff, t_infile how_expand)
 	if (pipe(end) == -1)
 		return (-1);
 	stuff->fd_read_end = end[0];
-	if (write_heredoc(eof, end[1], stuff, how_expand) != 0)
+	if (fork_heredoc(eof, end[1], stuff, how_expand) != 0)
 	{
 		close(end[1]);
 		close(end[0]);

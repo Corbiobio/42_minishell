@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 08:15:07 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/27 19:07:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 11:47:22 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,20 @@ static char	*ft_worddup(char *dest, const char *src, char c)
 	return (dest);
 }
 
-void	ft_free_split(char **strs)
+void	*ft_free_split(char **strs)
 {
 	int	i;
 
 	i = 0;
 	if (!strs)
-		return ;
+		return (0);
 	while (strs[i] != 0)
 	{
 		free(strs[i]);
 		i++;
 	}
 	free(strs);
+	return (0);
 }
 
 static char	**ft_realsplit(char const *s, char c, char **strs)

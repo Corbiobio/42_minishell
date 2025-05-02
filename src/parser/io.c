@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 18:18:37 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 10:16:43 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,16 +116,13 @@ int	open_infile_outfile(t_tokenized_line *line,
 		if (line->tokens[i].type == TYPE_PIPE)
 			index++;
 		if (!is_type_redirect(line->tokens[i]))
-		{
-			i++;
-			continue ;
-		}
-		if (!next_token_is_word(line, i))
+			;
+		else if (!next_token_is_word(line, i))
 		{
 			close_all_fd(cmd_list);
 			return (print_error_set_status(ERROR_FILENAME, to_free->env));
 		}
-		if (file_opening_did_not_fail(cmd_list->cmds[index]))
+		else if (file_opening_did_not_fail(cmd_list->cmds[index]))
 			if (redirect_io(line, i, &(cmd_list->cmds[index]), to_free) == -1)
 				return (close_all_fd(cmd_list));
 		i++;

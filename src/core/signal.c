@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 18:53:29 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 09:40:35 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	set_signal_handler_main(struct termios old_termios)
 	struct sigaction	sigset;
 	struct termios		new_termios;
 
-	sigemptyset(&sigset.sa_mask);
+	if (sigemptyset(&sigset.sa_mask) == -1)
+		return ;
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_shell;

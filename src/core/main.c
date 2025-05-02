@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 17:49:00 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 09:44:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,29 @@ void	free_cmd_list(t_cmd_list *list)
 	free(list);
 }
 
-struct termios	command_loop(t_hash_table *env)
+void	command_loop(t_hash_table *env, struct termios old_termios)
 {
-	struct termios	old_termios;
 	char			*line;
-	t_cmd_list		*list;
+	t_cmd_list		*cmd_list;
 
-	tcgetattr(STDIN_FILENO, &old_termios);
 	while (42)
 	{
 		printf("echo $?: %s\n", table_search(env, "?"));
 		set_signal_handler_main(old_termios);
 		line = readline("beurre_demishell$ ");
 		if (!line)
-			return (old_termios);
+			return ;
 		if (*line)
 			add_history(line);
-		list = parser(line, env);
-		if (!list)
+		cmd_list = parser(line, env);
+		if (!cmd_list)
 			continue ;
-		if (exec_cdms_list(list, env, old_termios) == 42)
+		if (exec_cdms_list(cmd_list, env, old_termios) == 42)
 		{
-			free_cmd_list(list);
-			return (old_termios);
+			free_cmd_list(cmd_list);
+			return ;
 		}
-		free_cmd_list(list);
+		free_cmd_list(cmd_list);
 	}
 }
 
@@ -76,11 +74,15 @@ int	main(int ac, char **av, char **env)
 		return (EXIT_FAILURE);
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
-		return (12);
-	old_termios = command_loop(env_table);
+		return (1);
+	if (tcgetattr(STDIN_FILENO, &old_termios) == -1)
+	{
+		table_delete_table(env_table);
+		return (1);
+	}
+	command_loop(env_table, old_termios);
 	rl_clear_history();
 	safe_atoi(table_search(env_table, "?"), &status);
-	printf("%i exited main\n", status);
 	table_delete_table(env_table);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
 	write(STDERR_FILENO, "exit\n", 5);

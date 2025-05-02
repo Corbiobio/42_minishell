@@ -83,6 +83,6 @@ re:
 
 val:
 	$(MAKE)
-	valgrind --track-origins=yes --track-fds=yes --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
+	valgrind --track-origins=yes --track-fds=yes --quiet --trace-children=yes --leak-check=full --show-leak-kinds=all --suppressions=readline.supp ./minishell
 
 .PHONY: all clean fclean re makelibft val

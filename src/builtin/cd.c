@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 18:36:32 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:09:36 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 void	get_cwd(char **cwd)
 {
 	*cwd = ft_calloc(sizeof(char), PATH_MAX);
+	if (*cwd == 0)
+		return ;
 	if (getcwd(*cwd, PATH_MAX) == NULL)
 		write(2, "minishell: cd: cannot use your current directory\n", 50);
 }

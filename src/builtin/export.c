@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 18:49:19 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:41:28 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	print_export(t_hash_table *env)
 			continue ;
 		}
 		if (curr_item.key && curr_item.key[0] != '\0' && curr_item.value)
-			printf("declare -x -%s-=\"%s\"\n", curr_item.key, curr_item.value);
+			printf("declare -x %s=\"%s\"\n", curr_item.key, curr_item.value);
 		else if (curr_item.key && curr_item.key[0] != '\0')
 			printf("declare -x %s\n", curr_item.key);
 		i++;

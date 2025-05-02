@@ -6,12 +6,11 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:50:35 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 18:57:26 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:26:08 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
-#include <stdio.h>
 #include <unistd.h>
 #include "parser.h"
 
@@ -30,7 +29,8 @@ void	set_signal_handler_heredoc(void)
 {
 	struct sigaction	sigset;
 
-	sigemptyset(&sigset.sa_mask);
+	if (sigemptyset(&sigset.sa_mask) == -1)
+		return ;
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_heredoc;
@@ -50,7 +50,8 @@ void	set_signal_handler_parent(void)
 {
 	struct sigaction	sigset;
 
-	sigemptyset(&sigset.sa_mask);
+	if (sigemptyset(&sigset.sa_mask) == -1)
+		return ;
 	sigaddset(&sigset.sa_mask, SIGINT);
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_parent;

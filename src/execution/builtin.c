@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 19:13:58 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 11:59:55 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,14 @@ void	set_stds_to_default(t_cmd cmd, t_position pos, int stds[2])
 	if (cmd.io[0] >= 0)
 	{
 		dup2(stds[0], STDIN_FILENO);
-		close(stds[0]);
+		if (stds[0] >= 0)
+			close(stds[0]);
 	}
 	if (cmd.io[1] >= 0)
 	{
 		dup2(stds[1], STDOUT_FILENO);
-		close(stds[1]);
+		if (stds[1] >= 0)
+			close(stds[1]);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 18:34:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 11:47:35 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char			*strjoin_and_free_s1(char *s1, char const *s2);
 char			*ft_strtrim(char const *s1, char const *set);
 int				ft_isincharset(char c, const char *charset);
 char			**ft_split(char const *s, char c);
-void			ft_free_split(char **strs);
+void			*ft_free_split(char **strs);
 char			*ft_itoa(int n);
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void			ft_striteri(char *s, void (*f)(unsigned int, char*));
