@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:10:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:22:32 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:54:37 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	signal_handler_exec(int signum)
 
 void	sigcatch(int signum)
 {
-	write(STDIN_FILENO, "Quit (core dumped)\n", 19);
+	write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 	(void)signum;
 }
 
