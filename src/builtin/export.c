@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 14:26:49 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:56:20 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	print_error(char *str, int *error)
 {
 	write(2, "minishell: export: ", 20);
 	write(2, str, ft_strlen(str));
-	write(2, " is not a valid identifier\n", 20);
+	write(2, " is not a valid identifier\n", 28);
 	*error = 1;
 }
 
