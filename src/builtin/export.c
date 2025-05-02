@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 17:52:26 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:04:28 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static void	print_export(t_hash_table *env)
 
 void	print_error(char *str, int *error)
 {
-	write(2, "minishell: export: ", 20);
-	write(2, str, ft_strlen(str));
-	write(2, " is not a valid identifier\n", 28);
+	write(STDERR_FILENO, "minishell: export: ", 20);
+	write(STDERR_FILENO, str, ft_strlen(str));
+	write(STDERR_FILENO, " is not a valid identifier\n", 28);
 	*error = 1;
 }
 

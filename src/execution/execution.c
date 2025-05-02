@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 13:16:53 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:07:01 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ pid_t	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env,
 	pid = fork();
 	if (pid < 0)
 	{
-		write(2, "minishell: fork: cannot fork\n", 30);
+		write(STDERR_FILENO, "minishell: fork: cannot fork\n", 30);
 		*status = 1;
 	}
 	else if (pid == 0)
@@ -108,7 +108,7 @@ void	create_childs_and_exec_cmds(t_cmd_list *list, t_hash_table *env,
 		cmd.pos = get_pos(list, i);
 		cmd.index = i;
 		if (cmd.pos != LAST && cmd.pos != ALONE && pipe(cmd.fds) == -1)
-			write(2, "minishell: pipe: cannot pipe\n", 30);
+			write(STDERR_FILENO, "minishell: pipe: cannot pipe\n", 30);
 		if (list->cmds[i].io[0] != -1 && list->cmds[i].io[1] != -1)
 			*pid = create_child_and_exec_cmd(list, env, status, cmd);
 		if (cmd.pos != FIRST && cmd.pos != ALONE)

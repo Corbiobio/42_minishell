@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:13:00 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/25 17:05:31 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:04:01 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ void	ft_echo(t_cmd cmd, int *status)
 	{
 		write(STDOUT_FILENO, arg[i], ft_strlen(arg[i]));
 		if (arg[i + 1] != NULL)
-			write(STDOUT_FILENO, " ", 1);
+			write(STDOUT_FILENO, " ", 2);
 		i++;
 	}
 	if (!flag)
-		write(STDOUT_FILENO, "\n", 1);
+		write(STDOUT_FILENO, "\n", 2);
 	*status = EXIT_SUCCESS;
 }

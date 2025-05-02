@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 15:29:33 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:10:22 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	get_cwd(char **cwd)
 	if (*cwd == 0)
 		return ;
 	if (getcwd(*cwd, PATH_MAX) == NULL)
-		write(2, "minishell: cd: cannot use your current directory\n", 50);
+		write(STDERR_FILENO,
+			"minishell: cd: cannot use your current directory\n", 50);
 }
 
 int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
@@ -34,16 +35,16 @@ int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 
 	if (chdir(path_to_add) == -1)
 	{
-		write(2, "minishell: cd: ", 16);
-		write(2, path_to_add, ft_strlen(path_to_add));
+		write(STDERR_FILENO, "minishell: cd: ", 16);
+		write(STDERR_FILENO, path_to_add, ft_strlen(path_to_add));
 		if (ft_strlen(path_to_add) >= PATH_MAX)
-			write(2, " file name too long\n", 21);
+			write(STDERR_FILENO, " file name too long\n", 21);
 		else if (stat(path_to_add, &sb) == -1)
-			write(2, " no such file or directory\n", 28);
+			write(STDERR_FILENO, " no such file or directory\n", 28);
 		else if (S_ISREG(sb.st_mode))
-			write(2, " not a directory\n", 18);
+			write(STDERR_FILENO, " not a directory\n", 18);
 		else
-			write(2, " permission denied\n", 20);
+			write(STDERR_FILENO, " permission denied\n", 20);
 		return (free_1_return_1(cwd));
 	}
 	if (cwd == NULL || cwd[0] == '\0')
@@ -74,7 +75,7 @@ void	go_home(t_hash_table *env, int *status)
 	path = table_search(env, "HOME");
 	if (path == NULL)
 	{
-		write(2, "minishell: cd: HOME not set\n", 29);
+		write(STDERR_FILENO, "minishell: cd: HOME not set\n", 29);
 		*status = 1;
 	}
 	handle_path(env, path, status);
@@ -87,7 +88,7 @@ void	ft_cd(t_cmd cmd, t_hash_table *env, int *status)
 	*status = 0;
 	if (cmd.nb_arg >= 2)
 	{
-		write(2, "minishell: cd: too many arguments\n", 35);
+		write(STDERR_FILENO, "minishell: cd: too many arguments\n", 35);
 		*status = 1;
 	}
 	else if (cmd.nb_arg == 0)
