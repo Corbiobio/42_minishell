@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 13:09:36 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:08:23 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	get_cwd(char **cwd)
 
 int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 {
-	struct stat sb;
+	struct stat	sb;
 
 	if (chdir(path_to_add) == -1)
 	{
@@ -44,7 +44,7 @@ int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 			write(2, " not a directory\n", 18);
 		else
 			write(2, " permission denied\n", 20);
-		return (free_1_return_1( cwd));
+		return (free_1_return_1(cwd));
 	}
 	table_insert(env, ft_strdup("OLD_PWD"), cwd);
 	get_cwd(&cwd);
@@ -57,7 +57,7 @@ int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 void	handle_path(t_hash_table *env, char *path_to_add, int *status)
 {
 	char	*cwd;
-	
+
 	if (path_to_add == NULL || path_to_add[0] == '\0')
 		return ;
 	cwd = NULL;
@@ -72,13 +72,13 @@ void	handle_path(t_hash_table *env, char *path_to_add, int *status)
 
 void	go_home(t_hash_table *env, int *status)
 {
-	char *path;
+	char	*path;
 
 	path = table_search(env, "HOME");
 	if (path == NULL)
 	{
 		write(2, "minishell: cd: HOME not set\n", 29);
-		*status = 1; 
+		*status = 1;
 	}
 	handle_path(env, path, status);
 }

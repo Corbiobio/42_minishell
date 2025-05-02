@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 15:31:30 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/28 18:43:26 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:07:03 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	print_env(t_hash_table *env)
 		curr_item = env->items[i];
 		if (curr_item.key && ft_strcmp(curr_item.key, "?") == 0)
 		{
-			i++;	
+			i++;
 			continue ;
 		}
 		if (curr_item.key && curr_item.key[0] != '\0' && curr_item.value)
