@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 12:41:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:05:03 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static void	print_export(t_hash_table *env)
 {
@@ -41,7 +42,9 @@ static void	print_export(t_hash_table *env)
 
 void	print_error(char *str, int *error)
 {
-	dprintf(2, "%s is not a valid identifier\n", str);//remove dprintf
+	write(2, "minishell: export: ", 20);
+	write(2, str, ft_strlen(str));
+	write(2, " is not a valid identifier\n", 20);
 	*error = 1;
 }
 
