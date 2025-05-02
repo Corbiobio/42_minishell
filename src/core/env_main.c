@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:39:13 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 08:24:53 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:44:33 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	fill_empty_env(t_hash_table *env)
 	char	*tmp_cwd;
 	char	*key_oldpwd;
 
-	printf("here\n");
 	if (insert_env_and_alloc("SHLVL", "0", env) == 1)
 		return (1);
 	if (insert_env_and_alloc("_", "usr/bin/env", env) == 1)
