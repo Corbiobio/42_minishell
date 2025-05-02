@@ -32,6 +32,7 @@ SRC =\
 	parser/expander.c\
 	parser/expander_core.c\
 	parser/expander_search.c\
+	parser/expander_token_bigger.c\
 	parser/token_utils.c\
 	execution/execution.c\
 	execution/execution_utils.c\

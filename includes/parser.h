@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 14:10:55 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:46:02 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,10 @@ void				expand_token_list(t_tokenized_line *input,
 int					expand_variables(t_tokenized_line *input,
 						t_tokenized_line *intermediary, t_hash_table *env);
 
+//expander_token_bigger
+void				make_token_bigger(	t_tokenized_line *line,
+						size_t *token_index);
+
 //io.c
 int					open_infile_outfile(t_tokenized_line *line,
 						t_cmd_list *cmd_list, t_free_close *to_free);
@@ -125,6 +129,7 @@ void				delete_all_heredoc(t_free_close *stuff);
 //heredoc_signals.c
 void				set_signal_handler_parent(void);
 void				set_signal_handler_heredoc(void);
+void				reset_signum_save_status(t_hash_table *env);
 
 //heredoc_write.c
 void				write_no_expand_heredoc(char *line, int write_end);

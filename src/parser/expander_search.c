@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 09:56:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:12:09 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,16 @@ void	fuse_dollars(t_tokenized_line *input, t_tokenized_line *output)
 		add_token(output, input->tokens[i]);
 		if (input->tokens[i].type == TYPE_DOLLAR)
 		{
-			i++;
-			if (i < input->nb_token && input->line[input->tokens[i].pos] == '?')
-				output->tokens[output->nb_token - 1].len++;
+			if (++i < input->nb_token
+				&& input->line[input->tokens[i].pos] == '?')
+				make_token_bigger(output, &i);
 			else if (variable_name_start_correctly(input, i))
 			{
 				while (i < input->nb_token
 					&& is_allowed_in_variable_name(input, i))
-				{
-					i++;
-					output->tokens[output->nb_token - 1].len++;
-				}
-				continue ;
+					make_token_bigger(output, &i);
 			}
+			continue ;
 		}
 		i++;
 	}

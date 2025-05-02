@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 09:40:35 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:34:04 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@
 #include <unistd.h>
 #include <termios.h>
 
+extern volatile sig_atomic_t	g_signum;
+
 void	signal_handler_shell(int signum)
 {
 	if (signum == SIGINT)
 	{
+		g_signum = SIGINT;
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);

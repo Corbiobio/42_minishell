@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:10:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 12:25:18 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:22:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	signal_handler_exec(int signum)
 void	sigcatch(int signum)
 {
 	write(STDIN_FILENO, "Quit (core dumped)\n", 19);
+	(void)signum;
+}
+
+void	sig_nothing(int signum)
+{
 	(void)signum;
 }
 
@@ -49,6 +54,6 @@ void	set_signal_handler_exec(struct termios old_termios)
 		return ;
 	sigaddset(&sigset.sa_mask, SIGPIPE);
 	sigset.sa_flags = SA_RESTART;
-	sigset.sa_handler = SIG_IGN;
+	sigset.sa_handler = &sig_nothing;
 	sigaction(SIGPIPE, &sigset, 0);
 }
