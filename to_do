@@ -1,3 +1,0 @@
-cd error if dir doesnt exist
-remove - around variable names in export
-export should not display _ variable
