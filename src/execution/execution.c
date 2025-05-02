@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 16:31:44 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/01 19:19:43 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,10 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-static t_position	get_pos(t_cmd_list *list, size_t curr_cmd_index)
+void	free_exit_error_exec(t_cmd_list *list, int *status,
+			size_t i, char *path)
 {
-	if (list->nb_cmd == 1)
-		return (ALONE);
-	else if (curr_cmd_index == list->nb_cmd - 1)
-		return (LAST);
-	else if (curr_cmd_index == 0)
-		return (FIRST);
-	else
-		return (MID);
-}
-
-void	free_exit_error_exec(t_cmd_list *list, int *status, size_t i, char *path)
-{
-	struct stat sb;
+	struct stat	sb;
 
 	*status = 126;
 	write(STDERR_FILENO, "minishell: ", 12);
@@ -61,18 +50,20 @@ void	free_exit_error_exec(t_cmd_list *list, int *status, size_t i, char *path)
 	exit(*status);
 }
 
-void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_list *list, size_t i, int *status)
+void	exec_cmd(t_cmd_list *list, t_hash_table *env, t_curr_cmd curr_cmd,
+			int *status)
 {
 	const char	**envp = (const char **)get_env_from_table(env);
+	const t_cmd	cmd_param = curr_cmd.cmd;
 	char		*path;
 
-	infile_redirection(cmd, pos, fds);
-	outfile_redirection(cmd, pos, fds);
-	close_all_unused_io(list, i);
-	if (cmd.cmd[0] == NULL || is_builtin(cmd))
+	infile_redirection(curr_cmd);
+	outfile_redirection(curr_cmd);
+	close_all_unused_io(list, curr_cmd.index);
+	if (curr_cmd.cmd.cmd[0] == NULL || is_builtin(cmd_param))
 	{
-		if (is_builtin(cmd))
-			launch_builtin(cmd, env, status, pos);
+		if (is_builtin(cmd_param))
+			launch_builtin(cmd_param, env, status, curr_cmd.pos);
 		else
 			*status = 0;
 		ft_free_split((char **)envp);
@@ -80,94 +71,81 @@ void	exec_cmd(int fds[3], t_cmd cmd, t_position pos, t_hash_table *env, t_cmd_li
 		table_delete_table(env);
 		exit(*status);
 	}
-	path = get_cmd_path(cmd, env);
+	path = get_cmd_path(cmd_param, env);
 	table_delete_table(env);
 	if (path != NULL && access(path, X_OK) == 0)
-		execve(path, cmd.cmd, (char **)envp);
+		execve(path, cmd_param.cmd, (char **)envp);
 	ft_free_split((char **)envp);
-	free_exit_error_exec(list, status, i, path);
+	free_exit_error_exec(list, status, curr_cmd.index, path);
 }
 
-size_t count_cmds_with_correct_io(t_cmd_list *list)
+pid_t	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env,
+			int *status, t_curr_cmd cmd)
 {
-	size_t count;
-	size_t i;
+	pid_t	pid;
 
-	count = 0;
+	pid = fork();
+	if (pid < 0)
+	{
+		write(2, "minishell: fork: cannot fork\n", 30);
+		*status = 1;
+	}
+	else if (pid == 0)
+		exec_cmd(list, env, cmd, status);
+	return (pid);
+}
+
+void	create_childs_and_exec_cmds(t_cmd_list *list, t_hash_table *env,
+			pid_t *pid, int *status)
+{
+	size_t		i;
+	t_curr_cmd	cmd;
+
 	i = 0;
 	while (i < list->nb_cmd)
 	{
+		cmd.cmd = list->cmds[i];
+		cmd.pos = get_pos(list, i);
+		cmd.index = i;
+		if (cmd.pos != LAST && cmd.pos != ALONE && pipe(cmd.fds) == -1)
+			write(2, "minishell: pipe: cannot pipe\n", 30);
 		if (list->cmds[i].io[0] != -1 && list->cmds[i].io[1] != -1)
-			count++;
+			*pid = create_child_and_exec_cmd(list, env, status, cmd);
+		if (cmd.pos != FIRST && cmd.pos != ALONE)
+			close(cmd.fds[2]);
+		if (cmd.pos != LAST && cmd.pos != ALONE)
+		{
+			close(cmd.fds[1]);
+			cmd.fds[2] = cmd.fds[0];
+		}
 		i++;
 	}
-	return (count);
 }
 
-int	calc_correct_status(int status, t_cmd_list *list, size_t i, t_position pos)
+int	exec_cdms_list(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
 {
-	if (i >= list->nb_cmd)
-		i--;
-	printf("here %i\n", status);
-	if (pos == ALONE && is_builtin(list->cmds[i]))
-		return (status);
-	printf("there %i\n", WEXITSTATUS(status));
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	printf("hiiiiii %i\n", status);
-	if (WIFSIGNALED(status))
-		return (WTERMSIG(status) + 128);
-	return (status);
-}
-
-int	create_child_and_exec_cmd(t_cmd_list *list, t_hash_table *env, struct termios old_termios)
-{
-	t_position	pos;
-	size_t		i;
-	int			fds[3];
+	const int	is_alone = get_pos(list, 0) == ALONE;
 	pid_t		pid;
 	int			status;
 	int			exit_status;
 
 	set_signal_handler_exec(old_termios);
-	i = 0;
 	status = 0;
 	exit_status = 0;
-	while (i < list->nb_cmd)
-	{
-		pos = get_pos(list, i);
-		if (pos == ALONE && is_builtin(list->cmds[i]))
-		{
-			exit_status = launch_builtin(list->cmds[i], env, &status, pos);
-			break ;
-		}
-		if (pos != LAST && pos != ALONE && pipe(fds) == -1)
-			dprintf(2, "cannot pipe on %s\n", list->cmds[i].cmd[0]);
-		if (list->cmds[i].io[0] != -1 && list->cmds[i].io[1] != -1)
-		{
-			pid = fork();
-			if (pid < 0)
-				dprintf(2, "cannot fork on %s\n", list->cmds[i].cmd[0]);
-			else if (pid == 0)
-				exec_cmd(fds, list->cmds[i], pos, env, list, i, &status);
-		}
-		if (pos != FIRST && pos != ALONE)
-			close(fds[2]);
-		if (pos != LAST && pos != ALONE)
-		{
-			close(fds[1]);
-			fds[2] = fds[0];
-		}
-		i++;
-	}
-	if ((pos != ALONE || (pos == ALONE && is_builtin(list->cmds[0]) == 0)) && count_cmds_with_correct_io(list) >= 1)
+	if (is_alone && is_builtin(list->cmds[0]))
+		exit_status = launch_builtin(list->cmds[0], env, &status, ALONE);
+	else
+		create_childs_and_exec_cmds(list, env, &pid, &status);
+	if ((!is_alone || (is_alone && !is_builtin(list->cmds[0])))
+		&& count_cmds_with_correct_io(list) >= 1)
 	{
 		waitpid(pid, &status, 0);
 		while (wait(0) > 0)
 			;
 	}
 	if (count_cmds_with_correct_io(list) >= 1)
-		table_insert(env, ft_strdup("?"), ft_itoa(calc_correct_status(status, list, i, pos)));
+		table_insert(env, ft_strdup("?"),
+			ft_itoa(calc_correct_status(list, status, is_alone)));
 	close_all_io(list);
 	return (exit_status);
 }
