@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 14:08:23 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:29:33 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 			write(2, " permission denied\n", 20);
 		return (free_1_return_1(cwd));
 	}
+	if (cwd == NULL || cwd[0] == '\0')
+		return (free_1_return_1(cwd));
 	table_insert(env, ft_strdup("OLD_PWD"), cwd);
 	get_cwd(&cwd);
 	if (cwd == NULL || cwd[0] == '\0')
@@ -62,11 +64,6 @@ void	handle_path(t_hash_table *env, char *path_to_add, int *status)
 		return ;
 	cwd = NULL;
 	get_cwd(&cwd);
-	if (cwd == NULL)
-	{
-		*status = 1;
-		return (free_1(cwd));
-	}
 	*status = move_to_final_path(env, path_to_add, cwd);
 }
 
