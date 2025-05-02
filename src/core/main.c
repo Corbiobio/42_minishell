@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:46:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:50:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	command_loop(t_hash_table *env, struct termios old_termios)
 
 	while (42)
 	{
-		printf("echo $?: %s\n", table_search(env, "?"));
 		set_signal_handler_main(old_termios);
 		line = readline("beurre_demishell$ ");
 		if (g_signum == SIGINT)
