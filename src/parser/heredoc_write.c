@@ -6,14 +6,13 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:54:28 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 10:30:53 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:10:37 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-void	write_no_expand_heredoc(char *line, int write_end,
-						t_free_close *stuff, char *eof)
+void	write_no_expand_heredoc(char *line, int write_end)
 {
 	write(write_end, line, ft_strlen(line));
 	write(write_end, "\n", 1);

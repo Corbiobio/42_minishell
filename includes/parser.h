@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 18:21:07 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:10:55 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,7 @@ void				set_signal_handler_parent(void);
 void				set_signal_handler_heredoc(void);
 
 //heredoc_write.c
-void				write_no_expand_heredoc(char *line, int write_end,
-						t_free_close *stuff, char *eof);
+void				write_no_expand_heredoc(char *line, int write_end);
 void				write_expander_heredoc(char *line, int write_end,
 						t_free_close *stuff, char *eof);
 
