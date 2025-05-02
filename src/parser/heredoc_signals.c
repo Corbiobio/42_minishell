@@ -6,15 +6,22 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:50:35 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 12:26:08 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:45:28 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <unistd.h>
+#include "libft.h"
 #include "parser.h"
 
 volatile sig_atomic_t	g_signum;
+
+void	reset_signum_save_status(t_hash_table *env)
+{
+	g_signum = 0;
+	table_insert(env, ft_strdup("?"), ft_strdup("130"));
+}
 
 static void	signal_handler_heredoc(int signum)
 {

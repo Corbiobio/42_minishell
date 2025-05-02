@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 14:10:45 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:43:10 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static int	fork_heredoc(char *eof, int write_end,
 			if (WEXITSTATUS(status) == 1)
 				perror_set_status(stuff->env, 1, 0);
 			if (WEXITSTATUS(status) == SIGINT)
-				return (set_status(stuff->env, SIGINT));
+				return (set_status(stuff->env, SIGINT + 128));
 			return (WEXITSTATUS(status));
 		}
 		else if (WIFSIGNALED(status))
