@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:10:16 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/04 17:16:00 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:37:31 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	quotes_to_empty_words(t_tokenized_line *input, t_tokenized_line *output)
 		{
 			if (input->tokens[i].type == input->tokens[i + 1].type)
 			{
-				change_last_token_type(output, TYPE_WORD);
+				change_last_token_type(output, TYPE_WORD_QUOTED);
 				output->tokens[output->nb_token - 1].len = 0;
 				i++;
 			}
