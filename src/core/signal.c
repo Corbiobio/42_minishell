@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:34:04 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:28:05 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	set_signal_handler_main(struct termios old_termios)
 	sigset.sa_flags = SA_RESTART;
 	sigset.sa_handler = &signal_handler_shell;
 	sigaction(SIGINT, &sigset, 0);
+	if (!isatty(STDIN_FILENO))
+		return ;
 	new_termios = old_termios;
 	new_termios.c_cc[VQUIT] = _POSIX_VDISABLE;
 	tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
