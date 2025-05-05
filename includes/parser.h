@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:46:02 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:16:52 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ int					expand_variables(t_tokenized_line *input,
 //expander_token_bigger
 void				make_token_bigger(	t_tokenized_line *line,
 						size_t *token_index);
+void				quotes_to_empty_words(t_tokenized_line *input,
+						t_tokenized_line *output);
 
 //io.c
 int					open_infile_outfile(t_tokenized_line *line,

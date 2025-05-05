@@ -6,7 +6,7 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 14:45:02 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:16:03 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_tokenized_line	*expander(char *line, t_hash_table *env)
 	const size_t	size = sizeof(t_tokenized_line)
 		+ sizeof(t_token) * len_line;
 
-	tokens = malloc(size);
+	tokens = malloc(size * 2);
 	if (tokens == 0)
 		return (0);
 	tokens_output = malloc(size);
@@ -94,9 +94,10 @@ t_tokenized_line	*expander(char *line, t_hash_table *env)
 	tokenize_string(line, tokens);
 	if (turn_quoted_tokens_to_word(tokens, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
-	dollar_alone_is_dead(tokens);
-	prevent_expand_in_eof(tokens);
-	if (expand_variables(tokens, tokens_output, env) == 1)
+	quotes_to_empty_words(tokens, tokens + size);
+	dollar_alone_is_dead(tokens + size);
+	prevent_expand_in_eof(tokens + size);
+	if (expand_variables(tokens + size, tokens_output, env) == 1)
 		return (free_2_return_null(tokens, tokens_output));
 	free(tokens);
 	return (tokens_output);

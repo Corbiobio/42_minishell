@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:43:10 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:20:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "minishell.h"
 #include "parser.h"
 #include <signal.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -25,6 +26,17 @@ extern volatile sig_atomic_t	g_signum;
 
 void	delete_all_heredoc(t_free_close *stuff)
 {
+	size_t	i;
+
+	i = 0;
+	while (i < stuff->cmds->nb_cmd)
+	{
+		if (stuff->cmds->cmds[i].io[0] >= 0)
+			close(stuff->cmds[i].cmds->io[0]);
+		if (stuff->cmds->cmds[i].io[1] >= 0)
+			close(stuff->cmds[i].cmds->io[1]);
+		i++;
+	}
 	close(stuff->fd_read_end);
 	free(stuff->line1);
 	free(stuff->line2);
@@ -110,6 +122,7 @@ int	create_heredoc(char *eof, t_free_close *stuff, t_infile how_expand)
 
 	if (pipe(end) == -1)
 		return (-1);
+	printf("%i, %i\n", end[0], end[1]);
 	stuff->fd_read_end = end[0];
 	if (fork_heredoc(eof, end[1], stuff, how_expand) != 0)
 	{

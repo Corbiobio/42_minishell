@@ -6,12 +6,17 @@
 /*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:45:40 by sflechel          #+#    #+#             */
-/*   Updated: 2025/04/30 12:21:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:07:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include <stdint.h>
+
+t_token	*last_token(t_tokenized_line *line)
+{
+	return (&line->tokens[line->nb_token - 1]);
+}
 
 void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 {
@@ -27,10 +32,12 @@ void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)
 			i++;
 			while (i < input->nb_token && is_word(input->tokens[i]))
 			{
+				if (last_token(output)->len == 0 && input->tokens[i].len > 0)
+					last_token(output)->pos = input->tokens[i].pos;
 				if (input->tokens[i].type == TYPE_WORD_QUOTED)
 					output->tokens[output->nb_token - 1].type
 						= TYPE_WORD_QUOTED;
-				output->tokens[output->nb_token - 1].len++;
+				last_token(output)->len += input->tokens[i].len;
 				i++;
 			}
 		}
