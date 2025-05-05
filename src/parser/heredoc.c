@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/05 13:20:57 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:03:45 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "parser.h"
 #include <signal.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -31,10 +32,11 @@ void	delete_all_heredoc(t_free_close *stuff)
 	i = 0;
 	while (i < stuff->cmds->nb_cmd)
 	{
+		printf("%i, %i\n", stuff->cmds->cmds[i].io[0], stuff->cmds->cmds[i].io[1]);
 		if (stuff->cmds->cmds[i].io[0] >= 0)
-			close(stuff->cmds[i].cmds->io[0]);
+			close(stuff->cmds->cmds[i].io[0]);
 		if (stuff->cmds->cmds[i].io[1] >= 0)
-			close(stuff->cmds[i].cmds->io[1]);
+			close(stuff->cmds->cmds[i].io[1]);
 		i++;
 	}
 	close(stuff->fd_read_end);
