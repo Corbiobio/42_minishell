@@ -6,7 +6,7 @@
 /*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/05 14:36:39 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:09:13 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,6 @@ int	create_heredoc(char *eof, t_free_close *stuff, t_infile how_expand)
 
 	if (pipe(end) == -1)
 		return (-1);
-	printf("%i, %i\n", end[0], end[1]);
 	stuff->fd_read_end = end[0];
 	if (fork_heredoc(eof, end[1], stuff, how_expand) != 0)
 	{
