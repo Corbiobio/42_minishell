@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:57:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 18:10:22 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:49:35 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	move_to_final_path(t_hash_table *env, char *path_to_add, char *cwd)
 	}
 	if (cwd == NULL || cwd[0] == '\0')
 		return (free_1_return_1(cwd));
-	table_insert(env, ft_strdup("OLD_PWD"), cwd);
+	table_insert(env, ft_strdup("OLDPWD"), cwd);
 	get_cwd(&cwd);
 	if (cwd == NULL || cwd[0] == '\0')
 		return (free_1_return_1(cwd));

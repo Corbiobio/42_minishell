@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/05 16:58:44 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:05:32 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,21 @@ void	command_loop(t_hash_table *env, struct termios old_termios)
 	}
 }
 
+int	get_termios(t_hash_table *env_table, struct termios *old_termios)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		if (tcgetattr(STDIN_FILENO, old_termios) == -1)
+		{
+			table_delete_table(env_table);
+			return (1);
+		}
+	}
+	else
+		ft_memset(old_termios, 0, sizeof(struct termios));
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_hash_table	*env_table;
@@ -72,19 +87,9 @@ int	main(int ac, char **av, char **env)
 		return (EXIT_FAILURE);
 	env_table = convert_env_to_table(env);
 	if (env_table == 0)
-		return (1);
-	//old_termios;
-	if (isatty(STDIN_FILENO))
-	{
-		if (tcgetattr(STDIN_FILENO, &old_termios) == -1)
-		{
-			printf("HIIIIIIIIIII\n");
-			table_delete_table(env_table);
-			return (1);
-		}
-	}
-	else
-		ft_memset(&old_termios, 0, sizeof(struct termios));
+		return (EXIT_FAILURE);
+	if (get_termios(env_table, &old_termios) == 1)
+		return (EXIT_FAILURE);
 	command_loop(env_table, old_termios);
 	rl_clear_history();
 	safe_atoi(table_search(env_table, "?"), &status);
