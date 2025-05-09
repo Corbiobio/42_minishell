@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:32:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 10:16:43 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:08:14 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parser.h"
-#include "../../libft/libft.h"
-#include "minishell.h"
-#include <stddef.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "parser.h"
 
 char	*alloc_word(t_tokenized_line *line, int token_index)
 {

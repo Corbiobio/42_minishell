@@ -6,17 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:13:02 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 18:04:28 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:14:46 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include "libft.h"
-#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 static void	print_export(t_hash_table *env)
 {

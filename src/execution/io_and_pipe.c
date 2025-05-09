@@ -6,12 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:34:24 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 11:56:56 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:11:17 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-#include <unistd.h>
 
 void	infile_redirection(t_curr_cmd curr_cmd)
 {

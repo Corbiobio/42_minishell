@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_signals.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:50:35 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:45:28 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:06:16 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <unistd.h>
-#include "libft.h"
 #include "parser.h"
-
-volatile sig_atomic_t	g_signum;
 
 void	reset_signum_save_status(t_hash_table *env)
 {

@@ -6,14 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:26:59 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 17:49:40 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:10:01 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <stdio.h>
-#include <unistd.h>
 
 static char	*join_path_to_cmd(char *path, char *cmd_name)
 {

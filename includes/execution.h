@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:55:15 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 19:11:41 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:10:39 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define EXECUTION_H
 
 # include "minishell.h"
-# include "libft.h"
 
 typedef enum e_position
 {

@@ -6,16 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:06:46 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 11:59:55 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:11:55 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execution.h"
 #include "builtin.h"
-#include "libft.h"
-#include "minishell.h"
-#include <stdio.h>
-#include <unistd.h>
 
 int	is_builtin(t_cmd cmd)
 {

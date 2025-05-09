@@ -6,19 +6,16 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:04:17 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/07 16:05:32 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:12:33 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../includes/execution.h"
-#include "../../includes/parser.h"
-#include "../../libft/libft.h"
+#include "execution.h"
+#include "parser.h"
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <sys/wait.h>
 
-extern volatile sig_atomic_t	g_signum;
+volatile sig_atomic_t	g_signum = 0;
 
 void	free_cmd_list(t_cmd_list *list)
 {

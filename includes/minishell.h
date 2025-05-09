@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:50 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/01 18:21:42 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:11:01 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 # define MINISHELL_H
 
-# include <stddef.h>
 # include "libft.h"
+# include <stddef.h>
 # include <termios.h>
+# include <signal.h>
+
+extern volatile sig_atomic_t	g_signum;
 
 typedef struct s_cmd
 {
@@ -37,7 +40,8 @@ typedef enum e_error
 	ERROR_UNKNOWN,
 	ERROR_QUOTE_UNCLOSED,
 	ERROR_FILENAME,
-	ERROR_HEREDOC_EOF
+	ERROR_HEREDOC_EOF,
+	ERROR_NO_CMD
 }	t_error;
 
 void			free_cmd_list(t_cmd_list *list);

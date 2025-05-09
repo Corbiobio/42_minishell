@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_core.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:40:46 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/04 17:16:03 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:09:31 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include <stddef.h>
 
 int	expand_variables(t_tokenized_line *input,
 				t_tokenized_line *intermediary, t_hash_table *env)

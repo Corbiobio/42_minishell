@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 14:43:41 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 13:01:33 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:10:49 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define BUILTIN_H
 
 # include "execution.h"
-# include "minishell.h"
 
 //echo
 void	ft_echo(t_cmd cmd, int *status);

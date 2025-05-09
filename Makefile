@@ -12,7 +12,7 @@ I = -I $(INC_DIR) -I $(LIB_DIR)
 
 LIBS = -lreadline
 
-HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h
+HEADERS = $(INC_DIR)minishell.h $(INC_DIR)parser.h $(INC_DIR)execution.h $(INC_DIR)builtin.h
 
 SRC =\
 	core/main.c\

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:18:59 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 12:37:00 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:14:50 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <unistd.h>
 
 void	ft_pwd(int *status)
 {

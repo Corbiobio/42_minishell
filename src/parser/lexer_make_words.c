@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_make_words.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:45:40 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/04 17:07:32 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:07:47 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include <stdint.h>
 
 t_token	*last_token(t_tokenized_line *line)
 {

@@ -6,14 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:57:38 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 18:04:52 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:12:55 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 #include <stdio.h>
-#include <unistd.h>
 
 int	print_error_set_status(t_error error, t_hash_table *env)
 {
@@ -27,6 +25,11 @@ int	print_error_set_status(t_error error, t_hash_table *env)
 	{
 		table_insert(env, ft_strdup("?"), ft_strdup("2"));
 		write(STDERR_FILENO, "missing filename after redirection\n", 35);
+	}
+	else if (error == ERROR_NO_CMD)
+	{
+		table_insert(env, ft_strdup("?"), ft_strdup("2"));
+		write(STDERR_FILENO, "missing command\n", 16);
 	}
 	return (1);
 }

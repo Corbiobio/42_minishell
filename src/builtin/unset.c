@@ -6,13 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:10:53 by edarnand          #+#    #+#             */
-/*   Updated: 2025/04/30 15:18:47 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:15:01 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <stdio.h>
 
 void	ft_unset(t_cmd cmd, t_hash_table *env, int *status)
 {

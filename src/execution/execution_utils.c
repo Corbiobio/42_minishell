@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 19:09:34 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/01 19:11:56 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:11:38 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ int	calc_correct_status(t_cmd_list *list, int status, int is_alone)
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
+		if (WTERMSIG(status) == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
 		return (WTERMSIG(status) + 128);
+	}
 	return (status);
 }
