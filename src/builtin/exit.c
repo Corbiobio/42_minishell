@@ -6,13 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:04:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:57:58 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:14:37 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-#include "minishell.h"
-#include <unistd.h>
 
 int	ft_exit(t_cmd cmd, int *status, t_position pos, int stds[2])
 {

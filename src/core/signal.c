@@ -6,17 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:25:36 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/05 16:28:05 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:12:07 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <bits/posix_opt.h>
+#include "minishell.h"
 #include <readline/readline.h>
-#include <signal.h>
-#include <unistd.h>
-#include <termios.h>
-
-extern volatile sig_atomic_t	g_signum;
 
 void	signal_handler_shell(int signum)
 {

@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:02:41 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 15:59:47 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:09:23 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parser.h"
-#include <stddef.h>
-#include <stdlib.h>
-#include "../../libft/libft.h"
+#include "parser.h"
 
 void	tokenize_string(char *line, t_tokenized_line *tokens)
 {

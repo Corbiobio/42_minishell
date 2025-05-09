@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   grammar.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 10:58:20 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:09:12 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parser.h"
-#include "libft.h"
-#include "minishell.h"
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "parser.h"
 
 void	remove_redirection(t_tokenized_line *input, t_tokenized_line *output)
 {
@@ -68,6 +63,27 @@ int	alloc_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 	return (0);
 }
 
+int	check_empty_cmd(t_cmd_list *cmd_list, t_hash_table *env)
+{
+	size_t	i;
+	t_cmd	cmd;
+
+	if (cmd_list->nb_cmd == 1)
+		return (0);
+	i = 0;
+	while (i < cmd_list->nb_cmd)
+	{
+		cmd = cmd_list->cmds[i];
+		if (cmd.io[0] == -2 && cmd.io[1] == -2)
+		{
+			if (cmd.cmd[0] == NULL)
+				return (print_error_set_status(ERROR_NO_CMD, env));
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	convert_to_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 {
 	size_t	i;
@@ -97,7 +113,7 @@ int	convert_to_cmd_list(t_tokenized_line *line, t_cmd_list *cmd_list)
 	return (0);
 }
 
-int	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list)
+int	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list, t_hash_table *env)
 {
 	t_tokenized_line	*line_no_redirect;
 
@@ -110,13 +126,9 @@ int	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list)
 		return (1);
 	}
 	remove_redirection(line, line_no_redirect);
-	if (alloc_cmd_list(line_no_redirect, cmd_list) == 1)
-	{
-		close_all_fd(cmd_list);
-		free_cmd_list(cmd_list);
-		return (free_1_return_1(line_no_redirect));
-	}
-	if (convert_to_cmd_list(line_no_redirect, cmd_list) == 1)
+	if (alloc_cmd_list(line_no_redirect, cmd_list) == 1
+		|| convert_to_cmd_list(line, cmd_list) == 1
+		|| check_empty_cmd(cmd_list, env) == 1)
 	{
 		close_all_fd(cmd_list);
 		free_cmd_list(cmd_list);

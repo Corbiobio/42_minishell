@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/04 17:16:52 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:11:07 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 # define PARSER_H
 
 # include "minishell.h"
-# include <stddef.h>
-# include "../libft/libft.h"
 
 typedef enum e_infile
 {
@@ -121,7 +119,8 @@ int					next_token_is_word(t_tokenized_line *line,
 int					close_all_fd(t_cmd_list *cmd_list);
 
 //grammar.c
-int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list);
+int					grammarify(t_tokenized_line *line, t_cmd_list *cmd_list,
+						t_hash_table *env);
 
 //heredoc.c
 int					create_heredoc(char *eof, t_free_close *stuff,

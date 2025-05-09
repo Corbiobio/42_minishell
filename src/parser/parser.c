@@ -6,17 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:42 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 11:01:21 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:07:07 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parser.h"
-#include "../../libft/libft.h"
-#include "../../includes/minishell.h"
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
+#include "parser.h"
 
 int	count_cmds(t_tokenized_line *line)
 {
@@ -69,7 +63,7 @@ t_cmd_list	*parser(char *line, t_hash_table *env)
 	init_cmds(cmds, count_cmds(expanded));
 	if (open_infile_outfile(expanded, cmds, to_free) != 0)
 		return (free_4_return_null(to_free, expanded->line, expanded, cmds));
-	if (grammarify(expanded, cmds) == 1)
+	if (grammarify(expanded, cmds, env) == 1)
 		return (free_3_return_null(expanded->line, expanded, to_free));
 	free_3(expanded->line, expanded, to_free);
 	return (cmds);

@@ -6,11 +6,10 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:13:00 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 18:04:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:14:24 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 static int	is_flag(char *str)

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_search.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <sflechel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:10:49 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 16:12:09 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:09:27 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "parser.h"
-#include <stddef.h>
 
 static char	*token_line_triple_join(char *line, t_token dollar, char *s2)
 {

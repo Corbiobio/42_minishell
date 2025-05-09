@@ -6,20 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/02 18:07:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:11:31 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../libft/libft.h"
-#include "../../includes/execution.h"
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <termios.h>
-#include <unistd.h> 
-#include <fcntl.h>
+#include "execution.h"
 #include <sys/wait.h>
 #include <sys/stat.h>
 

@@ -3,27 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sflechel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 08:53:58 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/06 14:09:13 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:08:35 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
-#include "minishell.h"
 #include "parser.h"
-#include <signal.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/wait.h>
-#include <unistd.h>
-#include <termios.h>
 #include <readline/readline.h>
-#include <readline/history.h>
-
-extern volatile sig_atomic_t	g_signum;
 
 void	delete_all_heredoc(t_free_close *stuff)
 {

@@ -6,14 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/05 14:32:31 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:07:40 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parser.h"
-#include "../../libft/libft.h"
-#include <stddef.h>
-#include <stdio.h>
+#include "parser.h"
 
 void	turn_whitespaces_to_word(t_tokenized_line *line)
 {

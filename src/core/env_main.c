@@ -6,15 +6,11 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 16:39:13 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/02 17:44:33 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:14:08 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <linux/limits.h>
 
 int	insert_env_and_alloc(char *key_stat, char *value_stat, t_hash_table *env)
 {
@@ -35,7 +31,7 @@ int	fill_empty_env(t_hash_table *env)
 	char	*tmp_cwd;
 	char	*key_oldpwd;
 
-	if (insert_env_and_alloc("SHLVL", "0", env) == 1)
+	if (insert_env_and_alloc("SHLVL", "1", env) == 1)
 		return (1);
 	if (insert_env_and_alloc("_", "usr/bin/env", env) == 1)
 		return (1);
@@ -67,12 +63,15 @@ int	initiate_env(t_hash_table *env)
 	if (key == 0)
 		return (1);
 	if (safe_atoi(table_search(env, key), &shlvl) == 1)
-		return (free_1_return_1(key));
-	value = ft_itoa(shlvl + 1);
-	if (value == 0)
-		return (free_1_return_1(key));
-	if (table_insert(env, key, value) == 1)
-		return (free_2_return_1(key, value));
+		table_insert(env, key, ft_strdup("1"));
+	else
+	{
+		value = ft_itoa(shlvl + 1);
+		if (value == 0)
+			return (free_1_return_1(key));
+		if (table_insert(env, key, value) == 1)
+			return (free_2_return_1(key, value));
+	}
 	return (0);
 }
 
