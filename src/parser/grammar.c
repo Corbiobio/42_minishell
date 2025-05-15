@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:25:45 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/09 15:09:12 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:38:57 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	grammarify(t_tokenized_line *line, t_cmd_list *cmd_list, t_hash_table *env)
 	}
 	remove_redirection(line, line_no_redirect);
 	if (alloc_cmd_list(line_no_redirect, cmd_list) == 1
-		|| convert_to_cmd_list(line, cmd_list) == 1
+		|| convert_to_cmd_list(line_no_redirect, cmd_list) == 1
 		|| check_empty_cmd(cmd_list, env) == 1)
 	{
 		close_all_fd(cmd_list);
