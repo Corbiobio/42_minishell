@@ -6,11 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:26:59 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/09 15:10:01 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:49:26 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 static char	*join_path_to_cmd(char *path, char *cmd_name)
 {
@@ -28,7 +29,6 @@ char	*get_cmd_path(t_cmd cmd, t_hash_table *env)
 	const char	*paths_from_env = table_search(env, "PATH");
 	const char	**paths = (const char**)ft_split(paths_from_env, ':');
 	char		*curr_path;
-	size_t		i;
 
 	if (ft_strchr(cmd.cmd[0], '/') != NULL)
 	{
@@ -37,15 +37,15 @@ char	*get_cmd_path(t_cmd cmd, t_hash_table *env)
 	}
 	if (paths == NULL)
 		return (NULL);
-	i = 0;
-	while (paths[i] != NULL)
+	curr_path = NULL;
+	while (*paths != NULL)
 	{
-		curr_path = join_path_to_cmd((char *)paths[i], cmd.cmd[0]);
+		curr_path = join_path_to_cmd((char *)*paths, cmd.cmd[0]);
 		if (curr_path == NULL || access(curr_path, X_OK) == 0)
 			break ;
 		free(curr_path);
-		i++;
-		if (paths[i] == NULL)
+		(*paths)++;
+		if (*paths == NULL)
 			curr_path = NULL;
 	}
 	ft_free_split((char **)paths);
