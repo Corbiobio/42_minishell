@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 11:32:33 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/09 15:11:07 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:27:33 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ t_tokenized_line	*lexer(t_tokenized_line *input);
 void				add_token(t_tokenized_line *line, t_token token_to_add);
 void				tokenize_string(char *line, t_tokenized_line *tokens);
 int					is_word(t_token token);
+char				*line_surgery(char *line, t_token quote, int amount);
 
 //lexer_make_words.c
 void				fuse_words(t_tokenized_line *input,
@@ -76,6 +77,8 @@ void				fuse_words(t_tokenized_line *input,
 void				remove_whitespaces(t_tokenized_line *input,
 						t_tokenized_line *output);
 void				fuse_chevrons(t_tokenized_line *in, t_tokenized_line *out);
+int					remove_empty_words(t_tokenized_line *input,
+						t_tokenized_line *output);
 
 //expander.c
 void				tokenize_string(char *line, t_tokenized_line *tokens);

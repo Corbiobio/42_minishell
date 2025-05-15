@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:45:40 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/09 15:07:47 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:28:00 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,31 @@
 t_token	*last_token(t_tokenized_line *line)
 {
 	return (&line->tokens[line->nb_token - 1]);
+}
+
+int	remove_empty_words(t_tokenized_line *input, t_tokenized_line *output)
+{
+	size_t	i;
+
+	i = 0;
+	*output = (t_tokenized_line){.line = input->line};
+	while (i < input->nb_token)
+	{
+		if (is_word(input->tokens[i]) && input->tokens[i].len == 0)
+		{
+			output->line = line_surgery(input->line, input->tokens[i], 2);
+			if (output->line == 0)
+				return (1);
+			free(input->line);
+			input->line = output->line;
+			correct_positions(input, 0, 2, i);
+			i++;
+			continue ;
+		}
+		add_token(output, input->tokens[i]);
+		i++;
+	}
+	return (0);
 }
 
 void	fuse_words(t_tokenized_line *input, t_tokenized_line *output)

@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:25:03 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/09 15:07:40 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:26:32 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	turn_dead_to_word(t_tokenized_line *line)
 	}
 }
 
-char	*line_surgery(char *line, t_token quote)
+char	*line_surgery(char *line, t_token quote, int amount)
 {
 	const size_t	len_line = ft_strlen(line);
 	char			*new_line;
@@ -57,7 +57,7 @@ char	*line_surgery(char *line, t_token quote)
 	if (new_line == 0)
 		return (0);
 	ft_strlcat(new_line, line, quote.pos + 1);
-	ft_strlcat(new_line, &line[quote.pos + 1], len_line);
+	ft_strlcat(new_line, &line[quote.pos + amount], len_line);
 	return (new_line);
 }
 
@@ -71,7 +71,7 @@ int	remove_quotes(t_tokenized_line *input, t_tokenized_line *output)
 	{
 		if (is_quote(input->tokens[i]))
 		{
-			output->line = line_surgery(input->line, input->tokens[i]);
+			output->line = line_surgery(input->line, input->tokens[i], 1);
 			if (output->line == 0)
 				return (1);
 			free(input->line);
@@ -94,7 +94,7 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	const size_t	size = sizeof(t_tokenized_line)
 		+ sizeof(t_token) * len_line;
 
-	tokens = malloc(size * 4);
+	tokens = malloc(size * 5);
 	if (tokens == 0)
 		return (0);
 	tokens_output = malloc(size);
@@ -105,9 +105,11 @@ t_tokenized_line	*lexer(t_tokenized_line *input)
 	turn_dead_to_word(tokens);
 	if (remove_quotes(tokens, tokens + size) == 1)
 		return (free_2_return_null(tokens, tokens_output));
-	fuse_words(tokens + size, tokens + size * 2);
-	fuse_chevrons(tokens + size * 2, tokens + size * 3);
-	remove_whitespaces(tokens + size * 3, tokens_output);
+	if (remove_empty_words(tokens + size, tokens + size * 2) == 1)
+		return (free_2_return_null(tokens, tokens_output));
+	fuse_words(tokens + size * 2, tokens + size * 3);
+	fuse_chevrons(tokens + size * 3, tokens + size * 4);
+	remove_whitespaces(tokens + size * 4, tokens_output);
 	free(tokens);
 	return (tokens_output);
 }
