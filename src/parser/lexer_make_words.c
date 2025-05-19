@@ -6,7 +6,7 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:45:40 by sflechel          #+#    #+#             */
-/*   Updated: 2025/05/15 17:28:00 by sflechel         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:34:36 by sflechel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ int	remove_empty_words(t_tokenized_line *input, t_tokenized_line *output)
 			free(input->line);
 			input->line = output->line;
 			correct_positions(input, 0, 2, i);
-			i++;
-			continue ;
 		}
 		add_token(output, input->tokens[i]);
 		i++;
