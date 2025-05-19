@@ -6,11 +6,12 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:10:01 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/09 15:11:31 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:05:10 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include <stdio.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 
@@ -22,7 +23,7 @@ void	free_exit_error_exec(t_cmd_list *list, int *status,
 	*status = 126;
 	write(STDERR_FILENO, "minishell: ", 12);
 	write(STDERR_FILENO, list->cmds[i].cmd[0], ft_strlen(list->cmds[i].cmd[0]));
-	if (stat(list->cmds[i].cmd[0], &sb) == -1)
+	if (stat(path, &sb) == -1)
 	{
 		if (ft_strchr(list->cmds[i].cmd[0], '/') != NULL)
 			write(STDERR_FILENO, " no such file or directory\n", 27);

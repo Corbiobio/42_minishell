@@ -6,12 +6,14 @@
 /*   By: edarnand <edarnand@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:26:59 by edarnand          #+#    #+#             */
-/*   Updated: 2025/05/15 16:49:26 by edarnand         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:29:23 by edarnand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 static char	*join_path_to_cmd(char *path, char *cmd_name)
 {
@@ -24,30 +26,53 @@ static char	*join_path_to_cmd(char *path, char *cmd_name)
 	return (new_path);
 }
 
+char	*get_absolut_path(char *cmd, const char **paths)
+{
+	if (ft_strchr(cmd, '/') != NULL)
+	{
+		ft_free_split((char **)paths);
+		return (ft_strdup(cmd));
+	}
+	return (NULL);
+}
+
+char	*get_path(const char **paths, char *cmd)
+{
+	size_t	i;
+	char	*tmp_path;
+	char	*path;
+
+	i = 0;
+	path = NULL;
+	while (paths[i] != NULL)
+	{
+		tmp_path = join_path_to_cmd((char *)paths[i], cmd);
+		if (tmp_path == NULL)
+			break ;
+		if (access(tmp_path, F_OK) == 0)
+		{
+			free(path);
+			path = tmp_path;
+		}
+		else
+			free(tmp_path);
+		i++;
+	}
+	return (path);
+}
+
 char	*get_cmd_path(t_cmd cmd, t_hash_table *env)
 {
 	const char	*paths_from_env = table_search(env, "PATH");
 	const char	**paths = (const char**)ft_split(paths_from_env, ':');
-	char		*curr_path;
+	char		*path;
 
-	if (ft_strchr(cmd.cmd[0], '/') != NULL)
-	{
-		ft_free_split((char **)paths);
-		return (ft_strdup(cmd.cmd[0]));
-	}
+	path = get_absolut_path(cmd.cmd[0], paths);
+	if (path != NULL)
+		return (path);
 	if (paths == NULL)
 		return (NULL);
-	curr_path = NULL;
-	while (*paths != NULL)
-	{
-		curr_path = join_path_to_cmd((char *)*paths, cmd.cmd[0]);
-		if (curr_path == NULL || access(curr_path, X_OK) == 0)
-			break ;
-		free(curr_path);
-		(*paths)++;
-		if (*paths == NULL)
-			curr_path = NULL;
-	}
+	path = get_path(paths, cmd.cmd[0]);
 	ft_free_split((char **)paths);
-	return (curr_path);
+	return (path);
 }
